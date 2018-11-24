@@ -1,0 +1,2 @@
+The npm run build script should exclude specs, so there needs to be two tsconfig files.
+Set up typedoc and test the documentation.

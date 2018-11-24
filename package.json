@@ -7,9 +7,13 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test":"ts-node ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter"
   },
   "devDependencies": {
+    "@types/jasmine": "~3.3.0",
+    "jasmine": "~3.3.0",
+    "jasmine-console-reporter": "~3.1.0",
     "ts-node": "~7.0.1"
   },
   "dependencies": {

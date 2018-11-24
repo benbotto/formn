@@ -29,6 +29,16 @@ class MetadataFactory {
   }
 
   /**
+   * Add a column's metadata.
+   * @param {ColumnMetadata} col - The metadata about the column.
+   * @return {this}
+   */
+  addColumnMetadata(col: ColumnMetadata): MetadataFactory {
+    this.colMetadata.push(col)
+    return this;
+  }
+
+  /**
    * Get the global array of ForeignKeyMetadata.
    * @return {ForeignKeyMetadata[]} An array of all foreign key metadata.
    */

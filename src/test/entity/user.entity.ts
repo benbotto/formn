@@ -3,7 +3,7 @@ import { Column } from '../../database/column.decorator';
 
 @Table({name: 'users'})
 export class User {
-  @Column({primary: true, generated: true})
+  @Column({isPrimary: true, isGenerated: true})
   id: number;
 
   @Column({maxLength: 255})

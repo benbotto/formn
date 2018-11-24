@@ -1,2 +1,4 @@
+Working on TableMetadata (replacement for ndm's Table).  Needs to set up the list of columns, primary keys, relationships, etc.
 The npm run build script should exclude specs, so there needs to be two tsconfig files.
 Set up typedoc and test the documentation.
+There's a to-do note in column.decorator.ts.  The dataType isn't going to work for non-primitives (like related entities).  Maybe just use the type.name and map them on demand (i.e. store the TS type in the column, not the db type).

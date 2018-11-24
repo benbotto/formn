@@ -1,0 +1,19 @@
+{
+  "name": "formn",
+  "version": "1.0.0",
+  "description": "Fucking Object-Relational Mapper for Node.",
+  "main": "src/index.ts",
+  "author": "Ben Botto",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "ts-node": "~7.0.1"
+  },
+  "dependencies": {
+    "reflect-metadata": "~0.1.12",
+    "typescript": "~3.1.6"
+  }
+}

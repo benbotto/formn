@@ -3,7 +3,7 @@ export class ForeignKeyMetaOptions {
   column: string;
 
   // Function that returns the type of Table that this references (e.g.
-  // the constructor of the associated Entity).
+  // the constructor of the associated Table-decorated class).
   getReferencedTable: () => {new(): any};
 }
 

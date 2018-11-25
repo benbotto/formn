@@ -1,15 +1,27 @@
 import { DatabaseMetaData } from './database-meta-data';
 import { ColumnMetadata } from './column-metadata';
-import { ForeignKeyMetadata } from './foreign-key-metadata';
+import { RelationshipStore } from './relationship-store';
 
 class MetadataFactory {
   private dbMetaMap: Map<string, DatabaseMetaData> = new Map();
   private colMetadata: ColumnMetadata[] = [];
-  private fkMetaData: ForeignKeyMetadata[] = [];
+  private relStore: RelationshipStore = new RelationshipStore();
+
+  /**
+   * Clear all metadata (useful in unit tests).
+   * @return {this}
+   */
+  clear(): MetadataFactory {
+    this.dbMetaMap = new Map();
+    this.colMetadata = [];
+    this.relStore = new RelationshipStore();
+
+    return this;
+  }
 
   /**
    * Get the DatabaseMetaData for a database by name.
-   * @param {string} [name='default'] - The name of the database, or 'default'
+   * @param [name='default'] - The name of the database, or 'default'
    * if not provided.
    * @return {DatabaseMetaData}
    */
@@ -22,7 +34,7 @@ class MetadataFactory {
 
   /**
    * Get the global array of ColumnMetadata.
-   * @return {ColumnMetadata[]} The metadata for all columns.
+   * @return The metadata for all columns.
    */
   getColumnMetadata(): ColumnMetadata[] {
     return this.colMetadata;
@@ -30,7 +42,7 @@ class MetadataFactory {
 
   /**
    * Add a column's metadata.
-   * @param {ColumnMetadata} col - The metadata about the column.
+   * @param col - The metadata about the column.
    * @return {this}
    */
   addColumnMetadata(col: ColumnMetadata): MetadataFactory {
@@ -39,21 +51,10 @@ class MetadataFactory {
   }
 
   /**
-   * Get the global array of ForeignKeyMetadata.
-   * @return {ForeignKeyMetadata[]} An array of all foreign key metadata.
+   * Get the global RelationshipStore instance.
    */
-  getForeignKeyMetadata(): ForeignKeyMetadata[] {
-    return this.fkMetaData;
-  }
-
-  /**
-   * Add a foreign key's metadata.
-   * @param {ForeignKeyMetadata} fk - Metadata about the key.
-   * @return {this}
-   */
-  addForeignKeyMetadata(fk: ForeignKeyMetadata): MetadataFactory {
-    this.fkMetaData.push(fk);
-    return this;
+  getRelationshipStore(): RelationshipStore {
+    return this.relStore;
   }
 }
 

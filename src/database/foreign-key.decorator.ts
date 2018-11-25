@@ -10,7 +10,9 @@ export function ForeignKey(options: ForeignKeyMetaOptions) {
       propName,
       options.getReferencedTable);
 
-    metaFactory.addForeignKeyMetadata(fk);
+    metaFactory
+      .getRelationshipStore()
+      .addForeignKeyMetadata(fk);
   }
 }
 

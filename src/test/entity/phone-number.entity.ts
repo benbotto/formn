@@ -14,6 +14,9 @@ export class PhoneNumber {
   @Column()
   type: string;
 
+  @Column()
+  userID: number;
+
   @ForeignKey({column: 'userID', getReferencedTable: () => User})
   user: User;
 }

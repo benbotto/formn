@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import { TableMetaOptions } from './table-meta-options';
 import { TableMetadata } from './table-metadata';
 import metaFactory from './metadata-factory';

@@ -5,14 +5,16 @@ import { Product } from './product.entity';
 
 import { Column } from '../../database/column.decorator';
 import { Table } from '../../database/table.decorator';
-import { ForeignKey } from '../../database/foreign-key.decorator';
+import { ManyToOne } from '../../database/many-to-one.decorator';
+import { OneToMany } from '../../database/one-to-many.decorator';
+import { OneToOne } from '../../database/one-to-one.decorator';
 
 import metaFactory from '../../database/metadata-factory';
 
 // This file clears all the metadata cache and manually decorates each class
 // when testing.
 export function initDB() {
-  let colDec, fkDec, tblDec;
+  let colDec, relDec, tblDec;
 
   metaFactory.clear();
 
@@ -32,6 +34,9 @@ export function initDB() {
   colDec = Column();
   colDec(User.prototype, 'createdOn');
 
+  relDec = OneToMany<User, PhoneNumber>(() => PhoneNumber, (u, pn) => [u.id, pn.userID]);
+  relDec(User.prototype, 'phoneNumbers');
+
   tblDec = Table({name: 'users'});
   tblDec(User);
 
@@ -48,8 +53,8 @@ export function initDB() {
   colDec = Column();
   colDec(PhoneNumber.prototype, 'userID');
 
-  fkDec = ForeignKey({column: 'userID', getReferencedTable: () => User});
-  fkDec(PhoneNumber.prototype, 'user');
+  relDec = ManyToOne<PhoneNumber, User>(() => User, (pn, u) => [pn.userID, u.id]);
+  relDec(PhoneNumber.prototype, 'user');
 
   tblDec = Table({name: 'phone_numbers'});
   tblDec(PhoneNumber);
@@ -67,8 +72,11 @@ export function initDB() {
   colDec = Column();
   colDec(Product.prototype, 'primaryPhotoID');
 
-  fkDec = ForeignKey({column: 'primaryPhotoID', getReferencedTable: () => Photo});
-  fkDec(Product.prototype, 'primaryPhoto');
+  relDec = OneToOne<Product, Photo>(() => Photo, (prod, photo) => [prod.primaryPhotoID, photo.id]);
+  relDec(Product.prototype, 'primaryPhoto');
+
+  relDec = OneToMany<Product, Photo>(() => Photo, (prod, photo) => [prod.id, photo.prodID]);
+  relDec(Product.prototype, 'photos');
 
   tblDec = Table({name: 'products'});
   tblDec(Product);
@@ -89,14 +97,14 @@ export function initDB() {
   colDec = Column();
   colDec(Photo.prototype, 'prodID');
 
-  fkDec = ForeignKey({column: 'largeThumbnailID', getReferencedTable: () => Photo});
-  fkDec(Photo.prototype, 'largeThumbnail');
+  relDec = OneToOne<Photo, Photo>(() => Photo, (p1, p2) => [p1.largeThumbnailID, p2.id]);
+  relDec(Photo.prototype, 'largeThumbnail');
 
-  fkDec = ForeignKey({column: 'smallThumbnailID', getReferencedTable: () => Photo});
-  fkDec(Photo.prototype, 'smallThumbnail');
+  relDec = OneToOne<Photo, Photo>(() => Photo, (p1, p2) => [p1.smallThumbnailID, p2.id]);
+  relDec(Photo.prototype, 'smallThumbnail');
 
-  fkDec = ForeignKey({column: 'prodID', getReferencedTable: () => Product}) // Circular.;
-  fkDec(Photo.prototype, 'product');
+  relDec = ManyToOne<Photo, Product>(() => Product, (photo, prod) => [photo.prodID, prod.id]);
+  relDec(Photo.prototype, 'product');
 
   tblDec = Table({name: 'photos'});
   tblDec(Photo);

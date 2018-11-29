@@ -1,6 +1,7 @@
 import { Table } from '../../database/table.decorator';
 import { Column } from '../../database/column.decorator';
 import { PhoneNumber } from './phone-number.entity';
+import { OneToMany } from '../../database/one-to-many.decorator';
 
 @Table({name: 'users'})
 export class User {
@@ -19,6 +20,7 @@ export class User {
   @Column()
   createdOn: Date;
 
+  @OneToMany<User, PhoneNumber>(() => PhoneNumber, (u, pn) => [u.id, pn.userID])
   phoneNumbers: PhoneNumber[];
 }
 

@@ -1,6 +1,7 @@
 import { Table } from '../../database/table.decorator';
 import { Column } from '../../database/column.decorator';
-import { ForeignKey } from '../../database/foreign-key.decorator';
+import { ManyToOne } from '../../database/many-to-one.decorator';
+import { OneToOne } from '../../database/one-to-one.decorator';
 import { Product } from './product.entity';
 
 @Table({name: 'photos'})
@@ -20,13 +21,13 @@ export class Photo {
   @Column()
   prodID: number;
 
-  @ForeignKey({column: 'largeThumbnailID', getReferencedTable: () => Photo}) // Self-referencing.
-  largeThumbnail: Photo;
+  @OneToOne<Photo, Photo>(() => Photo, (p1, p2) => [p1.largeThumbnailID, p2.id])
+  largeThumbnail: Photo; // Self-referencing.
 
-  @ForeignKey({column: 'smallThumbnailID', getReferencedTable: () => Photo})
-  smallThumbnail: Photo;
+  @OneToOne<Photo, Photo>(() => Photo, (p1, p2) => [p1.smallThumbnailID, p2.id])
+  smallThumbnail: Photo; // Self-referencing.
 
-  @ForeignKey({column: 'prodID', getReferencedTable: () => Product}) // Circular.
+  @ManyToOne<Photo, Product>(() => Product, (photo, prod) => [photo.prodID, prod.id])
   product: Product;
 }
 

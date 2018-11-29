@@ -1,6 +1,6 @@
 import { Table } from '../../database/table.decorator';
 import { Column } from '../../database/column.decorator';
-import { ForeignKey } from '../../database/foreign-key.decorator';
+import { ManyToOne } from '../../database/many-to-one.decorator';
 import { User } from './user.entity';
 
 @Table({name: 'phone_numbers'})
@@ -17,7 +17,7 @@ export class PhoneNumber {
   @Column()
   userID: number;
 
-  @ForeignKey({column: 'userID', getReferencedTable: () => User})
+  @ManyToOne<PhoneNumber, User>(() => User, (pn, u) => [pn.userID, u.id])
   user: User;
 }
 

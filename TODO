@@ -1,4 +1,3 @@
-Might be best to update the ForeignKey decorator with a joinType (single or many).
 Working on TableMetadata (replacement for ndm's Table).  Needs to set up the list of columns, primary keys, relationships, etc.
 The npm run build script should exclude specs, so there needs to be two tsconfig files.
 Set up typedoc and test the documentation.

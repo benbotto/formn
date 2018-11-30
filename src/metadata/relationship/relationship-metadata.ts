@@ -13,9 +13,10 @@ export class RelationshipMetadata {
    * @param to - A function that, when called, returns the referenced
    * Entity type (constructor).
    * @param on - A function that, when called, returns an array consisting of
-   * the names of the local and remote properties (e.g. [user.id,
-   * phoneNumber.userID]).  The function will be passed property maps
-   * containing all the decorated properties of Entity and RefEntity.
+   * the names of the local and remote properties. E.g. (user, phoneNumber) =>
+   * [user.id, phoneNumber.userID] (returns ['userID', 'phoneNumberID']).  The
+   * function will be passed [[PropertyMapType]]s containing all the decorated
+   * properties of Entity and RefEntity.
    * @param cardinality - The relationship type (e.g. OneToMany).
    */
   constructor(

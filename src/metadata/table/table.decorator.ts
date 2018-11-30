@@ -12,8 +12,8 @@ export function Table(options: TableMetaOptions = new TableMetaOptions()) {
       options.database = 'default';
 
     metaFactory
-      .getDatabaseMetaData(options.database)
-      .addTable(new TableMetadata(ctor, options));
+      .getTableStore()
+      .addTableMetadata(new TableMetadata(ctor, options.name, options.database));
   }
 }
 

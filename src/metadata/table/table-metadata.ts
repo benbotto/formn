@@ -1,16 +1,21 @@
 import { TableMetaOptions } from './table-meta-options';
-import { ColumnMetadata } from '../column/column-metadata';
+import { EntityType } from './entity-type';
 
 export class TableMetadata {
-  Entity: {new (): any};
+  Entity: EntityType;
   name: string;
-  mapTo: string;
   database: string;
 
-  constructor(Entity: {new (): any}, options: TableMetaOptions) {
+  /**
+   * Initialize the Table's metadata.
+   * @param Entity - The constructor for the Table-decorated class.
+   * @param name - The name of the database table.
+   * @param database - The database to which this table belongs.
+   */
+  constructor(Entity: EntityType, name: string, database: string) {
     this.Entity   = Entity;
-    this.name     = options.name;
-    this.database = options.database;
+    this.name     = name;
+    this.database = database;
   }
 
   /**

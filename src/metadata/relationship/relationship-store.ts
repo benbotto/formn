@@ -2,19 +2,13 @@ import { RelationshipMetadata } from './relationship-metadata';
 
 /** Stores relationships and provides lookup functions. */
 export class RelationshipStore {
-  private relMetaData: RelationshipMetadata[] = [];
+  private relMetadata: RelationshipMetadata[] = [];
 
   /**
-   * Init.
-   */
-  constructor() {
-  }
-
-  /**
-   * Add a relationship and index it by Entity type.
+   * Add a relationship.
    */
   addRelationshipMetadata(rel: RelationshipMetadata): RelationshipStore {
-    this.relMetaData.push(rel);
+    this.relMetadata.push(rel);
 
     return this;
   }
@@ -38,7 +32,7 @@ export class RelationshipStore {
 
     let t1Rels, t2Rels;
 
-    t1Rels = this.relMetaData
+    t1Rels = this.relMetadata
       .filter(rel => rel.Entity === Entity1 && rel.to() === Entity2 && (!mapTo || mapTo === rel.mapTo));
 
     if (oneWay || mapTo)
@@ -50,7 +44,7 @@ export class RelationshipStore {
     if (Entity1 === Entity2)
       return t1Rels;
 
-    t2Rels = this.relMetaData
+    t2Rels = this.relMetadata
       .filter(rel => rel.Entity === Entity2 && rel.to() === Entity1);
 
     return t1Rels.concat(t2Rels);

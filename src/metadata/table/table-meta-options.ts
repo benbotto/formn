@@ -1,8 +1,12 @@
 export class TableMetaOptions {
-  // Table name.
+  /**
+   * Table name.  Defaults to the Table-decorated class name.
+   */
   name?: string;
 
-  // The database the table belongs to.
+  /**
+   * The database the table belongs to.
+   */
   database?: string;
 }
 

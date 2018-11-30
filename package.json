@@ -7,8 +7,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "tsc --options ./typedoc.js ./src",
-    "doc":"typedoc",
+    "build": "tsc",
+    "doc":"typedoc --options ./typedoc.js ./src",
     "test": "ts-node ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter"
   },
   "devDependencies": {

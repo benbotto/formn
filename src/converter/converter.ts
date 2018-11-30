@@ -1,3 +1,7 @@
+/**
+ * A converter is used to transform a Table-decorated entity on save or
+ * retrieve.  For example, formatting dates to and from ISO8601.
+ */
 export class Converter {
   /**
    * Identity converter on retrieve.

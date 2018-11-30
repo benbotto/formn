@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import { User } from './test/entity/user.entity';
 import { PhoneNumber } from './test/entity/phone-number.entity';
-import metaFactory from './database/metadata-factory';
+import metaFactory from './metadata/metadata-factory';
 
 const user = new User();
 const pn = new PhoneNumber();
@@ -14,5 +14,4 @@ const pn = new PhoneNumber();
 //console.log(new Entity());
 //console.log(metaFactory.getDatabaseMetaData().getTables()[0].getColumns());
 //console.log(metaFactory.getDatabaseMetaData().getTables()[1].getColumns());
-console.log(metaFactory.getForeignKeyMetadata()[0].getRefEntity());
 

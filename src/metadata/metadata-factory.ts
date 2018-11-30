@@ -1,6 +1,6 @@
-import { DatabaseMetaData } from './database-meta-data';
-import { ColumnMetadata } from './column-metadata';
-import { RelationshipStore } from './relationship-store';
+import { DatabaseMetaData } from './database/database-metadata';
+import { ColumnMetadata } from './column/column-metadata';
+import { RelationshipStore } from './relationship/relationship-store';
 
 class MetadataFactory {
   private dbMetaMap: Map<string, DatabaseMetaData> = new Map();

@@ -1,6 +1,6 @@
 import { TableMetaOptions } from './table-meta-options';
-import { ColumnMetadata } from './column-metadata';
-import metaFactory from './metadata-factory';
+import { ColumnMetadata } from '../column/column-metadata';
+import metaFactory from '../metadata-factory';
 
 export class TableMetadata {
   Entity: {new (): any};

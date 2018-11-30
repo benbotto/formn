@@ -1,4 +1,4 @@
-import { Converter } from '../converter/converter';
+import { Converter } from '../../converter/converter';
 
 export class ColumnMetaOptions {
   // Column name.

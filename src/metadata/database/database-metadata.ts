@@ -1,4 +1,4 @@
-import { TableMetadata } from './table-metadata';
+import { TableMetadata } from '../table/table-metadata';
 
 export class DatabaseMetaData {
   private tables: TableMetadata[] = [];

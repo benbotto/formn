@@ -1,5 +1,5 @@
 import { RelationshipMetaOptions } from './relationship-meta-options';
-import metaFactory from './metadata-factory';
+import metaFactory from '../metadata-factory';
 import { RelationshipMetadata } from './relationship-metadata';
 
 export function Relationship<ENT_T, REF_ENT_T>(options: RelationshipMetaOptions<ENT_T, REF_ENT_T>) {

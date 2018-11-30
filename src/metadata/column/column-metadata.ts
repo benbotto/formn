@@ -1,5 +1,5 @@
 import { ColumnMetaOptions } from './column-meta-options';
-import { Converter } from '../converter/converter';
+import { Converter } from '../../converter/converter';
 
 export class ColumnMetadata {
   Entity: {new(): any};

@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import { ColumnMetaOptions } from './column-meta-options';
 import { ColumnMetadata } from './column-metadata';
 
-import metaFactory from './metadata-factory';
+import metaFactory from '../metadata-factory';
 
 export function Column(options: ColumnMetaOptions = new ColumnMetaOptions()) {
   return function(target: any, propName: string) {

@@ -1,11 +1,11 @@
 import { RelationshipStore } from './relationship-store';
-import metaFactory from './metadata-factory';
-import { initDB } from '../test/entity/database';
+import metaFactory from '../metadata-factory';
+import { initDB } from '../../test/entity/database';
 
-import { PhoneNumber } from '../test/entity/phone-number.entity';
-import { Product } from '../test/entity/product.entity';
-import { User } from '../test/entity/user.entity';
-import { Photo } from '../test/entity/photo.entity';
+import { PhoneNumber } from '../../test/entity/phone-number.entity';
+import { Product } from '../../test/entity/product.entity';
+import { User } from '../../test/entity/user.entity';
+import { Photo } from '../../test/entity/photo.entity';
 
 describe('RelationshipStore()', function() {
   let relStore: RelationshipStore;

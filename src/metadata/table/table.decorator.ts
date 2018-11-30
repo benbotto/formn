@@ -1,6 +1,6 @@
 import { TableMetaOptions } from './table-meta-options';
 import { TableMetadata } from './table-metadata';
-import metaFactory from './metadata-factory';
+import metaFactory from '../metadata-factory';
 
 export function Table(options: TableMetaOptions = new TableMetaOptions()) {
   return function(ctor: { new(): any }) {

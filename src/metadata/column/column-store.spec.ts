@@ -62,5 +62,14 @@ describe('ColumnStore()', () => {
       }
     });
   });
+
+  describe('.getPrimaryKey()', () => {
+    it('returns the array of primary key ColumnMetadata for a table.', () => {
+      const pk = colStore.getPrimaryKey(User);
+      expect(pk.length).toBe(1);
+      expect(pk[0].name).toBe('userID');
+      expect(pk[0].mapTo).toBe('id');
+    });
+  });
 });
 

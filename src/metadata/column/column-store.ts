@@ -57,5 +57,17 @@ export class ColumnStore {
 
     return pm
   }
+
+  /**
+   * Get the primary key for a table.
+   */
+  getPrimaryKey(Entity: EntityType): ColumnMetadata[] {
+    const cols = this.getColumnMetadata(Entity);
+    const pk   = cols.filter(col => col.isPrimary);
+
+    assert(pk.length, `Table "${Entity.name}" has no primary keys defined.`);
+
+    return pk;
+  }
 }
 

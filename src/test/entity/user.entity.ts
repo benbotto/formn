@@ -1,7 +1,7 @@
-import { Table } from '../../database/table.decorator';
-import { Column } from '../../database/column.decorator';
+import { Table } from '../../metadata/table/table.decorator';
+import { Column } from '../../metadata/column/column.decorator';
 import { PhoneNumber } from './phone-number.entity';
-import { OneToMany } from '../../database/one-to-many.decorator';
+import { OneToMany } from '../../metadata/relationship/one-to-many.decorator';
 
 @Table({name: 'users'})
 export class User {

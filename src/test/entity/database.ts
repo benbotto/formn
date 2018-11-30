@@ -3,13 +3,13 @@ import { PhoneNumber } from './phone-number.entity';
 import { Photo } from './photo.entity';
 import { Product } from './product.entity';
 
-import { Column } from '../../database/column.decorator';
-import { Table } from '../../database/table.decorator';
-import { ManyToOne } from '../../database/many-to-one.decorator';
-import { OneToMany } from '../../database/one-to-many.decorator';
-import { OneToOne } from '../../database/one-to-one.decorator';
+import { Column } from '../../metadata/column/column.decorator';
+import { Table } from '../../metadata/table/table.decorator';
+import { ManyToOne } from '../../metadata/relationship/many-to-one.decorator';
+import { OneToMany } from '../../metadata/relationship/one-to-many.decorator';
+import { OneToOne } from '../../metadata/relationship/one-to-one.decorator';
 
-import metaFactory from '../../database/metadata-factory';
+import metaFactory from '../../metadata/metadata-factory';
 
 // This file clears all the metadata cache and manually decorates each class
 // when testing.

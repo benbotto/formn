@@ -1,7 +1,7 @@
-import { Table } from '../../database/table.decorator';
-import { Column } from '../../database/column.decorator';
-import { OneToOne } from '../../database/one-to-one.decorator';
-import { OneToMany } from '../../database/one-to-many.decorator';
+import { Table } from '../../metadata/table/table.decorator';
+import { Column } from '../../metadata/column/column.decorator';
+import { OneToOne } from '../../metadata/relationship/one-to-one.decorator';
+import { OneToMany } from '../../metadata/relationship/one-to-many.decorator';
 import { Photo } from './photo.entity';
 
 @Table({name: 'products'})

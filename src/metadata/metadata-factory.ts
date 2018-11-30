@@ -1,10 +1,10 @@
 import { DatabaseMetaData } from './database/database-metadata';
-import { ColumnMetadata } from './column/column-metadata';
+import { ColumnStore } from './column/column-store';
 import { RelationshipStore } from './relationship/relationship-store';
 
 class MetadataFactory {
   private dbMetaMap: Map<string, DatabaseMetaData> = new Map();
-  private colMetadata: ColumnMetadata[] = [];
+  private colStore: ColumnStore = new ColumnStore();
   private relStore: RelationshipStore = new RelationshipStore();
 
   /**
@@ -13,7 +13,7 @@ class MetadataFactory {
    */
   clear(): MetadataFactory {
     this.dbMetaMap = new Map();
-    this.colMetadata = [];
+    this.colStore = new ColumnStore();
     this.relStore = new RelationshipStore();
 
     return this;
@@ -33,21 +33,10 @@ class MetadataFactory {
   }
 
   /**
-   * Get the global array of ColumnMetadata.
-   * @return The metadata for all columns.
+   * Get the global ColumnStore instance.
    */
-  getColumnMetadata(): ColumnMetadata[] {
-    return this.colMetadata;
-  }
-
-  /**
-   * Add a column's metadata.
-   * @param col - The metadata about the column.
-   * @return {this}
-   */
-  addColumnMetadata(col: ColumnMetadata): MetadataFactory {
-    this.colMetadata.push(col)
-    return this;
+  getColumnStore(): ColumnStore {
+    return this.colStore;
   }
 
   /**

@@ -17,7 +17,7 @@ export class RelationshipStore {
   /**
    * Get all of the relationships between two tables.
    * @param Entity1 - The first Entity (constructor), i.e. the class that's
-   * decorated with @Table.
+   * decorated with @[[Table]].
    * @param Entity2 - The second Entity.
    * @param oneWay - When true, only return the relationships between Entity1
    * and Entity2 that Entity1 owns.

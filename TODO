@@ -1,5 +1,4 @@
-Probably the MetaFactory should keep a Store for each type: DatabaseStore, TableStore, ColumnStore, RelationshipStore.  Then there can be functions like ColumnStore.getColumnsForTable(Entity).
-Working on TableMetadata (replacement for ndm's Table).  Needs to set up the list of columns, primary keys, relationships, etc.
+Check that when a relationship is loaded but the right side is empty that null is returned.  I think in ndm this case returns an empty struct (at least, it does in the CF implementation).
 The npm run build script should exclude specs, so there needs to be two tsconfig files.
 Set up typedoc and test the documentation.
 There's a to-do note in column.decorator.ts.  The dataType isn't going to work for non-primitives (like related entities).  Maybe just use the type.name and map them on demand (i.e. store the TS type in the column, not the db type).  Seems like trying to map conversions there isn't going to work because the mapping is different for different db flavors (e.g. boolean->bit, tinyint, etc.).

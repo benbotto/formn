@@ -7,14 +7,16 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "tsc",
-    "test":"ts-node ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter"
+    "build": "tsc --options ./typedoc.js ./src",
+    "doc":"typedoc",
+    "test": "ts-node ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter"
   },
   "devDependencies": {
     "@types/jasmine": "~3.3.0",
     "jasmine": "~3.3.0",
     "jasmine-console-reporter": "~3.1.0",
-    "ts-node": "~7.0.1"
+    "ts-node": "~7.0.1",
+    "typedoc": "~0.13.0"
   },
   "dependencies": {
     "reflect-metadata": "~0.1.12",

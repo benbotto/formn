@@ -1,11 +1,12 @@
 import { ColumnMetadata } from './column-metadata';
 import { PropertyMapType } from './property-map-type';
+import { EntityType } from '../table/entity-type';
 
 /** Storage for ColumnMetadata with lookup operations. */
 export class ColumnStore {
   private colMetadata: ColumnMetadata[] = [];
-  private tableCols: Map<{new(): any}, ColumnMetadata[]> = new Map();
-  private propMaps: Map<{new(): any}, PropertyMapType> = new Map();
+  private tableCols: Map<EntityType, ColumnMetadata[]> = new Map();
+  private propMaps: Map<EntityType, PropertyMapType> = new Map();
 
   /**
    * Add a column's metadata.
@@ -37,14 +38,14 @@ export class ColumnStore {
   /**
    * Get all the ColumnMetadata for a Table-decorated Entity.
    */
-  getColumnMetadata(Entity: {new(): any}): ColumnMetadata[] {
+  getColumnMetadata(Entity: EntityType): ColumnMetadata[] {
     return this.tableCols.get(Entity);
   }
 
   /**
    * Get the property map for a table.
    */
-  getPropertyMap(Entity: {new(): any}): PropertyMapType {
+  getPropertyMap(Entity: EntityType): PropertyMapType {
     return this.propMaps.get(Entity);
   }
 }

@@ -1,4 +1,5 @@
 import { RelationshipMetadata } from './relationship-metadata';
+import { EntityType } from '../table/entity-type';
 
 /** Stores relationships and provides lookup functions. */
 export class RelationshipStore {
@@ -25,8 +26,8 @@ export class RelationshipStore {
    * @return An array of RelationshipMetadata instances.
    */
   getRelationships(
-    Entity1: {new(): any},
-    Entity2: {new(): any},
+    Entity1: EntityType,
+    Entity2: EntityType,
     oneWay = false,
     mapTo: string = null): RelationshipMetadata[] {
 

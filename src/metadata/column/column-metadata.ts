@@ -1,8 +1,9 @@
 import { ColumnMetaOptions } from './column-meta-options';
 import { Converter } from '../../converter/converter';
+import { EntityType } from '../table/entity-type';
 
 export class ColumnMetadata {
-  Entity: {new(): any};
+  Entity: EntityType;
   mapTo: string;
   name: string;
   isPrimary: boolean;
@@ -23,7 +24,7 @@ export class ColumnMetadata {
    * metadata like dataType, column name, etc.
    */
   constructor(
-    Entity: {new(): any},
+    Entity: EntityType,
     mapTo: string,
     options: ColumnMetaOptions) {
 

@@ -1,3 +1,4 @@
+Define a type for Entity {new(): any}.
 Probably the MetaFactory should keep a Store for each type: DatabaseStore, TableStore, ColumnStore, RelationshipStore.  Then there can be functions like ColumnStore.getColumnsForTable(Entity).
 Working on TableMetadata (replacement for ndm's Table).  Needs to set up the list of columns, primary keys, relationships, etc.
 The npm run build script should exclude specs, so there needs to be two tsconfig files.

@@ -1,10 +1,13 @@
 import { TableMetaOptions } from './table-meta-options';
 import { EntityType } from './entity-type';
 
+/**
+ * Stores metadata about @[[Table]]-decorated classes.
+ */
 export class TableMetadata {
   /**
    * Initialize the Table's metadata.
-   * @param Entity - The constructor for the Table-decorated class.
+   * @param Entity - The constructor for the @[[Table]]-decorated class.
    * @param name - The name of the database table.
    * @param database - The database to which this table belongs.
    */

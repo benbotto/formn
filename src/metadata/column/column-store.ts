@@ -1,6 +1,7 @@
 import { ColumnMetadata } from './column-metadata';
 import { PropertyMapType } from './property-map-type';
 import { EntityType } from '../table/entity-type';
+import { assert } from '../../error/assert';
 
 /** Storage for ColumnMetadata with lookup operations. */
 export class ColumnStore {
@@ -39,14 +40,22 @@ export class ColumnStore {
    * Get all the ColumnMetadata for a Table-decorated Entity.
    */
   getColumnMetadata(Entity: EntityType): ColumnMetadata[] {
-    return this.tableCols.get(Entity);
+    const cols = this.tableCols.get(Entity);
+
+    assert(cols, `Failed to get column metadata for type "${Entity.name}."  The type must be decorated with @Table.`);
+
+    return cols;
   }
 
   /**
    * Get the property map for a table.
    */
   getPropertyMap(Entity: EntityType): PropertyMapType {
-    return this.propMaps.get(Entity);
+    const pm = this.propMaps.get(Entity);
+
+    assert(pm, `Failed to get property map for type "${Entity.name}."  The type must be decorated with @Table.`);
+
+    return pm
   }
 }
 

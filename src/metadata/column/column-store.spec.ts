@@ -25,6 +25,18 @@ describe('ColumnStore()', () => {
       expect(cols[3].mapTo).toBe('last');
       expect(cols[4].mapTo).toBe('createdOn');
     });
+
+    it('throws an error if the Entity is not decorated.', () => {
+      class Test {};
+
+      try {
+        colStore.getColumnMetadata(Test);
+        expect(true).toBe(false);
+      }
+      catch (err) {
+        expect(err.message).toBe('Failed to get column metadata for type "Test."  The type must be decorated with @Table.');
+      }
+    });
   });
 
   describe('.getPropertyMap()', () => {
@@ -36,6 +48,18 @@ describe('ColumnStore()', () => {
       expect(pm.first).toBe('first');
       expect(pm.last).toBe('last');
       expect(pm.createdOn).toBe('createdOn');
+    });
+
+    it('throws an error if the Entity is not decorated.', () => {
+      class Test {};
+
+      try {
+        colStore.getPropertyMap(Test);
+        expect(true).toBe(false);
+      }
+      catch (err) {
+        expect(err.message).toBe('Failed to get property map for type "Test."  The type must be decorated with @Table.');
+      }
     });
   });
 });

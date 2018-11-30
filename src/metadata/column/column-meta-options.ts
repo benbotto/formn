@@ -1,5 +1,8 @@
 import { Converter } from '../../converter/converter';
 
+/**
+ * Options for the [[Column]] decorator.
+ */
 export class ColumnMetaOptions {
   /**
    * Column name.  Defaults to the name of the Column-decorated property.

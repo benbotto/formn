@@ -8,7 +8,7 @@ import { PropertyMapType } from '../column/property-map-type';
 export class RelationshipMetaOptions<ENT_T, REF_ENT_T> {
   /**
    * Function that returns the type of Table that this references (e.g.
-   * the constructor of the associated Table-decorated class).
+   * the constructor of the associated [[Table]]-decorated class).
    */
   to: () => {new(): REF_ENT_T};
 

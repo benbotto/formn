@@ -3,7 +3,7 @@ import { PropertyMapType } from './property-map-type';
 import { EntityType } from '../table/entity-type';
 import { assert } from '../../error/assert';
 
-/** Storage for ColumnMetadata with lookup operations. */
+/** Storage for [[ColumnMetadata]] with lookup operations. */
 export class ColumnStore {
   private colMetadata: ColumnMetadata[] = [];
   private tableCols: Map<EntityType, ColumnMetadata[]> = new Map();
@@ -37,7 +37,7 @@ export class ColumnStore {
   }
 
   /**
-   * Get all the ColumnMetadata for a Table-decorated Entity.
+   * Get all the ColumnMetadata for a [[Table]]-decorated Entity.
    */
   getColumnMetadata(Entity: EntityType): ColumnMetadata[] {
     const cols = this.tableCols.get(Entity);
@@ -49,9 +49,9 @@ export class ColumnStore {
 
   /**
    * Get the property map for a table.  For each property in the
-   * Table-decorated Entity, the PropertyMap is a simple key-value pair.  The
-   * keys are all the properties of Entity, and each maps to the property name
-   * as a string.
+   * [[Table]]-decorated Entity, the property map is a simple key-value pair.
+   * The keys are all the properties of Entity, and each maps to the property
+   * name as a string.
    */
   getPropertyMap(Entity: EntityType): PropertyMapType {
     const pm = this.propMaps.get(Entity);

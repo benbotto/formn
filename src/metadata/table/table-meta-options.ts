@@ -1,6 +1,9 @@
+/**
+ * Options for the [[Table]] decorator.
+ */
 export class TableMetaOptions {
   /**
-   * Table name.  Defaults to the Table-decorated class name.
+   * Table name.  Defaults to the [[Table]]-decorated class name.
    */
   name?: string;
 

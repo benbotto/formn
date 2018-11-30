@@ -2,6 +2,10 @@ import { ColumnMetaOptions } from './column-meta-options';
 import { Converter } from '../../converter/converter';
 import { EntityType } from '../table/entity-type';
 
+/**
+ * Stores metadata about [[Column]]-decorated properties on
+ * [[Table]]-decorated classes (Entities).
+ */
 export class ColumnMetadata {
   Entity: EntityType;
   mapTo: string;
@@ -16,7 +20,7 @@ export class ColumnMetadata {
 
   /**
    * Initialize the metadata for a column.
-   * @param Entity The constructor for the Table-decorated class to which this
+   * @param Entity The constructor for the [[Table]]-decorated class to which this
    * column belongs.
    * @param mapTo The name of the property in the class to which this
    * column will be mapped.

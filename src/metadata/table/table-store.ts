@@ -2,7 +2,7 @@ import { TableMetadata } from './table-metadata';
 import { assert } from '../../error/assert';
 import { EntityType } from './entity-type';
 
-/** Provides storage and lookup operations for Table-decorated entities. */
+/** Provides storage and lookup operations for [[Table]]-decorated entities. */
 export class TableStore {
   private tblMetadata: TableMetadata[] = [];
   private tblMap: Map<EntityType, TableMetadata> = new Map();

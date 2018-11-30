@@ -2,7 +2,7 @@ import { CardinalityType } from './cardinality-type';
 import { PropertyMapType } from '../column/property-map-type';
 
 /**
- * Options for the Relationship decorator.  Reads "ENT_T is related to
+ * Options for the [[Relationship]] decorator.  Reads "ENT_T is related to
  * REF_ENT_T."
  */
 export class RelationshipMetaOptions<ENT_T, REF_ENT_T> {

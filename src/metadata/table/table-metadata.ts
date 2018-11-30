@@ -2,7 +2,7 @@ import { TableMetaOptions } from './table-meta-options';
 import { EntityType } from './entity-type';
 
 /**
- * Stores metadata about @[[Table]]-decorated classes.
+ * Stores metadata about [[Table]]-decorated classes.
  */
 export class TableMetadata {
   /**

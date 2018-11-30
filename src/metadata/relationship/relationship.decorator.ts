@@ -2,6 +2,10 @@ import { RelationshipMetaOptions } from './relationship-meta-options';
 import metaFactory from '../metadata-factory';
 import { RelationshipMetadata } from './relationship-metadata';
 
+/**
+ * Decorator for relationships between two [[Table]]-decorated classes.  See
+ * [[RelationshipMetaOptions]] for the parameters.
+ */
 export function Relationship<ENT_T, REF_ENT_T>(options: RelationshipMetaOptions<ENT_T, REF_ENT_T>) {
   return function(target: any, propName: string) {
     const rel = new RelationshipMetadata(

@@ -48,7 +48,10 @@ export class ColumnStore {
   }
 
   /**
-   * Get the property map for a table.
+   * Get the property map for a table.  For each property in the
+   * Table-decorated Entity, the PropertyMap is a simple key-value pair.  The
+   * keys are all the properties of Entity, and each maps to the property name
+   * as a string.
    */
   getPropertyMap(Entity: EntityType): PropertyMapType {
     const pm = this.propMaps.get(Entity);

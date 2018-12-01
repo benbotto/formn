@@ -37,7 +37,7 @@ export class ColumnStore {
   }
 
   /**
-   * Get all the ColumnMetadata for a [[Table]]-decorated Entity.
+   * Get all the [[ColumnMetadata]] for a [[Table]]-decorated Entity.
    */
   getColumnMetadata(Entity: EntityType): ColumnMetadata[] {
     const cols = this.tableCols.get(Entity);
@@ -45,6 +45,31 @@ export class ColumnStore {
     assert(cols, `Failed to get column metadata for type "${Entity.name}."  The type must be decorated with @Table.`);
 
     return cols;
+  }
+
+  /**
+   * Get the [[ColumnMetadata]] for a [[Table]]-decorated Entity by column name.
+   */
+  getColumnMetadataByName(Entity: EntityType, name: string): ColumnMetadata {
+    const cols = this.getColumnMetadata(Entity);
+    const col  = cols.find(col => col.name === name);
+
+    assert(col, `Column "${name}" does not exist in table "${Entity.name}."`);
+
+    return col;
+  }
+
+  /**
+   * Get the [[ColumnMetadata]] for a [[Table]]-decorated Entity by column
+   * mapping (property name in parent Entity).
+   */
+  getColumnMetadataByMapping(Entity: EntityType, mapTo: string): ColumnMetadata {
+    const cols = this.getColumnMetadata(Entity);
+    const col  = cols.find(col => col.mapTo === mapTo);
+
+    assert(col, `Column with mapping "${mapTo}" does not exist in table "${Entity.name}."`);
+
+    return col;
   }
 
   /**

@@ -39,6 +39,42 @@ describe('ColumnStore()', () => {
     });
   });
 
+  describe('.getColumnMetadataByName()', () => {
+    it('throws an error if the column does not exist.', () => {
+      try {
+        colStore.getColumnMetadataByName(User, 'foo');
+        expect(true).toBe(false);
+      }
+      catch (err) {
+        expect(err.message).toBe('Column "foo" does not exist in table "User."');
+      }
+    });
+
+    it('returns the ColumnMetadata.', () => {
+      const col = colStore.getColumnMetadataByName(User, 'userID');
+
+      expect(col.mapTo).toBe('id');
+    });
+  });
+
+  describe('.getColumnMetadataByMapping()', () => {
+    it('throws an error if the column does not exist.', () => {
+      try {
+        colStore.getColumnMetadataByMapping(User, 'foo');
+        expect(true).toBe(false);
+      }
+      catch (err) {
+        expect(err.message).toBe('Column with mapping "foo" does not exist in table "User."');
+      }
+    });
+
+    it('returns the ColumnMetadata.', () => {
+      const col = colStore.getColumnMetadataByMapping(User, 'id');
+
+      expect(col.name).toBe('userID');
+    });
+  });
+
   describe('.getPropertyMap()', () => {
     it('gets a PropertyMap for a table.', () => {
       const pm = colStore.getPropertyMap(User);

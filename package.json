@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "doc":"typedoc --options ./typedoc.js ./src",
-    "test": "ts-node ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter"
+    "test": "ts-node ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter",
+    "clean": "rm -rf doc dist"
   },
   "devDependencies": {
     "@types/jasmine": "~3.3.0",

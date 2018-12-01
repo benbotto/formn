@@ -9,8 +9,6 @@ import { Schema } from './schema';
 import { User } from '../test/entity/user.entity';
 import { PhoneNumber } from '../test/entity/phone-number.entity';
 
-// TODO: Test null case in TODO.
-// TODO: Test relationship from a bad parent (second assert in addSchema).
 describe('Schema()', function() {
   let tblStore: TableStore;
   let colStore: ColumnStore;

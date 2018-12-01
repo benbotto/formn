@@ -1,0 +1,8 @@
+version: '3'
+services:
+  dev:
+    image: avejidah/node-dubnium:latest
+    volumes:
+      - .:/home/node/dev
+    container_name: formn-dev
+

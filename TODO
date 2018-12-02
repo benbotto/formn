@@ -1,3 +1,5 @@
+Get rid of empty lines with spaces.
+The Schema has to take in column names because the columns will be aliased.  Right now column.name is used.  For example, actual columns from queries will be aliased `pn.userID`.
 Check that when a relationship is loaded but the right side is empty that null is returned.  I think in ndm this case returns an empty struct (at least, it does in the CF implementation).
 The npm run build script should exclude specs, so there needs to be two tsconfig files.
 There's a to-do note in column.decorator.ts.  The dataType isn't going to work for non-primitives (like related entities).  Maybe just use the type.name and map them on demand (i.e. store the TS type in the column, not the db type).  Seems like trying to map conversions there isn't going to work because the mapping is different for different db flavors (e.g. boolean->bit, tinyint, etc.).  Whenever this is fixed be sure to fix the documentation in column-meta-options.ts.

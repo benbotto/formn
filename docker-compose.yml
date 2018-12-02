@@ -7,6 +7,10 @@ services:
     container_name: formn-dev
     ports:
       - "9229:9229"
+    stdin_open: true
+    tty: true
+    environment:
+      - SHELL=/bin/bash
 
   db:
     image: percona:5.7

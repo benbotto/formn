@@ -8,7 +8,7 @@ export class PhoneNumber {
   @Column({name: 'phoneNumberID', isPrimary: true, isGenerated: true})
   id: number;
 
-  @Column()
+  @Column({isNullable: false})
   phoneNumber: string;
 
   @Column()

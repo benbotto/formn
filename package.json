@@ -8,13 +8,15 @@
   "private": false,
   "scripts": {
     "build": "tsc",
-    "doc":"typedoc --options ./typedoc.js ./src",
+    "doc": "typedoc --options ./typedoc.js ./src",
     "test": "ts-node ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter",
     "test:debug": "node --inspect-brk=0.0.0.0:9229 -r ts-node/register ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter",
-    "clean": "rm -rf doc dist"
+    "clean": "rm -rf doc dist",
+    "watch:test": "chokidar --initial \"src/**/*.ts\" -c \"npm run test\""
   },
   "devDependencies": {
     "@types/jasmine": "~3.3.0",
+    "chokidar-cli": "^1.2.1",
     "jasmine": "~3.3.0",
     "jasmine-console-reporter": "~3.1.0",
     "ts-node": "~7.0.1",

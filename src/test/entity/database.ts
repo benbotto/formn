@@ -2,6 +2,7 @@ import { User } from './user.entity';
 import { PhoneNumber } from './phone-number.entity';
 import { Photo } from './photo.entity';
 import { Product } from './product.entity';
+import { UserXProduct } from './user-x-product';
 
 import { Column } from '../../metadata/column/column.decorator';
 import { Table } from '../../metadata/table/table.decorator';
@@ -36,6 +37,9 @@ export function initDB() {
 
   relDec = OneToMany<User, PhoneNumber>(() => PhoneNumber, (u, pn) => [u.id, pn.userID]);
   relDec(User.prototype, 'phoneNumbers');
+
+  relDec = OneToMany<User, UserXProduct>(() => UserXProduct, (u, uxp) => [u.id, uxp.userID]);
+  relDec(User.prototype, 'userXProducts');
 
   tblDec = Table({name: 'users'});
   tblDec(User);
@@ -78,6 +82,9 @@ export function initDB() {
   relDec = OneToMany<Product, Photo>(() => Photo, (prod, photo) => [prod.id, photo.prodID]);
   relDec(Product.prototype, 'photos');
 
+  relDec = OneToMany<Product, UserXProduct>(() => UserXProduct, (p, uxp) => [p.id, uxp.productID]);
+  relDec(Product.prototype, 'userXProducts');
+
   tblDec = Table({name: 'products'});
   tblDec(Product);
 
@@ -108,5 +115,24 @@ export function initDB() {
 
   tblDec = Table({name: 'photos'});
   tblDec(Photo);
+
+  // UserXProduct.
+  colDec = Column({name: 'userXProductID'});
+  colDec(UserXProduct.prototype, 'id');
+
+  colDec = Column();
+  colDec(UserXProduct.prototype, 'userID');
+
+  colDec = Column();
+  colDec(UserXProduct.prototype, 'productID');
+
+  relDec = ManyToOne<UserXProduct, User>(() => User, (uxp, u) => [uxp.userID, u.id]);
+  relDec(UserXProduct.prototype, 'user');
+
+  relDec = ManyToOne<UserXProduct, Product>(() => Product, (uxp, p) => [uxp.productID, p.id])
+  relDec(UserXProduct.prototype, 'product');
+
+  tblDec = Table({name: 'users_x_products'});
+  tblDec(UserXProduct);
 }
 

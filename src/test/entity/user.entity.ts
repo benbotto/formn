@@ -1,7 +1,9 @@
 import { Table } from '../../metadata/table/table.decorator';
 import { Column } from '../../metadata/column/column.decorator';
-import { PhoneNumber } from './phone-number.entity';
 import { OneToMany } from '../../metadata/relationship/one-to-many.decorator';
+
+import { PhoneNumber } from './phone-number.entity';
+import { UserXProduct } from './user-x-product';
 
 @Table({name: 'users'})
 export class User {
@@ -22,5 +24,8 @@ export class User {
 
   @OneToMany<User, PhoneNumber>(() => PhoneNumber, (u, pn) => [u.id, pn.userID])
   phoneNumbers: PhoneNumber[];
+
+  @OneToMany<User, UserXProduct>(() => UserXProduct, (u, uxp) => [u.id, uxp.userID])
+  userXProducts: UserXProduct[];
 }
 

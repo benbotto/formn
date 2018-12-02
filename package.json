@@ -10,6 +10,7 @@
     "build": "tsc",
     "doc":"typedoc --options ./typedoc.js ./src",
     "test": "ts-node ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter",
+    "test:debug": "node --inspect-brk=0.0.0.0:9229 -r ts-node/register ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter",
     "clean": "rm -rf doc dist"
   },
   "devDependencies": {

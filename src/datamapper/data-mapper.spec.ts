@@ -255,50 +255,53 @@ describe('DataMapper()', function() {
       ]);
     });
 
-    /*
     it('serializes many-to-one relationships.', function() {
       const query = [
         {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 1, phoneNumber: '999-888-7777'},
         {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 2, phoneNumber: '666-555-4444'},
         {userID: 2, firstName: 'Will', lastName: 'Smith',  phoneNumberID: 3, phoneNumber: '333-222-1111'}
       ];
-      const schema = new Schema('phoneNumberID')
-        .addProperty('phoneNumber')
-        .addSchema('person', new Schema('userID')
-          .addProperties('firstName', 'lastName'),
-        Schema.RELATIONSHIP_TYPE.SINGLE);
 
-      expect(dm.serialize(query, schema)).toEqual([
+      pnSchema
+        .addSchema(
+          userSchema,
+          relStore.getRelationship(PhoneNumber, User, 'user'));
+
+      const phoneNumbers = toPlain(dm.serialize(query, pnSchema));
+      console.log(phoneNumbers);
+
+      expect(phoneNumbers).toEqual([
         {
-          phoneNumberID: 1,
+          id: 1,
           phoneNumber: '999-888-7777',
-          person: {
-            userID: 1,
-            firstName: 'Jack',
-            lastName: 'Black'
+          user: {
+            id: 1,
+            first: 'Jack',
+            last: 'Black'
           }
         },
         {
-          phoneNumberID: 2,
+          id: 2,
           phoneNumber: '666-555-4444',
-          person: {
-            userID: 1,
-            firstName: 'Jack',
-            lastName: 'Black'
+          user: {
+            id: 1,
+            first: 'Jack',
+            last: 'Black'
           }
         },
         {
-          phoneNumberID: 3,
+          id: 3,
           phoneNumber: '333-222-1111',
-          person: {
-            userID: 2,
-            firstName: 'Will',
-            lastName: 'Smith'
+          user: {
+            id: 2,
+            first: 'Will',
+            last: 'Smith'
           }
         }
       ]);
     });
 
+    /*
     it('serializes multiple sub-schemata with the same primary key value.', function() {
       // Both phoneNumberID and productID are 1.
       const query = [

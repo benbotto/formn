@@ -4,7 +4,7 @@ type LookupType = {[key: string]: any};
 type QueryRowType = LookupType;
 
 /**
- * Class that serializes a [[Schema]] instance into a normalized document (a
+ * Class that serializes a [[Schema]] instance in to a normalized document (a
  * series of [[Table]]-decorated Entities).
  */
 export class DataMapper {

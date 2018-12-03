@@ -354,6 +354,25 @@ describe('DataMapper()', function() {
         }
       ]);
     });
+
+    it('serializes sub-documents to null if the PK is not present.', () => {
+      const query: object[] = [
+        {userID: null, firstName: null, lastName: null, phoneNumberID: 4, phoneNumber: '987-654-3210'}
+      ];
+
+      pnSchema
+        .addSchema(userSchema, relStore.getRelationship(PhoneNumber, User, 'user'));
+
+      const phoneNumbers = toPlain(dm.serialize(query, pnSchema));
+
+      expect(phoneNumbers).toEqual([
+        {
+          id: 4,
+          phoneNumber: '987-654-3210',
+          user:  null
+        }
+      ]);
+    });
   });
 });
 

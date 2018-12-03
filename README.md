@@ -41,6 +41,7 @@ Tasks such as building, testing, and generating documentation are defined in pac
   * `npm run clean`: Remove the `dist` and `doc` folders.
   * `npm run watch:test`: Run the unit tests any time a ts file changes.
     Watching is done via chokidar-cli.
+  * `npm run watch:doc`: Generate documentation any time a ts file changes.
 
 ##### Unit Tests
 

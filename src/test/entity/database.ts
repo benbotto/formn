@@ -2,7 +2,7 @@ import { User } from './user.entity';
 import { PhoneNumber } from './phone-number.entity';
 import { Photo } from './photo.entity';
 import { Product } from './product.entity';
-import { UserXProduct } from './user-x-product';
+import { UserXProduct } from './user-x-product.entity';
 
 import { Column } from '../../metadata/column/column.decorator';
 import { Table } from '../../metadata/table/table.decorator';
@@ -117,7 +117,7 @@ export function initDB() {
   tblDec(Photo);
 
   // UserXProduct.
-  colDec = Column({name: 'userXProductID'});
+  colDec = Column({name: 'userXProductID', isPrimary: true, isGenerated: true});
   colDec(UserXProduct.prototype, 'id');
 
   colDec = Column();

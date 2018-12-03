@@ -3,7 +3,7 @@ import { Column } from '../../metadata/column/column.decorator';
 import { OneToMany } from '../../metadata/relationship/one-to-many.decorator';
 
 import { PhoneNumber } from './phone-number.entity';
-import { UserXProduct } from './user-x-product';
+import { UserXProduct } from './user-x-product.entity';
 
 @Table({name: 'users'})
 export class User {

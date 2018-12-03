@@ -4,7 +4,7 @@ import { OneToOne } from '../../metadata/relationship/one-to-one.decorator';
 import { OneToMany } from '../../metadata/relationship/one-to-many.decorator';
 
 import { Photo } from './photo.entity';
-import { UserXProduct } from './user-x-product';
+import { UserXProduct } from './user-x-product.entity';
 
 @Table({name: 'products'})
 export class Product {

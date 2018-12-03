@@ -7,7 +7,7 @@ import { Product } from './product.entity';
 
 @Table({name: 'users_x_products'})
 export class UserXProduct {
-  @Column({name: 'userXProductID'})
+  @Column({name: 'userXProductID', isPrimary: true, isGenerated: true})
   id: number;
 
   @Column()

@@ -10,6 +10,9 @@ import { DataMapper } from './data-mapper';
 
 import { User } from '../test/entity/user.entity';
 import { PhoneNumber } from '../test/entity/phone-number.entity';
+import { UserXProduct } from '../test/entity/user-x-product.entity';
+import { Product } from '../test/entity/product.entity';
+import { Photo } from '../test/entity/photo.entity';
 
 describe('DataMapper()', function() {
   let tblStore: TableStore;
@@ -17,6 +20,9 @@ describe('DataMapper()', function() {
   let relStore: RelationshipStore;
   let userSchema: Schema;
   let pnSchema: Schema;
+  let userXProdSchema: Schema;
+  let prodSchema: Schema;
+  let photoSchema: Schema;
   let dm: DataMapper;
 
   // Helper to convert to an object.  Jasmine's .toEqual match checks
@@ -43,6 +49,20 @@ describe('DataMapper()', function() {
       colStore.getPrimaryKey(PhoneNumber)[0])
       .addColumn(colStore.getColumnMetadataByName(PhoneNumber, 'phoneNumber'));
 
+    userXProdSchema = new Schema(
+      tblStore.getTable(UserXProduct),
+      colStore.getPrimaryKey(UserXProduct)[0]);
+
+    prodSchema = new Schema(
+      tblStore.getTable(Product),
+      colStore.getPrimaryKey(Product)[0])
+      .addColumn(colStore.getColumnMetadataByName(Product, 'description'));
+
+    photoSchema = new Schema(
+      tblStore.getTable(Photo),
+      colStore.getPrimaryKey(Photo)[0])
+      .addColumn(colStore.getColumnMetadataByName(Photo, 'photoURL'));
+
     dm = new DataMapper();
   });
 
@@ -67,7 +87,7 @@ describe('DataMapper()', function() {
         {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 2,    phoneNumber: '666-555-4444'},
         {userID: 2, firstName: 'Dave', lastName: 'Zander', phoneNumberID: null, phoneNumber: null}
       ];
-      const rel = relStore.getRelationships(User, PhoneNumber, true, 'phoneNumbers')[0];
+      const rel = relStore.getRelationship(User, PhoneNumber, 'phoneNumbers');
 
       // PhoneNumber is a SubSchema for User.
       userSchema.addSchema(pnSchema, rel);
@@ -94,88 +114,143 @@ describe('DataMapper()', function() {
     });
 
     it('serializes complex queries recursively.', function() {
-      const query = [
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 1,    phoneNumber: '916-293-4667', productID: 1,    description: 'Nike',     catDesc: 'Apparel'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 2,    phoneNumber: '916-200-1440', productID: 1,    description: 'Nike',     catDesc: 'Apparel'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 3,    phoneNumber: '530-307-8810', productID: 1,    description: 'Nike',     catDesc: 'Apparel'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 1,    phoneNumber: '916-293-4667', productID: 1,    description: 'Nike',     catDesc: 'Shoes'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 2,    phoneNumber: '916-200-1440', productID: 1,    description: 'Nike',     catDesc: 'Shoes'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 3,    phoneNumber: '530-307-8810', productID: 1,    description: 'Nike',     catDesc: 'Shoes'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 1,    phoneNumber: '916-293-4667', productID: 2,    description: 'Reboc',    catDesc: 'Apparel'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 2,    phoneNumber: '916-200-1440', productID: 2,    description: 'Reboc',    catDesc: 'Apparel'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 3,    phoneNumber: '530-307-8810', productID: 2,    description: 'Reboc',    catDesc: 'Apparel'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 1,    phoneNumber: '916-293-4667', productID: 2,    description: 'Reboc',    catDesc: 'Shoes'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 2,    phoneNumber: '916-200-1440', productID: 2,    description: 'Reboc',    catDesc: 'Shoes'},
-        {userID: 1, firstName: 'Joe',  lastName: 'Shmo',    phoneNumberID: 3,    phoneNumber: '530-307-8810', productID: 2,    description: 'Reboc',    catDesc: 'Shoes'},
-        {userID: 3, firstName: 'Rand', lastName: 'AlThore', phoneNumberID: 4,    phoneNumber: '666-451-4412', productID: null, description: null,       catDesc: null},
-        {userID: 2, firstName: 'Jack', lastName: 'Davis',   phoneNumberID: null, phoneNumber: null,           productID: 3,    description: 'Crystals', catDesc: 'Gifts'},
-        {userID: 2, firstName: 'Jack', lastName: 'Davis',   phoneNumberID: null, phoneNumber: null,           productID: 1,    description: 'Nike',     catDesc: 'Shoes'}
-      ];
+      const query = require('../test/query/users-with-phone-numbers-products-and-photos.json');
 
-      const schema = new Schema('userID', 'userID')
-        .addProperties('firstName', 'lastName')
-        .addSchema('phoneNumbers', new Schema('phoneNumber'))
-        .addSchema('products', new Schema('prodDesc')
-          .addProperty('productVisible', 'isVisible')
-          .addSchema('categories', new Schema('catDesc')));
+      userSchema
+        .addSchema(
+          pnSchema,
+          relStore.getRelationship(User, PhoneNumber, 'phoneNumbers'))
+        .addSchema(
+          userXProdSchema
+            .addSchema(
+              prodSchema
+                .addSchema(photoSchema, relStore.getRelationship(Product, Photo, 'photos')),
+              relStore.getRelationship(UserXProduct, Product, 'product')),
+          relStore.getRelationship(User, UserXProduct, 'userXProducts'));
 
-      expect(dm.serialize(query, schema)).toEqual([
+      const users = toPlain(dm.serialize(query, userSchema));
+
+      expect(users).toEqual([
+        // User 1 has three phone numbers and 2 products.
+        // Nike has 3 photos, Rebok has 2.
         {
-          userID: 1,
-          firstName: 'Joe',
-          lastName: 'Shmo',
-          phoneNumbers: [
-            {phoneNumber: '916-293-4667'},
-            {phoneNumber: '916-200-1440'},
-            {phoneNumber: '530-307-8810'}
+          "id": 1,
+          "first": "Joe",
+          "last": "Shmo",
+          "phoneNumbers": [
+            {
+              "id": 1,
+              "phoneNumber": "530-307-8810"
+            },
+            {
+              "id": 2,
+              "phoneNumber": "916-200-1440"
+            },
+            {
+              "id": 3,
+              "phoneNumber": "916-293-4667"
+            }
           ],
-          products: [
+          "userXProducts": [
             {
-              prodDesc: 'Nike',
-              isVisible: true,
-              categories: [
-                {catDesc: 'Apparel'},
-                {catDesc: 'Shoes'}
-              ]
+              "id": 1,
+              "product": {
+                "id": 1,
+                "description": "Nike",
+                "photos": [
+                  {
+                    "id": 3,
+                    "photoURL": "https://photos.com/nike.jpg"
+                  },
+                  {
+                    "id": 6,
+                    "photoURL": "https://photos.com/MJ.jpg"
+                  },
+                  {
+                    "id": 9,
+                    "photoURL": "https://photos.com/hoops.jpg"
+                  }
+                ]
+              }
             },
             {
-              prodDesc: 'Reboc',
-              isVisible: false,
-              categories: [
-                {catDesc: 'Apparel'},
-                {catDesc: 'Shoes'}
-              ]
-            },
+              "id": 2,
+              "product": {
+                "id": 3,
+                "description": "Rebok",
+                "photos": [
+                  {
+                    "id": 12,
+                    "photoURL": "https://photos.com/rebok.jpg"
+                  },
+                  {
+                    "id": 15,
+                    "photoURL": "https://photos.com/mma.jpg"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        // User 2 has 1 phone number and 1 product.
+        // Crystals has no photos.
+        {
+          "id": 2,
+          "first": "Rand",
+          "last": "AlThore",
+          "phoneNumbers": [
+            {
+              "id": 4,
+              "phoneNumber": "666-451-4412"
+            }
+          ],
+          "userXProducts": [
+            {
+              "id": 3,
+              "product": {
+                "id": 2,
+                "description": "Crystals",
+                "photos": []
+              }
+            }
+          ]
+        },
+        // User 3 has no phone numbers and the same products as user 1.
+        {
+          "id": 3,
+          "first": "Holly",
+          "last": "Davis",
+          "phoneNumbers": [],
+          "userXProducts": [
+            {
+              "id": 4,
+              "product": {
+                "id": 1,
+                "description": "Nike",
+                "photos": [
+                  {
+                    "id": 3,
+                    "photoURL": "https://photos.com/nike.jpg"
+                  },
+                  {
+                    "id": 6,
+                    "photoURL": "https://photos.com/MJ.jpg"
+                  },
+                  {
+                    "id": 9,
+                    "photoURL": "https://photos.com/hoops.jpg"
+                  }
+                ]
+              }
+            }
           ]
         },
         {
-          userID: 3,
-          firstName: 'Rand',
-          lastName: 'AlThore',
-          phoneNumbers: [{phoneNumber: '666-451-4412'}],
-          products: []
-        },
-        {
-          userID: 2,
-          firstName: 'Jack',
-          lastName: 'Davis',
-          phoneNumbers: [],
-          products: [
-            {
-              prodDesc: 'Crystals',
-              isVisible: true,
-              categories: [
-                {catDesc: 'Gifts'}
-              ]
-            },
-            {
-              prodDesc: 'Nike',
-              isVisible: true,
-              categories: [
-                {catDesc: 'Shoes'}
-              ]
-            },
-          ]
+          "id": 4,
+          "first": "Jenny",
+          "last": "Mather",
+          "phoneNumbers": [],
+          "userXProducts": []
         }
       ]);
     });

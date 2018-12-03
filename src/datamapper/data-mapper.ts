@@ -31,7 +31,7 @@ export class DataMapper {
       lookup: LookupType,
       collection?: R[]): R {
 
-      const keyCol = schema.keyColumn.name;
+      const keyCol = schema.getKeyColumn().name;
       const keyVal = queryRow[keyCol];
       let doc;
 
@@ -54,16 +54,17 @@ export class DataMapper {
 
         // Add each property->column value to the document.
         for (let i = 0; i < schema.columns.length; ++i) {
+          const column  = schema.columns[i];
+          const colMeta = column.meta;
+          const colName = column.name;
+
           // If there's an onRetrieve converter then call it with the column
           // value.  Otherwise just map the column on to the document.  (mapTo
           // is the Column-decorated property name.)
-          if (schema.columns[i].converter && schema.columns[i].converter.onRetrieve) {
-            doc[schema.columns[i].mapTo] = schema.columns[i].converter
-              .onRetrieve(queryRow[schema.columns[i].name]);
-          }
-          else {
-            doc[schema.columns[i].mapTo] = queryRow[schema.columns[i].name];
-          }
+          if (colMeta.converter && colMeta.converter.onRetrieve)
+            doc[colMeta.mapTo] = colMeta.converter.onRetrieve(queryRow[colName]);
+          else
+            doc[colMeta.mapTo] = queryRow[colName];
         }
 
         // This lookup is used to ensure uniqueness.

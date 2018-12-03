@@ -42,28 +42,33 @@ describe('DataMapper()', function() {
 
     userSchema = new Schema(
       tblStore.getTable(User),
-      colStore.getPrimaryKey(User)[0])
-      .addColumn(colStore.getColumnMetadataByName(User, 'firstName'))
-      .addColumn(colStore.getColumnMetadataByName(User, 'lastName'));
+      colStore.getPrimaryKey(User)[0],
+      'userID')
+      .addColumn(colStore.getColumnMetadataByName(User, 'firstName'), 'firstName')
+      .addColumn(colStore.getColumnMetadataByName(User, 'lastName'), 'lastName');
 
     pnSchema = new Schema(
       tblStore.getTable(PhoneNumber),
-      colStore.getPrimaryKey(PhoneNumber)[0])
-      .addColumn(colStore.getColumnMetadataByName(PhoneNumber, 'phoneNumber'));
+      colStore.getPrimaryKey(PhoneNumber)[0],
+      'phoneNumberID')
+      .addColumn(colStore.getColumnMetadataByName(PhoneNumber, 'phoneNumber'), 'phoneNumber');
 
     userXProdSchema = new Schema(
       tblStore.getTable(UserXProduct),
-      colStore.getPrimaryKey(UserXProduct)[0]);
+      colStore.getPrimaryKey(UserXProduct)[0],
+      'userXProductID');
 
     prodSchema = new Schema(
       tblStore.getTable(Product),
-      colStore.getPrimaryKey(Product)[0])
-      .addColumn(colStore.getColumnMetadataByName(Product, 'description'));
+      colStore.getPrimaryKey(Product)[0],
+      'productID')
+      .addColumn(colStore.getColumnMetadataByName(Product, 'description'), 'description');
 
     photoSchema = new Schema(
       tblStore.getTable(Photo),
-      colStore.getPrimaryKey(Photo)[0])
-      .addColumn(colStore.getColumnMetadataByName(Photo, 'photoURL'));
+      colStore.getPrimaryKey(Photo)[0],
+      'photoID')
+      .addColumn(colStore.getColumnMetadataByName(Photo, 'photoURL'), 'photoURL');
 
     dm = new DataMapper();
   });
@@ -210,6 +215,38 @@ describe('DataMapper()', function() {
             {id: 14, phoneNumber: '987-654-3210'}
           ]
         }
+      ]);
+    });
+
+    it('uses custom column names.', () => {
+      class UCConverter extends Converter {
+        onRetrieve(name: string): string {
+          return name.toUpperCase();
+        }
+      }
+
+      // Convert firstName to uppercase.
+      colStore
+        .getColumnMetadataByName(User, 'firstName')
+        .converter = new UCConverter();
+
+      const schema = new Schema(
+        tblStore.getTable(User),
+        colStore.getPrimaryKey(User)[0],
+        'col1')
+        .addColumn(colStore.getColumnMetadataByName(User, 'firstName'), 'col2')
+        .addColumn(colStore.getColumnMetadataByName(User, 'lastName'), 'col3');
+
+      const query = [
+        {col1: 1, col2: 'Jane', col3: 'Doe'},
+        {col1: 2, col2: 'Suzy', col3: 'Queue'},
+      ];
+
+      const users = toPlain(dm.serialize(query, schema));
+
+      expect(users).toEqual([
+        {id: 1, first: 'JANE', last: 'Doe'},
+        {id: 2, first: 'SUZY', last: 'Queue'},
       ]);
     });
 

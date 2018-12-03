@@ -24,7 +24,8 @@ describe('Schema()', function() {
 
     userSchema = new Schema(
       tblStore.getTable(User),
-      colStore.getPrimaryKey(User)[0]);
+      colStore.getPrimaryKey(User)[0],
+      'userID');
   });
 
   describe('.constructor()', function() {
@@ -32,9 +33,10 @@ describe('Schema()', function() {
       const cols = userSchema.columns;
 
       expect(cols.length).toBe(1);
-      expect(cols[0]).toBe(userSchema.keyColumn);
-      expect(cols[0].mapTo).toBe('id');
+      expect(cols[0]).toBe(userSchema.getKeyColumn());
+      expect(cols[0].meta.mapTo).toBe('id');
       expect(cols[0].name).toBe('userID');
+      expect(cols[0].meta.name).toBe('userID');
       expect(userSchema.table.name).toBe('users');
       expect(userSchema.table.Entity).toBe(User);
     });
@@ -42,34 +44,19 @@ describe('Schema()', function() {
 
   describe('.addColumn()', function() {
     it('throw if the property name has been used.', function() {
-      expect(() => userSchema.addColumn(colStore.getPrimaryKey(User)[0]))
+      expect(() => userSchema.addColumn(colStore.getPrimaryKey(User)[0], 'userID'))
         .toThrowError('Property "id" already present in schema.');
     });
 
     it('stores the column.', () => {
-      userSchema.addColumn(colStore.getColumnMetadataByName(User, 'firstName'));
+      userSchema.addColumn(colStore.getColumnMetadataByName(User, 'firstName'), 'colName');
 
       const cols = userSchema.columns;
 
       expect(cols.length).toBe(2);
-      expect(cols[1].mapTo).toBe('first');
-      expect(cols[1].name).toBe('firstName');
-    });
-  });
-
-  describe('.addColumns()', () => {
-    it('adds multiple columns.', () => {
-      userSchema.addColumns(
-        colStore.getColumnMetadataByName(User, 'firstName'),
-        colStore.getColumnMetadataByName(User, 'lastName'));
-
-      const cols = userSchema.columns;
-
-      expect(cols.length).toBe(3);
-      expect(cols[1].mapTo).toBe('first');
-      expect(cols[1].name).toBe('firstName');
-      expect(cols[2].mapTo).toBe('last');
-      expect(cols[2].name).toBe('lastName');
+      expect(cols[1].name).toBe('colName');
+      expect(cols[1].meta.mapTo).toBe('first');
+      expect(cols[1].meta.name).toBe('firstName');
     });
   });
 
@@ -80,7 +67,8 @@ describe('Schema()', function() {
     beforeEach(() => {
       pnSchema = new Schema(
         tblStore.getTable(PhoneNumber),
-        colStore.getPrimaryKey(PhoneNumber)[0]);
+        colStore.getPrimaryKey(PhoneNumber)[0],
+        'phoneNumberID');
       
       rel = relStore.getRelationships(User, PhoneNumber, true, 'phoneNumbers')[0];
     });
@@ -93,7 +81,7 @@ describe('Schema()', function() {
       expect(schemata.length).toBe(1);
       expect(schemata[0].relationship.mapTo).toBe('phoneNumbers');
       expect(schemata[0].relationship.cardinality).toBe('OneToMany');
-      expect(schemata[0].schema.keyColumn.name).toBe('phoneNumberID');
+      expect(schemata[0].schema.getKeyColumn().name).toBe('phoneNumberID');
       expect(schemata[0].schema.table.Entity).toBe(PhoneNumber);
     });
 

@@ -1,5 +1,6 @@
 import { RelationshipMetadata } from './relationship-metadata';
 import { EntityType } from '../table/entity-type';
+import { assert } from '../../error/assert';
 
 /** Stores relationships and provides lookup functions. */
 export class RelationshipStore {
@@ -49,6 +50,29 @@ export class RelationshipStore {
       .filter(rel => rel.Entity === Entity2 && rel.to() === Entity1);
 
     return t1Rels.concat(t2Rels);
+  }
+
+  /**
+   * Get the relationship between two tables on a property.  Short-hand for
+   * getRelationships with oneWay=true, but throws if the relationship does not
+   * exist.
+   * @param Entity1 - The first Entity (constructor), i.e. the class that's
+   * decorated with @[[Table]].
+   * @param Entity2 - The second Entity.
+   * @param mapTo - The proeprty on Entity1 where the relationship is defined.
+   * @return The RelationshipMetadata for the relationship.
+   */
+  getRelationship(
+    Entity1: EntityType,
+    Entity2: EntityType,
+    mapTo: string): RelationshipMetadata {
+
+    const rels = this.getRelationships(Entity1, Entity2, true, mapTo);
+
+    assert(rels.length,
+      `Relationship between "${Entity1.name}" and "${Entity2.name}" on property "${mapTo}" does not exist.`);
+
+    return rels[0];
   }
 }
 

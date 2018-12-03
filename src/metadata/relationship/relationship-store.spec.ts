@@ -107,5 +107,20 @@ describe('RelationshipStore()', function() {
       expect(rels[0].cardinality).toBe('OneToOne');
     });
   });
+
+  describe('.getRelationship()', () => {
+    it('throws an error if the relationship is not defined.', () => {
+      expect(() => relStore.getRelationship(User, Product, 'foo'))
+        .toThrowError('Relationship between "User" and "Product" on property "foo" does not exist.');
+    });
+
+    it('returns the relationship.', () => {
+      const rel = relStore.getRelationship(User, PhoneNumber, 'phoneNumbers');
+
+      expect(rel.mapTo).toBe('phoneNumbers');
+      expect(rel.to()).toBe(PhoneNumber);
+      expect(rel.Entity).toBe(User);
+    });
+  });
 });
 

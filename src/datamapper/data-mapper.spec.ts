@@ -8,6 +8,8 @@ import { RelationshipMetadata } from '../metadata/relationship/relationship-meta
 import { Schema } from './schema';
 import { DataMapper } from './data-mapper';
 
+import { Converter } from '../converter/converter';
+
 import { User } from '../test/entity/user.entity';
 import { PhoneNumber } from '../test/entity/phone-number.entity';
 import { UserXProduct } from '../test/entity/user-x-product.entity';
@@ -109,6 +111,104 @@ describe('DataMapper()', function() {
           first: 'Dave',
           last: 'Zander',
           phoneNumbers: []
+        }
+      ]);
+    });
+
+    it('serializes many-to-one relationships.', function() {
+      const query = [
+        {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 1, phoneNumber: '999-888-7777'},
+        {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 2, phoneNumber: '666-555-4444'},
+        {userID: 2, firstName: 'Will', lastName: 'Smith',  phoneNumberID: 3, phoneNumber: '333-222-1111'}
+      ];
+
+      pnSchema
+        .addSchema(
+          userSchema,
+          relStore.getRelationship(PhoneNumber, User, 'user'));
+
+      const phoneNumbers = toPlain(dm.serialize(query, pnSchema));
+
+      expect(phoneNumbers).toEqual([
+        {
+          id: 1,
+          phoneNumber: '999-888-7777',
+          user: {
+            id: 1,
+            first: 'Jack',
+            last: 'Black'
+          }
+        },
+        {
+          id: 2,
+          phoneNumber: '666-555-4444',
+          user: {
+            id: 1,
+            first: 'Jack',
+            last: 'Black'
+          }
+        },
+        {
+          id: 3,
+          phoneNumber: '333-222-1111',
+          user: {
+            id: 2,
+            first: 'Will',
+            last: 'Smith'
+          }
+        }
+      ]);
+    });
+
+    it('uses converters when serializing.', function() {
+      class UCConverter extends Converter {
+        onRetrieve(name: string): string {
+          return name.toUpperCase();
+        }
+      }
+
+      class IDConverter extends Converter {
+        onRetrieve(id: number): number {
+          return id + 10;
+        }
+      }
+
+      // Convert firstName to uppercase.
+      colStore
+        .getColumnMetadataByName(User, 'firstName')
+        .converter = new UCConverter();
+
+      // Add 10 to phoneNumberID.
+      colStore
+        .getColumnMetadataByName(PhoneNumber, 'phoneNumberID')
+        .converter = new IDConverter();
+
+      const query = [
+        {userID: 1, firstName: 'Jack', lastName: 'Black', phoneNumberID: 3, phoneNumber: '123-456-7890'},
+        {userID: 2, firstName: 'Dave', lastName: 'Zander', phoneNumberID: 4, phoneNumber: '987-654-3210'}
+      ];
+
+      userSchema
+        .addSchema(pnSchema, relStore.getRelationship(User, PhoneNumber, 'phoneNumbers'));
+
+      const users = toPlain(dm.serialize(query, userSchema));
+
+      expect(users).toEqual([
+        {
+          id: 1,
+          first: 'JACK',
+          last: 'Black',
+          phoneNumbers: [
+            {id: 13, phoneNumber: '123-456-7890'}
+          ]
+        },
+        {
+          id: 2,
+          first: 'DAVE',
+          last: 'Zander',
+          phoneNumbers: [
+            {id: 14, phoneNumber: '987-654-3210'}
+          ]
         }
       ]);
     });
@@ -254,96 +354,6 @@ describe('DataMapper()', function() {
         }
       ]);
     });
-
-    it('serializes many-to-one relationships.', function() {
-      const query = [
-        {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 1, phoneNumber: '999-888-7777'},
-        {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 2, phoneNumber: '666-555-4444'},
-        {userID: 2, firstName: 'Will', lastName: 'Smith',  phoneNumberID: 3, phoneNumber: '333-222-1111'}
-      ];
-
-      pnSchema
-        .addSchema(
-          userSchema,
-          relStore.getRelationship(PhoneNumber, User, 'user'));
-
-      const phoneNumbers = toPlain(dm.serialize(query, pnSchema));
-      console.log(phoneNumbers);
-
-      expect(phoneNumbers).toEqual([
-        {
-          id: 1,
-          phoneNumber: '999-888-7777',
-          user: {
-            id: 1,
-            first: 'Jack',
-            last: 'Black'
-          }
-        },
-        {
-          id: 2,
-          phoneNumber: '666-555-4444',
-          user: {
-            id: 1,
-            first: 'Jack',
-            last: 'Black'
-          }
-        },
-        {
-          id: 3,
-          phoneNumber: '333-222-1111',
-          user: {
-            id: 2,
-            first: 'Will',
-            last: 'Smith'
-          }
-        }
-      ]);
-    });
-
-    /*
-    it('serializes multiple sub-schemata with the same primary key value.', function() {
-      // Both phoneNumberID and productID are 1.
-      const query = [
-        {userID: 1, phoneNumberID: 1, productID: 1}
-      ];
-
-      const schema = new Schema('userID')
-        .addSchema('phoneNumbers', new Schema('phoneNumberID'))
-        .addSchema('products',     new Schema('productID'));
-
-      expect(dm.serialize(query, schema)).toEqual([
-        {
-          userID: 1,
-          phoneNumbers: [{phoneNumberID: 1}],
-          products: [{productID: 1}]
-        }
-      ]);
-    });
-
-    it('uses converters when serializing.', function() {
-      function idConvert(id) {
-        return id + 10;
-      }
-
-      function ucConvert(str) {
-        return str.toUpperCase();
-      }
-
-      const query = [
-        {userID: 1, firstName: 'Jack', lastName: 'Black'},
-        {userID: 2, firstName: 'Dave', lastName: 'Zander'}
-      ];
-      const schema = new Schema('userID', 'userID', idConvert)
-        .addProperty('firstName', 'first', ucConvert)
-        .addProperty('lastName');
-
-      expect(dm.serialize(query, schema)).toEqual([
-        {userID: 11, first: 'JACK', lastName: 'Black'},
-        {userID: 12, first: 'DAVE', lastName: 'Zander'}
-      ]);
-    });
-    */
   });
 });
 

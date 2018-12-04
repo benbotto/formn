@@ -1,3 +1,13 @@
 Get rid of empty lines with spaces.
 The npm run build script should exclude specs, so there needs to be two tsconfig files.
 There's a to-do note in column.decorator.ts.  The dataType isn't going to work for non-primitives (like related entities).  Maybe just use the type.name and map them on demand (i.e. store the TS type in the column, not the db type).  Seems like trying to map conversions there isn't going to work because the mapping is different for different db flavors (e.g. boolean->bit, tinyint, etc.).  Whenever this is fixed be sure to fix the documentation in column-meta-options.ts.
+This syntax seems okay for selecting.
+  dc.from(User, 'u')
+    .innerJoin('u.phoneNumbers', 'pn')
+    .select();
+ I thought I had is that each from/join could add the alias to an object, so above there would be
+   {
+     u: {id: 'u.id', first: 'u.first', ...},
+     pn: {id: 'pn.id', ...}
+   }
+ Then select could take a function: select(({u}) => [u.id, u.first]).  It wouldn't help with type safety, though, because TS doesn't support variadic generics.

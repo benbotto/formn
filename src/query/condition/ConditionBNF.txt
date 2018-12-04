@@ -1,0 +1,14 @@
+<condition>                ::= "{" <comparison> | <null-comparison> | <in-comparison> | <logical-condition> "}"
+<comparison>               ::= <comparison-operator> ":" "{" <column> ":" <value> "}"
+<null-comparison>          ::= <null-comparison-operator> ":" "{" <column> ":" <nullable> "}"
+<in-comparison>            ::= <in-comparison-operator> ":" "{" <column> ":" "[" <value> {"," <value>} "]" "}"
+<logical-condition>        ::= <boolean-operator> ":" "[" <condition> {"," <condition>} "]"
+<comparison-operator>      ::= "$eq" | "$neq" | "$lt" | "$lte" | "$gt" | "$gte" | "$like" | "$notlike"
+<in-comparison-operator>   ::= "$in" | "$notIn"
+<null-comparison-operator> ::= "$is" | "$isnt"
+<boolean-operator>         ::= "$and" | "$or"
+<nullable>                 ::= null | <parameter>
+<value>                    ::= <parameter> | <column> | <number>
+<column>                   ::= <string>
+<parameter>                ::= :<string>
+

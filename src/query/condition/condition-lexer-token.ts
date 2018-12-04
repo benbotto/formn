@@ -1,9 +1,9 @@
 /**
- * A condition token is generated from the [[ConditionLexer]].  It has a type,
- * a terminal flag, and a value, and is intended for use with the
+ * A token that's generated from the [[ConditionLexer]].  It has a type, a
+ * terminal flag, and a value, and is intended for use with the
  * [[ConditionParser]].
  */
-export class ConditionToken {
+export class ConditionLexerToken {
   /**
    * Initialize the token.
    * @param terminal - Whether or not the token is terminal.

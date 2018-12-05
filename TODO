@@ -12,3 +12,19 @@ This syntax seems okay for selecting.
      pn: {id: 'pn.id', ...}
    }
  Then select could take a function: select(({u}) => [u.id, u.first]).  It wouldn't help with type safety, though, because TS doesn't support variadic generics.
+
+Here's what I'm thinking for the condition builder, set as a to-do item in ndm.
+ 
+const cb = new ConditionBuilder();
+
+cb.and(
+  cb.eq('u.name', 'Ben'),
+  cb.gt('u.dob', '2014-01-01')
+)
+
+Returns a 
+
+class ParameterizedCondition {
+  condition: object;
+  params: object;
+}

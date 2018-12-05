@@ -13,6 +13,6 @@ export class LexerToken {
   constructor(
     public terminal: boolean,
     public type: string,
-    public value: any) {
+    public value: string|number) {
   }
 }

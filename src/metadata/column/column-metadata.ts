@@ -46,13 +46,13 @@ export class ColumnMetadata {
   }
 
   /**
-   * Create a fully-qualified column name in the form
-   * &lt;table-alias&gt;.&lt;column-name&gt;.
+   * Create a fully-qualified name in the form
+   * &lt;table-alias&gt;.&lt;name&gt;.
    * @param tableAlias - The alias for the table.
-   * @param colName - The column name.
+   * @param colName - The name of a column or property.
    * @return The fully-qualified column name, unescaped.
    */
-  static createFQColName(tableAlias: string, colName: string): string {
+  static createFQName(tableAlias: string, colName: string): string {
     return `${tableAlias}.${colName}`;
   }
 }

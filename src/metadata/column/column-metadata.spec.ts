@@ -65,9 +65,9 @@ describe('Column()', () => {
     });
   });
 
-  describe('.createFQColName()', () => {
+  describe('.createFQName()', () => {
     it('returns the unescaped name.', function() {
-      expect(ColumnMetadata.createFQColName('users', 'firstName')).toBe('users.firstName');
+      expect(ColumnMetadata.createFQName('users', 'firstName')).toBe('users.firstName');
     });
   });
 });

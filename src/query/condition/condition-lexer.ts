@@ -1,4 +1,4 @@
-import { ConditionLexerToken } from './condition-lexer-token';
+import { LexerToken } from './lexer-token';
 import { ConditionError } from '../../error/condition-error';
 
 /** 
@@ -13,12 +13,12 @@ export class ConditionLexer {
    * properties: terminal, which is a boolean indicating if the token is a
    * terminal or not; type, as described by the condition BNF; and value.
    */
-  parse(condStr: string|object): ConditionLexerToken[] {
+  parse(condStr: string|object): LexerToken[] {
     // Make sure condStr is actually a string.  If it's an object, stringify it.
     if (typeof condStr === 'object')
       condStr = JSON.stringify(condStr);
 
-    const tokens: ConditionLexerToken[] = [];
+    const tokens: LexerToken[] = [];
     const len     = condStr.length;
     const boolOps = ['$and', '$or'];
     const compOps = ['$eq', '$neq', '$lt', '$lte', '$gt', '$gte', '$like', '$notLike'];
@@ -30,7 +30,7 @@ export class ConditionLexer {
 
     // Helper to add a token to the tokens array.
     function addToken(terminal: boolean, type: string, value: any): void {
-      tokens.push(new ConditionLexerToken(terminal, type, value));
+      tokens.push(new LexerToken(terminal, type, value));
     }
 
     for (let i = 0; i < len; ++i) {

@@ -3,7 +3,7 @@
  * terminal flag, and a value, and is intended for use with the
  * [[ConditionParser]].
  */
-export class ConditionLexerToken {
+export class LexerToken {
   /**
    * Initialize the token.
    * @param terminal - Whether or not the token is terminal.

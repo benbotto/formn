@@ -1,0 +1,286 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>formn</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">formn</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> formn</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<p>Work in progress.</p>
+				<h3 id="development-notes">Development Notes</h3>
+				<h5 id="development-environment">Development Environment</h5>
+				<p>Two docker containers are used during development:</p>
+				<ol>
+					<li><code>formn-dev</code>: An Ubuntu Bionic container with Node.js Dubnium, with the code
+						(this directory) mounted on <code>/home/node/dev/</code>.  This container has all the
+						dependencies required to run the unit tests, build the application, and
+					generate documentation.</li>
+					<li><code>formn-db</code>: A Percona 5.7 container with a <code>formn_test_db</code> database.  This
+						container isn&#39;t strictly necessary for development, but while coding it&#39;s
+						often useful to test against an actual database.  The tables mimic the
+						entity definitions in <code>src/test/entity/</code>.  The database data and schema are
+					defined in <code>docker-entrypoint-initdb.d/</code>.</li>
+				</ol>
+				<p>To bring up the development environment, use Docker Compose: <code>docker-compose up
+-d</code>.  The two containers can be seen by running <code>docker ps -a</code>.  Bring up a
+					bash shell in the dev environment with <code>docker-compose exec dev bash</code>.  From bash,
+				install the required dependencies using yarn:</p>
+				<pre><code><span class="hljs-built_in">cd</span> dev
+yarn</code></pre><h5 id="tasks">Tasks</h5>
+				<p>Tasks such as building, testing, and generating documentation are defined in package.json as npm scripts.</p>
+				<ul>
+					<li><code>npm run build</code>: Build the application to ES6.  The build will be in
+					<code>dist</code>.</li>
+					<li><code>npm run doc</code>: Generate documentation for the project.  The documentation
+					is created with TypeDoc and is located in the <code>doc</code> folder.</li>
+					<li><code>npm run test</code>: Run the unit tests.  Unit tests are written for Jasmine.</li>
+					<li><code>npm run test:debug</code>: Run the unit tests and break immediately.  From
+						Chrome, navigate to <code>chrome://inspect</code> to debug the application.  (Using a
+					<code>debugger</code> statement somewhere in the code is helpful.)</li>
+					<li><code>npm run clean</code>: Remove the <code>dist</code> and <code>doc</code> folders.</li>
+					<li><code>npm run watch:test</code>: Run the unit tests any time a ts file changes.
+					Watching is done via chokidar-cli.</li>
+					<li><code>npm run watch:doc</code>: Generate documentation any time a ts file changes.</li>
+				</ul>
+				<h5 id="unit-tests">Unit Tests</h5>
+				<p>Tests are written for Jasmine.  Each test suite lives alongside its counterpart
+					file (for example, <code>src/datamapper/schema.ts</code> is accompanied by
+					<code>src/datamapper/schema.spec.ts</code>).  There are also some helper scripts in
+				<code>src/test/</code> that are used to aid in the testing process.</p>
+				<ul>
+					<li><code>test/query/</code>: One-off queries that were used to generate database results
+					for testing against actual datasets.</li>
+					<li><code>test/entity/*.entity.ts</code>: Table definitions used when testing.  These
+					definitions match the <code>formn_test_db</code> database.</li>
+					<li><code>test/entity/database.ts</code>: Exports an <code>initDB()</code> function.  With formn,
+						entities are defined using decorators, and these decorators create metadata
+						about tables and columns.  Unit tests sometimes change these metadata
+						definitions to test different scenarios.  <code>initDB()</code> manually decorates
+						entity classes to prevent state from carrying over from one test to the
+					next.  It&#39;s generally called from a test&#39;s <code>beforeEach</code> setup.</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class">
+						<a href="classes/columnmetaoptions.html" class="tsd-kind-icon">Column<wbr>Meta<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/columnmetadata.html" class="tsd-kind-icon">Column<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/columnstore.html" class="tsd-kind-icon">Column<wbr>Store</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/conditionerror.html" class="tsd-kind-icon">Condition<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/conditionlexer.html" class="tsd-kind-icon">Condition<wbr>Lexer</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/conditionparser.html" class="tsd-kind-icon">Condition<wbr>Parser</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/converter.html" class="tsd-kind-icon">Converter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/datamapper.html" class="tsd-kind-icon">Data<wbr>Mapper</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/lexertoken.html" class="tsd-kind-icon">Lexer<wbr>Token</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/parsetree.html" class="tsd-kind-icon">Parse<wbr>Tree</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/relationshipmetaoptions.html" class="tsd-kind-icon">Relationship<wbr>Meta<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/relationshipmetadata.html" class="tsd-kind-icon">Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/relationshipstore.html" class="tsd-kind-icon">Relationship<wbr>Store</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/schema.html" class="tsd-kind-icon">Schema</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/schemacolumn.html" class="tsd-kind-icon">Schema<wbr>Column</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/subschema.html" class="tsd-kind-icon">Sub<wbr>Schema</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/tablemetaoptions.html" class="tsd-kind-icon">Table<wbr>Meta<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/tablemetadata.html" class="tsd-kind-icon">Table<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/tablestore.html" class="tsd-kind-icon">Table<wbr>Store</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#cardinalitytype" class="tsd-kind-icon">Cardinality<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#entitytype" class="tsd-kind-icon">Entity<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#propertymaptype" class="tsd-kind-icon">Property<wbr>Map<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#column" class="tsd-kind-icon">Column</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#manytoone" class="tsd-kind-icon">Many<wbr>ToOne</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#onetomany" class="tsd-kind-icon">One<wbr>ToMany</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#onetoone" class="tsd-kind-icon">One<wbr>ToOne</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#relationship" class="tsd-kind-icon">Relationship</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#table" class="tsd-kind-icon">Table</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#assert" class="tsd-kind-icon">assert</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

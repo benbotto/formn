@@ -11,8 +11,9 @@ import { ConditionError } from '../../error/condition-error';
 export class ConditionCompiler {
   /**
    * Initialize the compiler.
-   * @param - An instance of an [[Escaper]] that matches the database type (e.g.
-   * [[MySQLEscaper]] for a [[MySQL]] database).
+   * @param escaper - An instance of an [[Escaper]] that matches the database
+   * type (e.g. [[MySQLEscaper]] or [[MSSQLEscaper]]).  This is used for
+   * escaping column names.
    */
   constructor(private escaper: Escaper) {
   }

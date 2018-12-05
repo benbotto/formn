@@ -106,13 +106,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Lexer<wbr>Token<span class="tsd-signature-symbol">(</span>terminal<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lexertoken.html" class="tsd-signature-type">LexerToken</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Lexer<wbr>Token<span class="tsd-signature-symbol">(</span>terminal<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lexertoken.html" class="tsd-signature-type">LexerToken</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/7297851/src/query/condition/lexer-token.ts#L6">query/condition/lexer-token.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/query/condition/lexer-token.ts#L6">query/condition/lexer-token.ts:6</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -139,7 +139,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<h5>value: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The value of the token.</p>
@@ -160,7 +160,7 @@
 					<div class="tsd-signature tsd-kind-icon">terminal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/7297851/src/query/condition/lexer-token.ts#L14">query/condition/lexer-token.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/query/condition/lexer-token.ts#L14">query/condition/lexer-token.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -175,7 +175,7 @@
 					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/7297851/src/query/condition/lexer-token.ts#L15">query/condition/lexer-token.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/query/condition/lexer-token.ts#L15">query/condition/lexer-token.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -187,10 +187,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="value" class="tsd-anchor"></a>
 					<h3>value</h3>
-					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/7297851/src/query/condition/lexer-token.ts#L16">query/condition/lexer-token.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/query/condition/lexer-token.ts#L16">query/condition/lexer-token.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -221,6 +221,9 @@
 						<a href="columnstore.html" class="tsd-kind-icon">Column<wbr>Store</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="conditioncompiler.html" class="tsd-kind-icon">Condition<wbr>Compiler</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="conditionerror.html" class="tsd-kind-icon">Condition<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -234,6 +237,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="datamapper.html" class="tsd-kind-icon">Data<wbr>Mapper</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="escaper.html" class="tsd-kind-icon">Escaper</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -256,6 +262,12 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class">
+						<a href="mssqlescaper.html" class="tsd-kind-icon">MSSQLEscaper</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="mysqlescaper.html" class="tsd-kind-icon">MySQLEscaper</a>
+					</li>
 					<li class=" tsd-kind-class">
 						<a href="parsetree.html" class="tsd-kind-icon">Parse<wbr>Tree</a>
 					</li>
@@ -291,6 +303,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#entitytype" class="tsd-kind-icon">Entity<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#parametertype" class="tsd-kind-icon">Parameter<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#propertymaptype" class="tsd-kind-icon">Property<wbr>Map<wbr>Type</a>

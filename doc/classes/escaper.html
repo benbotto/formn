@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RelationshipMetaOptions | formn</title>
+	<title>Escaper | formn</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,10 +52,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="relationshipmetaoptions.html">RelationshipMetaOptions</a>
+					<a href="escaper.html">Escaper</a>
 				</li>
 			</ul>
-			<h1>Class RelationshipMetaOptions&lt;ENT_T, REF_ENT_T&gt;</h1>
+			<h1>Class Escaper</h1>
 		</div>
 	</div>
 </header>
@@ -65,27 +65,23 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Options for the <a href="../globals.html#relationship">Relationship</a> decorator.  Reads &quot;ENT_T is related to
-						REF_ENT_T.&quot;</p>
+						<p>Helper class for escaping parts of a query.</p>
 					</div>
 				</div>
-			</section>
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>ENT_T</h4>
-					</li>
-					<li>
-						<h4>REF_ENT_T</h4>
-					</li>
-				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">RelationshipMetaOptions</span>
+						<span class="target">Escaper</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="mssqlescaper.html" class="tsd-signature-type">MSSQLEscaper</a>
+							</li>
+							<li>
+								<a href="mysqlescaper.html" class="tsd-signature-type">MySQLEscaper</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -94,109 +90,81 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="relationshipmetaoptions.html#cardinality" class="tsd-kind-icon">cardinality</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="relationshipmetaoptions.html#on" class="tsd-kind-icon">on</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="relationshipmetaoptions.html#to" class="tsd-kind-icon">to</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="escaper.html#escapefullyqualifiedcolumn" class="tsd-kind-icon">escape<wbr>Fully<wbr>Qualified<wbr>Column</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="escaper.html#escapeproperty" class="tsd-kind-icon">escape<wbr>Property</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="cardinality" class="tsd-anchor"></a>
-					<h3>cardinality</h3>
-					<div class="tsd-signature tsd-kind-icon">cardinality<span class="tsd-signature-symbol">:</span> <a href="../globals.html#cardinalitytype" class="tsd-signature-type">CardinalityType</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/relationship/relationship-meta-options.ts#L25">metadata/relationship/relationship-meta-options.ts:25</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Cardinality of the relationship (e.g. OneToOne, ManyToOne, etc.).</p>
-						</div>
-					</div>
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="escapefullyqualifiedcolumn" class="tsd-anchor"></a>
+					<h3>escape<wbr>Fully<wbr>Qualified<wbr>Column</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">escape<wbr>Fully<wbr>Qualified<wbr>Column<span class="tsd-signature-symbol">(</span>fqc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/query/escaper/escaper.ts#L16">query/escaper/escaper.ts:16</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Escape a fully-qualified column name, such as &#39;u.firstName&#39; or
+									&#39;phone_numbers.phoneNumber&#39;.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>fqc: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The fully-qualified column.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>The escaped column name.</p>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="on" class="tsd-anchor"></a>
-					<h3>on</h3>
-					<div class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/relationship/relationship-meta-options.ts#L20">metadata/relationship/relationship-meta-options.ts:20</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>How ENT_T and REF_ENT_T are related.  This is a function that, given ENT_T
-								and REF_ENT_T <a href="../globals.html#propertymaptype">PropertyMapType</a>s returns an array of Column-decorated
-							property names that will be used to join the two tables.</p>
-						</div>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>ent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ENT_T</span><span class="tsd-signature-symbol"> | </span><a href="../globals.html#propertymaptype" class="tsd-signature-type">PropertyMapType</a>, refEnt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">REF_ENT_T</span><span class="tsd-signature-symbol"> | </span><a href="../globals.html#propertymaptype" class="tsd-signature-type">PropertyMapType</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="escapeproperty" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> escape<wbr>Property</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">escape<wbr>Property<span class="tsd-signature-symbol">(</span>prop<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/query/escaper/escaper.ts#L8">query/escaper/escaper.ts:8</a></li>
 								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>ent: <span class="tsd-signature-type">ENT_T</span><span class="tsd-signature-symbol"> | </span><a href="../globals.html#propertymaptype" class="tsd-signature-type">PropertyMapType</a></h5>
-											</li>
-											<li>
-												<h5>refEnt: <span class="tsd-signature-type">REF_ENT_T</span><span class="tsd-signature-symbol"> | </span><a href="../globals.html#propertymaptype" class="tsd-signature-type">PropertyMapType</a></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>
-											<span class="tsd-signature-symbol"> | </span>
-											<span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>
-										</h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="to" class="tsd-anchor"></a>
-					<h3>to</h3>
-					<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/relationship/relationship-meta-options.ts#L13">metadata/relationship/relationship-meta-options.ts:13</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Function that returns the type of Table that this references (e.g.
-							the constructor of the associated <a href="../globals.html#table">Table</a>-decorated class).</p>
-						</div>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
-										<ul class="tsd-parameters">
-										</ul>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Escape a property, such as a table, column name, or alias.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>prop: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The property to escape.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>The escaped property as a string.</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -237,9 +205,21 @@
 					<li class=" tsd-kind-class">
 						<a href="datamapper.html" class="tsd-kind-icon">Data<wbr>Mapper</a>
 					</li>
-					<li class=" tsd-kind-class">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
 						<a href="escaper.html" class="tsd-kind-icon">Escaper</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="escaper.html#escapefullyqualifiedcolumn" class="tsd-kind-icon">escape<wbr>Fully<wbr>Qualified<wbr>Column</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="escaper.html#escapeproperty" class="tsd-kind-icon">escape<wbr>Property</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="lexertoken.html" class="tsd-kind-icon">Lexer<wbr>Token</a>
 					</li>
@@ -252,24 +232,9 @@
 					<li class=" tsd-kind-class">
 						<a href="parsetree.html" class="tsd-kind-icon">Parse<wbr>Tree</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class tsd-has-type-parameter">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="relationshipmetaoptions.html" class="tsd-kind-icon">Relationship<wbr>Meta<wbr>Options</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="relationshipmetaoptions.html#cardinality" class="tsd-kind-icon">cardinality</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="relationshipmetaoptions.html#on" class="tsd-kind-icon">on</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="relationshipmetaoptions.html#to" class="tsd-kind-icon">to</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="relationshipmetadata.html" class="tsd-kind-icon">Relationship<wbr>Metadata</a>
 					</li>

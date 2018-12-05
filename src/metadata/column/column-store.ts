@@ -1,5 +1,4 @@
 import { ColumnMetadata } from './column-metadata';
-import { PropertyMapType } from './property-map-type';
 import { EntityType } from '../table/entity-type';
 import { assert } from '../../error/assert';
 
@@ -7,7 +6,6 @@ import { assert } from '../../error/assert';
 export class ColumnStore {
   private colMetadata: ColumnMetadata[] = [];
   private tableCols: Map<EntityType, ColumnMetadata[]> = new Map();
-  private propMaps: Map<EntityType, PropertyMapType> = new Map();
 
   /**
    * Add a column's metadata.
@@ -22,16 +20,6 @@ export class ColumnStore {
     this.tableCols
       .get(col.Entity)
       .push(col);
-
-    // Keep a local map of Table to Property names.
-    // (See RelationshipMetaOptions: This is what's passed to "on.").
-    if (!this.propMaps.has(col.Entity))
-      this.propMaps.set(col.Entity, {});
-
-    const pm = this.propMaps
-      .get(col.Entity);
-
-    pm[col.mapTo] = col.mapTo;
 
     return this;
   }
@@ -70,20 +58,6 @@ export class ColumnStore {
     assert(col, `Column with mapping "${mapTo}" does not exist in table "${Entity.name}."`);
 
     return col;
-  }
-
-  /**
-   * Get the property map for a table.  For each property in the
-   * [[Table]]-decorated Entity, the property map is a simple key-value pair.
-   * The keys are all the properties of Entity, and each maps to the property
-   * name as a string.
-   */
-  getPropertyMap(Entity: EntityType): PropertyMapType {
-    const pm = this.propMaps.get(Entity);
-
-    assert(pm, `Failed to get property map for type "${Entity.name}."  The type must be decorated with @Table.`);
-
-    return pm
   }
 
   /**

@@ -1,4 +1,3 @@
-The property maps created from ColumnStore are not going to work because they are missing relational properties, for example User's property map isn't going to have phoneNumbers.  There needs to be a store for property maps that accessed via both the Relationship and Column decorators.
 Get rid of empty lines with spaces.
 The npm run build script should exclude specs, so there needs to be two tsconfig files.
 There's a to-do note in column.decorator.ts.  The dataType isn't going to work for non-primitives (like related entities).  Maybe just use the type.name and map them on demand (i.e. store the TS type in the column, not the db type).  Seems like trying to map conversions there isn't going to work because the mapping is different for different db flavors (e.g. boolean->bit, tinyint, etc.).  Whenever this is fixed be sure to fix the documentation in column-meta-options.ts.

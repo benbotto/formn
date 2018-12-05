@@ -18,6 +18,10 @@ export function Relationship<ENT_T, REF_ENT_T>(options: RelationshipMetaOptions<
     metaFactory
       .getRelationshipStore()
       .addRelationshipMetadata(rel);
+
+    metaFactory
+      .getPropertyMapStore()
+      .addProperty(target.constructor, propName);
   }
 }
 

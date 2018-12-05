@@ -75,30 +75,6 @@ describe('ColumnStore()', () => {
     });
   });
 
-  describe('.getPropertyMap()', () => {
-    it('gets a PropertyMap for a table.', () => {
-      const pm = colStore.getPropertyMap(User);
-
-      expect(pm.id).toBe('id');
-      expect(pm.username).toBe('username');
-      expect(pm.first).toBe('first');
-      expect(pm.last).toBe('last');
-      expect(pm.createdOn).toBe('createdOn');
-    });
-
-    it('throws an error if the Entity is not decorated.', () => {
-      class Test {};
-
-      try {
-        colStore.getPropertyMap(Test);
-        expect(true).toBe(false);
-      }
-      catch (err) {
-        expect(err.message).toBe('Failed to get property map for type "Test."  The type must be decorated with @Table.');
-      }
-    });
-  });
-
   describe('.getPrimaryKey()', () => {
     it('returns the array of primary key ColumnMetadata for a table.', () => {
       const pk = colStore.getPrimaryKey(User);

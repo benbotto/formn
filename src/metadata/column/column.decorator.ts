@@ -39,6 +39,10 @@ export function Column(options: ColumnMetaOptions = new ColumnMetaOptions()) {
     metaFactory
       .getColumnStore()
       .addColumnMetadata(new ColumnMetadata(target.constructor, propName, options));
+
+    metaFactory
+      .getPropertyMapStore()
+      .addProperty(target.constructor, propName);
   }
 }
 

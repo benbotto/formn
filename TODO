@@ -1,4 +1,3 @@
-From.join needs cond and params, both optional.
 Get rid of empty lines with spaces.
 TableMetadata needs an optional schema.
 If properties are going to be throughout (rather than column names), then all the properties are going to have to be swapped out in the condition objects.

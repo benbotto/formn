@@ -6,6 +6,7 @@ import { Escaper } from '../escaper/escaper';
 import { EntityType } from '../../metadata/table/entity-type';
 
 import { assert } from '../../error/assert';
+import { ConditionError } from '../../error/condition-error';
 
 import { ParameterType } from '../condition/parameter-type';
 import { ParameterList } from '../condition/parameter-list';
@@ -20,12 +21,6 @@ import { JoinType } from './join-type';
  */
 export class From {
   private fromMeta: FromMeta;
-
-  /**
-   * Stores all the parameters for the query.  The parameters are used for
-   * WHERE and ON conditions.
-   */
-  public paramList: ParameterList = new ParameterList();
 
   /**
    * Initialize.
@@ -50,7 +45,8 @@ export class From {
     FromEntity: EntityType,
     fromAlias?: string) {
 
-    this.fromMeta = new FromMeta(this.colStore, this.tblStore, this.relStore);
+    this.fromMeta = new FromMeta(this.colStore, this.tblStore,
+      this.relStore, this.escaper);
 
     // Table alias defaults to the name of the table.
     if (fromAlias === undefined)
@@ -64,7 +60,7 @@ export class From {
    * table in [[FromMeta]].
    * @return A meta object describing the table.
    */
-  getFromMeta(): FromTableMeta {
+  getBaseTableMeta(): FromTableMeta {
     return this.fromMeta.tableMetas.values().next().value;
   }
 
@@ -125,14 +121,10 @@ export class From {
 
       joinCond = {$eq: {[`${onProps[0]}`]: `${onProps[1]}`}};
     }
-    else if (joinParams !== undefined) {
-      // Store the parameters for the join condition.
-      this.paramList.addParameters(joinParams);
-    }
 
     // Store the metadata about the table.
     this.fromMeta
-      .addTable(Entity, alias, parAlias, parProperty, joinType, joinCond);
+      .addTable(Entity, alias, parAlias, parProperty, joinType, joinCond, joinParams);
 
     return this;
   }
@@ -163,6 +155,44 @@ export class From {
 
     return this
       .join('LEFT OUTER JOIN', Entity, alias, fqParentProperty, joinCond, joinParams);
+  }
+
+  /**
+   * Add a WHERE condition to the query.  This method can only be called one
+   * time (if called a second time an exception is raised).
+   * @param cond - The where condition object.
+   * @param params - Any parameter replacements in the condition object.
+   */
+  where(cond: object, params: ParameterType): From {
+    const tblMeta = this.getBaseTableMeta();
+
+    assert(tblMeta.cond === null,
+      'where already performed on query.');
+
+    // Noop if cond is an empty object.
+    if (Object.keys(cond).length === 0 && cond.constructor === Object)
+      return this;
+
+    // Set the condition on the base table.
+    this.fromMeta.setCondition(tblMeta.alias, cond, params);
+
+    return this;
+  }
+
+  /**
+   * Get the [[FromTableMeta]] for a table by alias.  Throws if the alias is
+   * not present.
+   * @param alias - Alias of the table.
+   */
+  getFromTableMetaByAlias(alias: string): FromTableMeta {
+    return this.fromMeta.getFromTableMetaByAlias(alias);
+  }
+
+  /**
+   * Get the list of parameters for the From.
+   */
+  getParameterList(): ParameterList {
+    return this.fromMeta.paramList;
   }
 }
 

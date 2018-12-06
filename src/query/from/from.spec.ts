@@ -42,13 +42,13 @@ describe('From()', () => {
     it('defaults the table alias to the table name.', () => {
       const from = getFrom(User);
 
-      expect(from.getFromMeta().alias).toBe('users');
+      expect(from.getBaseTableMeta().alias).toBe('users');
     });
 
     it('uses the supplied table alias.', () => {
       const from = getFrom(User, 'u');
 
-      expect(from.getFromMeta().alias).toBe('u');
+      expect(from.getBaseTableMeta().alias).toBe('u');
     });
   });
 
@@ -69,6 +69,7 @@ describe('From()', () => {
       expect(meta.parentAlias).toBe('u');
       expect(meta.joinType).toBe('INNER JOIN');
       expect(meta.cond).toEqual({$eq: {'u.id': 'pn.userID'}});
+      expect(meta.condStr).toBe('`u`.`id` = `pn`.`userID`');
       expect(meta.relationshipMetadata).toBe(relStore.getRelationship(User, PhoneNumber, 'phoneNumbers'));
       expect(meta.tableMetadata).toBe(tblStore.getTable(PhoneNumber));
     });
@@ -89,6 +90,7 @@ describe('From()', () => {
 
       const meta = from.getJoinMeta()[0];
       expect(meta.cond).toBe(cond);
+      expect(meta.condStr).toBe('`u`.`id` = `pn`.`id`');
     });
 
     it('stores the join parameters if supplied.', () => {
@@ -105,7 +107,7 @@ describe('From()', () => {
 
       const meta = from.getJoinMeta()[0];
       expect(meta.cond).toBe(cond);
-      expect(from.paramList.params.mobile).toBe('cell');
+      expect(from.getParameterList().params.mobile).toBe('cell');
     });
   });
 
@@ -128,6 +130,28 @@ describe('From()', () => {
       const meta = from.getJoinMeta()[0];
 
       expect(meta.joinType).toBe('LEFT OUTER JOIN');
+    });
+  });
+
+  describe('.where()', () => {
+    it('stores the condition, compiled, with the parameters.', () => {
+      const cond = {$eq: {'u.id': ':me'}};
+      const from = getFrom(User, 'u')
+        .where(cond, {me: 42});
+
+      const meta = from.getBaseTableMeta();
+      expect(meta.cond).toBe(cond);
+      expect(meta.condStr).toBe('`u`.`id` = :me');
+      expect(from.getParameterList().params.me).toBe(42);
+    });
+
+    it('throws an error if a where condition already exists.', () => {
+      const cond = {$eq: {'u.id': ':me'}};
+      const from = getFrom(User, 'u')
+        .where(cond, {me: 42});
+
+      expect(() => from.where(cond, {me: 42}))
+        .toThrowError('where already performed on query.');
     });
   });
 });

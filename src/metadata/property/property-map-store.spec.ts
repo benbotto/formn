@@ -31,13 +31,19 @@ describe('.PropertyMapStore()', () => {
     it('throws an error if the Entity is not decorated.', () => {
       class Test {};
 
-      try {
-        propStore.getPropertyMap(Test);
-        expect(true).toBe(false);
-      }
-      catch (err) {
-        expect(err.message).toBe('Failed to get property map for type "Test."  The type must be decorated with @Table.');
-      }
+      expect(() => propStore.getPropertyMap(Test))
+        .toThrowError('Failed to get property map for type "Test."  The type must be decorated with @Table.');
+    });
+
+    it('returns the property map with the alias prefix.', () => {
+      const pm = propStore.getPropertyMap(User, 'u');
+
+      expect(pm.id).toBe('u.id');
+      expect(pm.username).toBe('u.username');
+      expect(pm.first).toBe('u.first');
+      expect(pm.last).toBe('u.last');
+      expect(pm.createdOn).toBe('u.createdOn');
+      expect(pm.phoneNumbers).toBe('u.phoneNumbers');
     });
   });
 });

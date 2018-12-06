@@ -32,13 +32,24 @@ export class PropertyMapStore {
    * [[Table]]-decorated Entity, the property map is a simple key-value pair.
    * The keys are all the properties of Entity, and each maps to the property
    * name as a string.
+   * @param Entity - The [[Table]-decorated Entity.
+   * @param alias - An optional table alias.  If supplied each value in the property map will
+   * be prefixed with the alias as &lt;alias&gt;.&lt;property&gt;.
    */
-  getPropertyMap(Entity: EntityType): PropertyMapType {
+  getPropertyMap(Entity: EntityType, alias?: string): PropertyMapType {
     const pm = this.propMaps.get(Entity);
 
     assert(pm, `Failed to get property map for type "${Entity.name}."  The type must be decorated with @Table.`);
 
-    return pm
+    if (alias == undefined)
+      return pm;
+
+    const aliasedPM: PropertyMapType = {};
+
+    for (let key in pm)
+      aliasedPM[key] = `${alias}.${pm[key]}`;
+
+    return aliasedPM;
   }
 }
 

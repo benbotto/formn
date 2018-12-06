@@ -16,7 +16,10 @@ export class FromTableMeta {
    * the child.
    * @param joinType - The type of join (inner/outer) if this table was joined
    * in, or null for the top-level table.
-   * @param cond - A join condition for the two tables.
+   * @param cond - A join condition for the two tables, or a where condition
+   * for the base table.
+   * @param condStr - The compiled condition string as created by a
+   * [[ConditionCompiler]].
    */
   constructor(
     public tableMetadata: TableMetadata,
@@ -24,10 +27,8 @@ export class FromTableMeta {
     public parentAlias: string = null,
     public relationshipMetadata: RelationshipMetadata = null,
     public joinType: JoinType = null,
-    public cond: object = null) {
-
-    if (!this.alias)
-      this.alias = this.tableMetadata.name;
+    public cond: object = null,
+    public condStr: string = null) {
   }
 }
 

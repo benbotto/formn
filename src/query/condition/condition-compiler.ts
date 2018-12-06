@@ -1,8 +1,12 @@
+import { ColumnLookup } from '../../metadata/column/column-lookup';
+
 import { Escaper } from '../escaper/escaper';
+
+import { ConditionError } from '../../error/condition-error';
+
 import { ParseTree } from './parse-tree';
 import { ParameterType } from './parameter-type';
 import { LexerToken } from './lexer-token';
-import { ConditionError } from '../../error/condition-error';
 
 /**
  * A class that compiles a [[ParseTree]], as created by a [[ConditionParser]]
@@ -26,9 +30,16 @@ export class ConditionCompiler {
    * used to replace parameters in the query.  The compiler verifies that
    * there is a replacement for every parameter, but does not perform the
    * actual replacement.
+   * @param columnLookup - An optional [[ColumnLookup]] instance.  When
+   * provided, the name of each column in the condition will be replaced with
+   * the value returned from [[ColumnLookup.getColumn]].
    * @return The compiled condition as a SQL string.
    */
-  compile(parseTree: ParseTree, params: ParameterType = {}): string {
+  compile(
+    parseTree: ParseTree,
+    params: ParameterType = {},
+    columnLookup?: ColumnLookup): string {
+
     const compOps: ParameterType = {
       $eq:      '=',
       $neq:     '<>',
@@ -55,16 +66,31 @@ export class ConditionCompiler {
       $notIn: 'NOT IN'
     };
 
-    return traverse(parseTree, this.escaper, params);
+    return traverse(parseTree, this.escaper, params, columnLookup);
 
     // Function to recursively traverse the parse tree and compile it.
-    function traverse(tree: ParseTree, escaper: Escaper, params: ParameterType): string {
+    function traverse(
+      tree: ParseTree,
+      escaper: Escaper,
+      params: ParameterType,
+      columnLookup: ColumnLookup): string {
+
       // Helper to return a <value>, which may be a parameter, column, or number.
       // The return is escaped properly.
-      function getValue(token: LexerToken, escaper: Escaper): string|number {
+      function getValue(
+        token: LexerToken,
+        escaper: Escaper,
+        columnLookup?: ColumnLookup): string|number {
+
         // The token could be a column, a parameter, or a number.
-        if (token.type === 'column')
-          return escaper.escapeFullyQualifiedColumn(token.value as string);
+        if (token.type === 'column') {
+          // For columns, a lookup can be used to replace the column name.
+          const colName = columnLookup === undefined ?
+            (token.value as string) :
+            columnLookup.getColumn(token.value as string);
+
+          return escaper.escapeFullyQualifiedColumn(colName);
+        }
         else if (token.type === 'parameter') {
           // Find the value in the params list (the leading colon is removed).
           const paramKey = (token.value as string).substring(1);
@@ -81,8 +107,8 @@ export class ConditionCompiler {
         case 'comparison-operator': {
           // <column> <comparison-operator> <value> (ex. `users`.`name` = :name)
           // where value is a parameter, column, or number.
-          const column: string = escaper.escapeFullyQualifiedColumn(tree.children[0].token.value as string);
-          const op = compOps[tree.token.value];
+          const column = getValue(tree.children[0].token, escaper, columnLookup);
+          const op     = compOps[tree.token.value];
           const value  = getValue(tree.children[1].token, escaper);
 
           return `${column} ${op} ${value}`;
@@ -92,7 +118,7 @@ export class ConditionCompiler {
           // <column> <null-operator> <nullable> (ex. `j`.`occupation` IS NULL).
           // Note that if a parameter is used (e.g. {occupation: null}) it's
           // ignored.  NULL is blindly inserted since it's the only valid value.
-          const column = escaper.escapeFullyQualifiedColumn(tree.children[0].token.value as string);
+          const column = getValue(tree.children[0].token, escaper, columnLookup);
           const op     = nullOps[tree.token.value];
 
           return `${column} ${op} NULL`;
@@ -100,7 +126,7 @@ export class ConditionCompiler {
 
         case 'in-comparison-operator': {
           // <column> <in-comparison-operator> (<value> {, <value}) (ex. `shoeSize` IN (10, 10.5, 11)).
-          const column = escaper.escapeFullyQualifiedColumn(tree.children[0].token.value as string);
+          const column = getValue(tree.children[0].token, escaper, columnLookup);
           const op     = inOps[tree.token.value];
           const kids   = tree.children
             .slice(1)
@@ -113,7 +139,7 @@ export class ConditionCompiler {
         case 'boolean-operator': {
           // Each of the children is a <condition>.  Put each <condition> in an array.
           const kids = tree.children
-            .map(kid => traverse(kid, escaper, params))
+            .map(kid => traverse(kid, escaper, params, columnLookup))
             .join(` ${boolOps[tree.token.value]} `);
 
           // Explode the conditions on the current boolean operator (AND or OR).

@@ -1,5 +1,7 @@
 import { MySQLEscaper } from '../escaper/mysql-escaper';
 
+import { ColumnLookup } from '../../metadata/column/column-lookup';
+
 import { ConditionLexer } from './condition-lexer';
 import { ConditionParser } from './condition-parser';
 import { ConditionCompiler } from './condition-compiler';
@@ -228,6 +230,36 @@ describe('ConditionCompiler()', function() {
 
       expect(() => compiler.compile(tree))
         .toThrowError('Replacement value for parameter "gender" not present.');
+    });
+
+    it('replaces columns using the provided ColumnLookup.', () => {
+      const colLookup = new ColumnLookup();
+
+      colLookup.addColumn('u.id', 'u.userID');
+      colLookup.addColumn('u.first', 'u.firstName');
+      colLookup.addColumn('pn.id', 'pn.phoneNumberID');
+
+      // Checks each operator type that could have a column: comparison, null,
+      // and in.
+      const cond = {
+        $and: [
+          {$eq: {'u.id': ':uid'}},
+          {$is: {'u.first': ':myFirst'}},
+          {$in: {'pn.id': [':pid']}},
+        ]
+      };
+
+      const params = {
+        uid:     1,
+        myFirst: null as any,
+        pid:     2
+      };
+
+      const tokens = lexer.parse(cond);
+      const tree   = parser.parse(tokens);
+
+      expect(compiler.compile(tree, params, colLookup))
+        .toBe('(`u`.`userID` = :uid AND `u`.`firstName` IS NULL AND `pn`.`phoneNumberID` IN (:pid))');
     });
   });
 

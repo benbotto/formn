@@ -32,7 +32,7 @@ export class PropertyMapStore {
    * [[Table]]-decorated Entity, the property map is a simple key-value pair.
    * The keys are all the properties of Entity, and each maps to the property
    * name as a string.
-   * @param Entity - The [[Table]-decorated Entity.
+   * @param Entity - The [[Table]]-decorated Entity.
    * @param alias - An optional table alias.  If supplied each value in the property map will
    * be prefixed with the alias as &lt;alias&gt;.&lt;property&gt;.
    */

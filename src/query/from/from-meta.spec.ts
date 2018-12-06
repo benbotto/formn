@@ -58,7 +58,7 @@ describe('FromMeta()', function() {
       it('throws an error if a parent is supplied which does not match a table alias.', function() {
         expect(function() {
           fromMeta.addTable(PhoneNumber, 'pn', 'BAD_NAME');
-        }).toThrowError('Parent table alias "BAD_NAME" is not a valid table alias.');
+        }).toThrowError('Table alias "BAD_NAME" is not a valid table alias.');
       });
 
       it('throws an error if a table alias has already been used.', function() {

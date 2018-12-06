@@ -6,6 +6,7 @@ import { RelationshipStore } from '../../metadata/relationship/relationship-stor
 import { EntityType } from '../../metadata/table/entity-type';
 import { ColumnMetadata } from '../../metadata/column/column-metadata';
 import { ColumnLookup } from '../../metadata/column/column-lookup';
+import { TableMetadata } from '../../metadata/table/table-metadata';
 
 import { FromTableMeta } from './from-table-meta';
 import { FromColumnMeta } from './from-column-meta';
@@ -65,8 +66,8 @@ export class FromMeta {
    * @param Entity - Constructor of the [[Table]]-decorated class.
    * @param alias - Alias of the table.
    * @param parentAlias - Alias of the parent table.
-   * @param property - Property in the parent Entity to which children will be
-   * mapped.
+   * @param property - Property in the parent Entity to which children (this
+   * Entity) will be mapped.
    * @param joinType - How this table was joined to from the parent.
    * @param cond - A join condition object for the two tables.
    */
@@ -93,12 +94,8 @@ export class FromMeta {
       `The table alias "${alias}" is not unique.`);
 
     // If a parent is specified, make sure it is a valid alias.
-    if (parentAlias !== null) {
-      assert(this.tableMetas.has(parentAlias),
-        `Parent table alias "${parentAlias}" is not a valid table alias.`);
-
-      parentTblMeta = this.tableMetas.get(parentAlias).tableMetadata;
-    }
+    if (parentAlias !== null)
+      parentTblMeta = this.getTableMetadataByAlias(parentAlias);
 
     // The table alias is guaranteed to be unique here.  Add it to the map
     // hierarchy.
@@ -148,6 +145,25 @@ export class FromMeta {
    */
   isColumnAvailable(fqProp: string): boolean {
     return this.availableCols.has(fqProp);
+  }
+
+  /**
+   * Get the [[FromTableMeta]] for a table by alias or throw.
+   * @param alias - Alias of the table.
+   */
+  getFromTableMetaByAlias(alias: string): FromTableMeta {
+    assert(this.tableMetas.has(alias),
+      `Table alias "${alias}" is not a valid table alias.`);
+
+    return this.tableMetas.get(alias);
+  }
+
+  /**
+   * Get the [[TableMetadata]] for a table by alias or throw.
+   * @param alias - Alias of the table.
+   */
+  getTableMetadataByAlias(alias: string): TableMetadata {
+    return this.getFromTableMetaByAlias(alias).tableMetadata;
   }
 }
 

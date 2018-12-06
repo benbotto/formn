@@ -12,10 +12,10 @@ import { FromColumnMeta } from './from-column-meta';
 import { JoinType } from './join-type';
 
 /**
- * A helper class for keeping metadata about a list of tables.  Used in the
- * [[From]] class.
+ * A helper class for keeping metadata about tables and columns used in a
+ * [[From]] instance.
  */
-export class FromTableMetaList {
+export class FromMeta {
   /**
    * A map from table alias to [[FromTableMeta]] objects.
    */
@@ -76,7 +76,7 @@ export class FromTableMetaList {
     parentAlias: string = null,
     property: string = null,
     joinType: JoinType = null,
-    cond: object = null): FromTableMetaList {
+    cond: object = null): FromMeta {
 
     let parentTblMeta = null;
     let relationshipMetadata = null;

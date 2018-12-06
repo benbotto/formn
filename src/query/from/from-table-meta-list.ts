@@ -5,6 +5,7 @@ import { TableStore } from '../../metadata/table/table-store';
 import { RelationshipStore } from '../../metadata/relationship/relationship-store';
 import { EntityType } from '../../metadata/table/entity-type';
 import { ColumnMetadata } from '../../metadata/column/column-metadata';
+import { ColumnLookup } from '../../metadata/column/column-lookup';
 
 import { FromTableMeta } from './from-table-meta';
 import { FromColumnMeta } from './from-column-meta';
@@ -36,6 +37,14 @@ export class FromTableMetaList {
    * "photo" properties at same level (e.g. under person).
    */
   public mapHierarchy: Map<string, Set<string>> = new Map();
+
+  /**
+   * Lookup functionality between fully-qualified property names and
+   * fully-qualified column names.  Users operate on [[Column]]-decorated
+   * properties, but ultimately those properties need to be mapped to
+   * fully-qualified column names when querying.
+   */
+  public columnLookup: ColumnLookup = new ColumnLookup();
   
   /**
    * Initialize.
@@ -112,7 +121,8 @@ export class FromTableMetaList {
 
     this.tableMetas.set(alias, tableMeta);
 
-    // Make each column available for selection or conditions.
+    // Make each column available for selection or conditions, and keep
+    // a lookup of fq-property names to fq-column names.
     const colMetas = this.colStore.getColumnMetadata(Entity);
     
     colMetas.forEach(colMeta => {
@@ -123,6 +133,9 @@ export class FromTableMetaList {
 
       this.availableCols
         .set(fqProp, new FromColumnMeta(alias, colMeta, fqColName, fqProp));
+
+      this.columnLookup
+        .addColumn(fqProp, fqColName);
     }, this);
 
     return this;

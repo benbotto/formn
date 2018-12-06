@@ -168,6 +168,18 @@ describe('TableMetaList()', function() {
       });
     });
 
+    describe('column lookup -', () => {
+      it('stores a lookup of fully-qualified property names to fully-qualified column names.', () => {
+        tables
+          .addTable(User, 'u')
+          .addTable(PhoneNumber, 'pn', 'u', 'phoneNumbers');
+
+        expect(tables.columnLookup.getColumn('u.id')).toBe('u.userID');
+        expect(tables.columnLookup.getColumn('u.first')).toBe('u.firstName');
+        expect(tables.columnLookup.getColumn('pn.id')).toBe('pn.phoneNumberID');
+      });
+    });
+
     describe('available columns -', function() {
       it('exposes the table alias, column, and FQ name of each column in the table.', function() {
         tables.addTable(User, 'u');

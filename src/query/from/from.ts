@@ -180,6 +180,67 @@ export class From {
   }
 
   /**
+   * Get the FROM portion of the query as a string.
+   * @return The FROM portion of the query (FROM &lt;table&gt; AS
+   * &lt;alias&gt;), escaped.
+   */
+  getFromString(): string {
+    const baseMeta  = this.getBaseTableMeta();
+    const baseName  = this.escaper.escapeProperty(baseMeta.tableMetadata.name);
+    const baseAlias = this.escaper.escapeProperty(baseMeta.alias);
+
+    return `FROM    ${baseName} AS ${baseAlias}`;
+  }
+
+  /**
+   * Get the JOIN parts of the query string.
+   * @return The JOIN parts of the query, escaped.
+   */
+  getJoinString(): string {
+    // Add any JOINs.  The first table is the FROM table, hence the initial
+    // next() call on the table iterator.
+    return this.getJoinMeta()
+      .map(tblMeta  => {
+        const joinName  = this.escaper.escapeProperty(tblMeta.tableMetadata.name);
+        const joinAlias = this.escaper.escapeProperty(tblMeta.alias);
+        let   sql       = `${tblMeta.joinType} ${joinName} AS ${joinAlias}`;
+
+        if (tblMeta.condStr)
+          sql += ` ON ${tblMeta.condStr}`;
+
+        return sql;
+      })
+      .join('\n');
+  }
+
+  /**
+   * Get the WHERE portion of the query string.
+   * @return The WHERE part of the query, or a blank string if there is no
+   * where clause.
+   */
+  getWhereString(): string {
+    const baseMeta = this.getBaseTableMeta();
+
+    return baseMeta.condStr ? `WHERE   ${baseMeta.condStr}` : '';
+  }
+
+  /**
+   * Get the SQL that represents the query.
+   * @return The actual SQL query (FROM, JOINS, and WHERE).
+   */
+  toString(): string {
+    const parts = [
+      this.getFromString(),
+      this.getJoinString(),
+      this.getWhereString()
+    ];
+
+    return parts
+      .filter(part => part !== '')
+      .join('\n');
+  }
+
+  /**
    * Get the [[FromTableMeta]] for a table by alias.  Throws if the alias is
    * not present.
    * @param alias - Alias of the table.

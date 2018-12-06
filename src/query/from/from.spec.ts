@@ -155,5 +155,45 @@ describe('From()', () => {
         .toThrowError('where already performed on query.');
     });
   });
+
+  describe('.toString()', () => {
+    it('returns the single-table query.', () => {
+      const from = getFrom(User, 'u');
+
+      expect(from.toString()).toBe('FROM    `users` AS `u`');
+    });
+
+    it('returns the query with the joins.', () => {
+      const from = getFrom(User, 'u')
+        .innerJoin(PhoneNumber, 'pn', 'u.phoneNumbers')
+        .leftOuterJoin(UserXProduct, 'uxp', 'u.userXProducts');
+
+      expect(from.toString()).toBe(
+        'FROM    `users` AS `u`\n' +
+        'INNER JOIN `phone_numbers` AS `pn` ON `u`.`userID` = `pn`.`userID`\n' +
+        'LEFT OUTER JOIN `users_x_products` AS `uxp` ON `u`.`userID` = `uxp`.`userID`');
+    });
+
+    it('returns the query with joins and a where clause.', () => {
+      const cond = {
+        $and: [
+          {$eq: {'u.first': ':me'}},
+          {$eq: {'pn.id': ':pid'}}
+        ]
+      };
+      const params = {me: 'ben', pid: 2};
+
+      const from = getFrom(User, 'u')
+        .innerJoin(PhoneNumber, 'pn', 'u.phoneNumbers')
+        .leftOuterJoin(UserXProduct, 'uxp', 'u.userXProducts')
+        .where(cond, params);
+
+      expect(from.toString()).toBe(
+        'FROM    `users` AS `u`\n' +
+        'INNER JOIN `phone_numbers` AS `pn` ON `u`.`userID` = `pn`.`userID`\n' +
+        'LEFT OUTER JOIN `users_x_products` AS `uxp` ON `u`.`userID` = `uxp`.`userID`\n' +
+        'WHERE   (`u`.`firstName` = :me AND `pn`.`phoneNumberID` = :pid)');
+    });
+  });
 });
 

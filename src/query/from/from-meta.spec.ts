@@ -4,6 +4,8 @@ import { ColumnStore } from '../../metadata/column/column-store';
 import { RelationshipStore } from '../../metadata/relationship/relationship-store';
 import { initDB } from '../../test/entity/database';
 
+import { MySQLEscaper } from '../escaper/mysql-escaper';
+
 import { User } from '../../test/entity/user.entity';
 import { PhoneNumber } from '../../test/entity/phone-number.entity';
 import { Photo } from '../../test/entity/photo.entity';
@@ -17,6 +19,7 @@ describe('FromMeta()', function() {
   let relStore: RelationshipStore;
   let tblStore: TableStore;
   let colStore: ColumnStore;
+  let escaper: MySQLEscaper;
 
   beforeAll(function() {
     // (Re)initialize the db.
@@ -27,7 +30,8 @@ describe('FromMeta()', function() {
     relStore = metaFactory.getRelationshipStore();
   });
 
-  beforeEach(() => fromMeta = new FromMeta(colStore, tblStore, relStore));
+  beforeEach(() =>
+    fromMeta = new FromMeta(colStore, tblStore, relStore, new MySQLEscaper()));
 
   describe('.constructor()', function() {
     it('exposes a Map of table meta.', function() {
@@ -121,13 +125,43 @@ describe('FromMeta()', function() {
       it('sets the cond to null if not provided.', function() {
         fromMeta.addTable(User, 'u');
         expect(fromMeta.tableMetas.get('u').cond).toBeNull();
+        expect(fromMeta.tableMetas.get('u').condStr).toBeNull();
       });
 
       it('stores the cond if provided.', function() {
-        const cond = {$eq: {'users.userID': 3}};
+        const cond = {$eq: {'u.id': 'pn.userID'}};
         fromMeta.addTable(User, 'u');
         fromMeta.addTable(PhoneNumber, 'pn', 'u', 'phoneNumbers', 'INNER JOIN', cond);
         expect(fromMeta.tableMetas.get('pn').cond).toBe(cond);
+        expect(fromMeta.tableMetas.get('pn').condStr).toBe('`u`.`id` = `pn`.`userID`');
+      });
+
+      it('stores the join parameters if supplied.', () => {
+        const cond = {
+          $and: [
+            {$eq: {'u.id': 'pn.id'}},
+            {$eq: {'pn.type': ':mobile'}}
+          ]
+        };
+
+        const params = {mobile: 'cell'};
+
+        fromMeta.addTable(User, 'u');
+        fromMeta.addTable(PhoneNumber, 'pn', 'u', 'phoneNumbers', 'INNER JOIN', cond, params);
+
+        expect(fromMeta.paramList.params.mobile).toBe('cell');
+        expect(fromMeta.tableMetas.get('pn').cond).toBe(cond);
+        expect(fromMeta.tableMetas.get('pn').condStr)
+          .toBe('(`u`.`id` = `pn`.`id` AND `pn`.`type` = :mobile)');
+      });
+
+      it('throws an exception if one of the properties in the join condition is not available.', () => {
+        const cond = {$eq: {'u.id': 'pn.foo'}};
+        fromMeta.addTable(User, 'u');
+
+        expect(() =>
+          fromMeta.addTable(PhoneNumber, 'pn', 'u', 'phoneNumbers', 'INNER JOIN', cond))
+          .toThrowError('The column "pn.foo" is not available for a condition.');
       });
 
       it('sets the joinType to null if not provided.', function() {

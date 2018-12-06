@@ -1,4 +1,5 @@
 import { assert } from '../../error/assert';
+import { ConditionError } from '../../error/condition-error';
 
 import { ColumnStore } from '../../metadata/column/column-store';
 import { TableStore } from '../../metadata/table/table-store';
@@ -7,6 +8,14 @@ import { EntityType } from '../../metadata/table/entity-type';
 import { ColumnMetadata } from '../../metadata/column/column-metadata';
 import { ColumnLookup } from '../../metadata/column/column-lookup';
 import { TableMetadata } from '../../metadata/table/table-metadata';
+
+import { ConditionLexer } from '../condition/condition-lexer';
+import { ConditionParser } from '../condition/condition-parser';
+import { ConditionCompiler } from '../condition/condition-compiler';
+import { ParameterList } from '../condition/parameter-list';
+import { ParameterType } from '../condition/parameter-type';
+
+import { Escaper } from '../escaper/escaper';
 
 import { FromTableMeta } from './from-table-meta';
 import { FromColumnMeta } from './from-column-meta';
@@ -46,6 +55,12 @@ export class FromMeta {
    * fully-qualified column names when querying.
    */
   public columnLookup: ColumnLookup = new ColumnLookup();
+
+  /**
+   * Stores all the parameters for the query.  The parameters are used for
+   * WHERE and ON conditions.
+   */
+  public paramList: ParameterList = new ParameterList();
   
   /**
    * Initialize.
@@ -53,11 +68,15 @@ export class FromMeta {
    * @param tblStore - Used for accessing tables in the database.
    * @param relStore - Used for finding relationships between parent and child
    * tables.
+   * @param escaper - An [[Escaper]] matching the database type (e.g.
+   * [[MySQLEscaper]] or [[MSSQLEscaper]].  Used when escaping column names in
+   * compiled conditions.
    */
   constructor(
     private colStore: ColumnStore,
     private tblStore: TableStore,
-    private relStore: RelationshipStore) {
+    private relStore: RelationshipStore,
+    private escaper: Escaper) {
   }
 
   /**
@@ -69,7 +88,9 @@ export class FromMeta {
    * @param property - Property in the parent Entity to which children (this
    * Entity) will be mapped.
    * @param joinType - How this table was joined to from the parent.
-   * @param cond - A join condition object for the two tables.
+   * @param cond - A join condition object for the two tables, or a where
+   * condition object for the parent table.
+   * @param params - Any parameters used in the condition.
    */
   addTable(
     Entity: EntityType,
@@ -77,7 +98,8 @@ export class FromMeta {
     parentAlias: string = null,
     property: string = null,
     joinType: JoinType = null,
-    cond: object = null): FromMeta {
+    cond: object = null,
+    params: ParameterType = null): FromMeta {
 
     let parentTblMeta = null;
     let relationshipMetadata = null;
@@ -114,7 +136,7 @@ export class FromMeta {
 
     // Add the table to the list of tables.
     const tableMeta = new FromTableMeta(
-      tableMetadata, alias, parentAlias, relationshipMetadata, joinType, cond);
+      tableMetadata, alias, parentAlias, relationshipMetadata, joinType);
 
     this.tableMetas.set(alias, tableMeta);
 
@@ -133,7 +155,32 @@ export class FromMeta {
 
       this.columnLookup
         .addColumn(fqProp, fqColName);
-    }, this);
+    });
+
+    // Add the condition to the table meta if provided.
+    if (cond)
+      this.setCondition(alias, cond, params);
+
+    return this;
+  }
+
+  /**
+   * Set the condition object on one of the [[FromTableMeta]] objects and
+   * compile it.
+   * @param alias - Alias of the table to which the condition will be added.
+   * @param cond - The condition object to add and compile.
+   * @param params - Any parameters in the cond object.
+   */
+  setCondition(alias: string, cond: object, params: ParameterType = null): FromMeta {
+    const tblMeta = this.getFromTableMetaByAlias(alias);
+
+    if (params)
+      this.paramList.addParameters(params);
+
+    const condStr = this.compileCondition(cond);
+
+    tblMeta.cond    = cond;
+    tblMeta.condStr = condStr;
 
     return this;
   }
@@ -164,6 +211,31 @@ export class FromMeta {
    */
   getTableMetadataByAlias(alias: string): TableMetadata {
     return this.getFromTableMetaByAlias(alias).tableMetadata;
+  }
+
+  /**
+   * Helper method to compile a condition.  The compilation process ensures
+   * that each parameter in the condition has a replacement in the parameter
+   * list, and that each fully-qualified property in the condition is available
+   * (that is, belongs to one of the tables used in the [[From]]).  Also, a
+   * [[ColumnLookup]] is supplied so that fully-qualified property names can be
+   * mapped to the associated column names.
+   */
+  compileCondition(cond: object): string {
+    // Lex and parse the condition.
+    const tokens   = new ConditionLexer().parse(cond);
+    const tree     = new ConditionParser().parse(tokens);
+    const compiler = new ConditionCompiler(this.escaper);
+
+    // Make sure that each column in the condition is available for selection.
+    const columns = compiler.getColumns(tree);
+
+    for (let i = 0; i < columns.length; ++i) {
+      if (!this.isColumnAvailable(columns[i]))
+        throw new ConditionError(`The column "${columns[i]}" is not available for a condition.`);
+    }
+
+    return compiler.compile(tree, this.paramList.params);
   }
 }
 

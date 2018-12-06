@@ -244,22 +244,22 @@ describe('ConditionCompiler()', function() {
       const cond = {
         $and: [
           {$eq: {'u.id': ':uid'}},
+          {$eq: {'pn.id': 'u.id'}},
           {$is: {'u.first': ':myFirst'}},
-          {$in: {'pn.id': [':pid']}},
+          {$in: {'pn.id': ['u.id']}},
         ]
       };
 
       const params = {
         uid:     1,
-        myFirst: null as any,
-        pid:     2
+        myFirst: null as any
       };
 
       const tokens = lexer.parse(cond);
       const tree   = parser.parse(tokens);
 
       expect(compiler.compile(tree, params, colLookup))
-        .toBe('(`u`.`userID` = :uid AND `u`.`firstName` IS NULL AND `pn`.`phoneNumberID` IN (:pid))');
+        .toBe('(`u`.`userID` = :uid AND `pn`.`phoneNumberID` = `u`.`userID` AND `u`.`firstName` IS NULL AND `pn`.`phoneNumberID` IN (`u`.`userID`))');
     });
   });
 

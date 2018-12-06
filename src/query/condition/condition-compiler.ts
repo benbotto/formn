@@ -109,7 +109,7 @@ export class ConditionCompiler {
           // where value is a parameter, column, or number.
           const column = getValue(tree.children[0].token, escaper, columnLookup);
           const op     = compOps[tree.token.value];
-          const value  = getValue(tree.children[1].token, escaper);
+          const value  = getValue(tree.children[1].token, escaper, columnLookup);
 
           return `${column} ${op} ${value}`;
         }
@@ -130,7 +130,7 @@ export class ConditionCompiler {
           const op     = inOps[tree.token.value];
           const kids   = tree.children
             .slice(1)
-            .map(kid => getValue(kid.token, escaper))
+            .map(kid => getValue(kid.token, escaper, columnLookup))
             .join(', ');
 
           return `${column} ${op} (${kids})`;

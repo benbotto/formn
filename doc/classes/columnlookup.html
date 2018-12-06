@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RelationshipStore | formn</title>
+	<title>ColumnLookup | formn</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,10 +52,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="relationshipstore.html">RelationshipStore</a>
+					<a href="columnlookup.html">ColumnLookup</a>
 				</li>
 			</ul>
-			<h1>Class RelationshipStore</h1>
+			<h1>Class ColumnLookup</h1>
 		</div>
 	</div>
 </header>
@@ -65,7 +65,11 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Stores relationships and provides lookup functions.</p>
+						<p>Helper class that maps between column aliases and fully-qualified column
+							names.  Users of formn always deal with properties (<a href="../globals.html#column">Column</a>-decorated
+							properties of <a href="../globals.html#table">Table</a>-decorated classes), and those properties need to be
+							mapped to column names when querying.  This class helps with that mapping
+						process.</p>
 					</div>
 				</div>
 			</section>
@@ -73,7 +77,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">RelationshipStore</span>
+						<span class="target">ColumnLookup</span>
 					</li>
 				</ul>
 			</section>
@@ -84,9 +88,8 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="relationshipstore.html#addrelationshipmetadata" class="tsd-kind-icon">add<wbr>Relationship<wbr>Metadata</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="relationshipstore.html#getrelationship" class="tsd-kind-icon">get<wbr>Relationship</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="relationshipstore.html#getrelationships" class="tsd-kind-icon">get<wbr>Relationships</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="columnlookup.html#addcolumn" class="tsd-kind-icon">add<wbr>Column</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="columnlookup.html#getcolumn" class="tsd-kind-icon">get<wbr>Column</a></li>
 							</ul>
 						</section>
 					</div>
@@ -95,130 +98,69 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="addrelationshipmetadata" class="tsd-anchor"></a>
-					<h3>add<wbr>Relationship<wbr>Metadata</h3>
+					<a name="addcolumn" class="tsd-anchor"></a>
+					<h3>add<wbr>Column</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Relationship<wbr>Metadata<span class="tsd-signature-symbol">(</span>rel<span class="tsd-signature-symbol">: </span><a href="relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="relationshipstore.html" class="tsd-signature-type">RelationshipStore</a></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Column<span class="tsd-signature-symbol">(</span>property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fqColName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="columnlookup.html" class="tsd-signature-type">ColumnLookup</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/bac7193/src/metadata/relationship/relationship-store.ts#L12">metadata/relationship/relationship-store.ts:12</a></li>
+									<li>Defined in metadata/column/column-lookup.ts:20</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Add a relationship.</p>
+									<p>Add a lookup from property to column.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>rel: <a href="relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a></h5>
+									<h5>property: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The property name.</p>
+									</div>
+								</li>
+								<li>
+									<h5>fqColName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Generally this is a fully-qualified column name (see
+											<a href="columnmetadata.html#createfqname">ColumnMetadata.createFQName</a>), but it can be any string that&#39;s
+										associated with property.</p>
+									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="relationshipstore.html" class="tsd-signature-type">RelationshipStore</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="columnlookup.html" class="tsd-signature-type">ColumnLookup</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getrelationship" class="tsd-anchor"></a>
-					<h3>get<wbr>Relationship</h3>
+					<a name="getcolumn" class="tsd-anchor"></a>
+					<h3>get<wbr>Column</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationship<span class="tsd-signature-symbol">(</span>Entity1<span class="tsd-signature-symbol">: </span><a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a>, Entity2<span class="tsd-signature-symbol">: </span><a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a>, mapTo<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Column<span class="tsd-signature-symbol">(</span>property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/bac7193/src/metadata/relationship/relationship-store.ts#L65">metadata/relationship/relationship-store.ts:65</a></li>
+									<li>Defined in metadata/column/column-lookup.ts:29</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get the relationship between two tables on a property.  Short-hand for
-										getRelationships with oneWay=true, but throws if the relationship does not
-									exist.</p>
+									<p>Get the column associated with property or throw.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>Entity1: <a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The first Entity (constructor), i.e. the class that&#39;s
-										decorated with @<a href="../globals.html#table">Table</a>.</p>
-									</div>
-								</li>
-								<li>
-									<h5>Entity2: <a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The second Entity.</p>
-									</div>
-								</li>
-								<li>
-									<h5>mapTo: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The proeprty on Entity1 where the relationship is defined.</p>
-									</div>
+									<h5>property: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a></h4>
-							<p>The RelationshipMetadata for the relationship.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getrelationships" class="tsd-anchor"></a>
-					<h3>get<wbr>Relationships</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationships<span class="tsd-signature-symbol">(</span>Entity1<span class="tsd-signature-symbol">: </span><a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a>, Entity2<span class="tsd-signature-symbol">: </span><a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a>, oneWay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, mapTo<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a><span class="tsd-signature-symbol">[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/bac7193/src/metadata/relationship/relationship-store.ts#L29">metadata/relationship/relationship-store.ts:29</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get all of the relationships between two tables.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>Entity1: <a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The first Entity (constructor), i.e. the class that&#39;s
-										decorated with @<a href="../globals.html#table">Table</a>.</p>
-									</div>
-								</li>
-								<li>
-									<h5>Entity2: <a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The second Entity.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> oneWay: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>When true, only return the relationships between Entity1
-										and Entity2 that Entity1 owns.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> mapTo: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>An optional property on Entity1.  If passed, return the
-										relationship for this property only (implies oneWay).</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a><span class="tsd-signature-symbol">[]</span></h4>
-							<p>An array of RelationshipMetadata instances.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -237,16 +179,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="relationshipstore.html" class="tsd-kind-icon">Relationship<wbr>Store</a>
+						<a href="columnlookup.html" class="tsd-kind-icon">Column<wbr>Lookup</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="relationshipstore.html#addrelationshipmetadata" class="tsd-kind-icon">add<wbr>Relationship<wbr>Metadata</a>
+								<a href="columnlookup.html#addcolumn" class="tsd-kind-icon">add<wbr>Column</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="relationshipstore.html#getrelationship" class="tsd-kind-icon">get<wbr>Relationship</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="relationshipstore.html#getrelationships" class="tsd-kind-icon">get<wbr>Relationships</a>
+								<a href="columnlookup.html#getcolumn" class="tsd-kind-icon">get<wbr>Column</a>
 							</li>
 						</ul>
 					</li>

@@ -70,8 +70,7 @@ export class From {
 
   /**
    * Join in a table.
-   * @param joinType - How to join the two tables (INNER JOIN, LEFT OUTER JOIN,
-   * RIGHT OUTER JOIN).
+   * @param joinType - How to join the two tables (INNER JOIN, LEFT OUTER JOIN).
    * @param Entity - The [[Table]]-decorated Entity to join in.
    * @param alias - Alias of the joined-in table.
    * @param fqParentProperty - The fully-qualified property name on the parent
@@ -109,6 +108,20 @@ export class From {
       .addTable(Entity, alias, parAlias, parProperty, joinType, cond);
 
     return this;
+  }
+
+  /**
+   * Inner join in a table.  See [[From.join]].
+   */
+  innerJoin(Entity: EntityType, alias: string, fqParentProperty: string): From {
+    return this.join('INNER JOIN', Entity, alias, fqParentProperty);
+  }
+
+  /**
+   * Left outer join in a table.  See [[From.join]].
+   */
+  leftOuterJoin(Entity: EntityType, alias: string, fqParentProperty: string): From {
+    return this.join('LEFT OUTER JOIN', Entity, alias, fqParentProperty);
   }
 }
 

@@ -82,5 +82,27 @@ describe('From()', () => {
         .toThrowError('Relationship (on) between "User" and "PhoneNumber" must contain exactly 2 properties.');
     });
   });
+
+  describe('.innerJoin()', () => {
+    it('Joins using an INNER JOIN.', () => {
+      const from = getFrom(User, 'u')
+        .innerJoin(PhoneNumber, 'pn', 'u.phoneNumbers');
+
+      const meta = from.getJoinMeta()[0];
+
+      expect(meta.joinType).toBe('INNER JOIN');
+    });
+  });
+
+  describe('.leftOuterJoin()', () => {
+    it('Joins using an LEFT OUTER JOIN.', () => {
+      const from = getFrom(User, 'u')
+        .leftOuterJoin(PhoneNumber, 'pn', 'u.phoneNumbers');
+
+      const meta = from.getJoinMeta()[0];
+
+      expect(meta.joinType).toBe('LEFT OUTER JOIN');
+    });
+  });
 });
 

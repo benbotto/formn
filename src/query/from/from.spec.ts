@@ -81,6 +81,32 @@ describe('From()', () => {
         .join('INNER JOIN', PhoneNumber, 'pn', 'u.phoneNumbers'))
         .toThrowError('Relationship (on) between "User" and "PhoneNumber" must contain exactly 2 properties.');
     });
+
+    it('lets the join condition be overridden.', () => {
+      const cond = {$eq: {'u.id': 'pn.id'}};
+      const from = getFrom(User, 'u')
+        .join('INNER JOIN', PhoneNumber, 'pn', 'u.phoneNumbers', cond);
+
+      const meta = from.getJoinMeta()[0];
+      expect(meta.cond).toBe(cond);
+    });
+
+    it('stores the join parameters if supplied.', () => {
+      const cond = {
+        $and: [
+          {$eq: {'u.id': 'pn.id'}},
+          {$eq: {'pn.type': ':mobile'}}
+        ]
+      };
+
+      const params = {mobile: 'cell'};
+      const from = getFrom(User, 'u')
+        .join('INNER JOIN', PhoneNumber, 'pn', 'u.phoneNumbers', cond, params);
+
+      const meta = from.getJoinMeta()[0];
+      expect(meta.cond).toBe(cond);
+      expect(from.paramList.params.mobile).toBe('cell');
+    });
   });
 
   describe('.innerJoin()', () => {

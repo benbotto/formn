@@ -7,6 +7,9 @@ import { EntityType } from '../../metadata/table/entity-type';
 
 import { assert } from '../../error/assert';
 
+import { ParameterType } from '../condition/parameter-type';
+import { ParameterList } from '../condition/parameter-list';
+
 import { FromMeta } from './from-meta';
 import { FromTableMeta } from './from-table-meta';
 import { JoinType } from './join-type';
@@ -17,6 +20,13 @@ import { JoinType } from './join-type';
  */
 export class From {
   private fromMeta: FromMeta;
+
+  /**
+   * Stores all the parameters for the query.  The parameters are used for
+   * WHERE and ON conditions.
+   */
+  public paramList: ParameterList = new ParameterList();
+
   /**
    * Initialize.
    * @param colStore - Used for accessing columns in tables.
@@ -75,8 +85,19 @@ export class From {
    * @param alias - Alias of the joined-in table.
    * @param fqParentProperty - The fully-qualified property name on the parent
    * Entity to which this Entity will be mapped.
+   * @param joinCond - An optional condition that describes how to join the two
+   * tables.  If not supplied then the join condition will be derived.
+   * @param joinParams - An optional set of parameters that will be used to
+   * replace values in joinCond.
    */
-  join(joinType: JoinType, Entity: EntityType, alias: string, fqParentProperty: string): From {
+  join(
+    joinType: JoinType,
+    Entity: EntityType,
+    alias: string,
+    fqParentProperty: string,
+    joinCond?: object,
+    joinParams?: ParameterType): From {
+
     // Get the parent alias and property name.
     const propRE = /^(\w+)\.(\w+)$/;
 
@@ -92,20 +113,26 @@ export class From {
     const relationship = this.relStore
       .getRelationship(parTblMeta.Entity, Entity, parProperty);
 
-    // Create the join condition.
-    const onProps = relationship
-      .on(
-        this.propStore.getPropertyMap(parTblMeta.Entity, parAlias),
-        this.propStore.getPropertyMap(Entity, alias));
+    if (joinCond === undefined) {
+      // Create the join condition.
+      const onProps = relationship
+        .on(
+          this.propStore.getPropertyMap(parTblMeta.Entity, parAlias),
+          this.propStore.getPropertyMap(Entity, alias));
 
-    assert(onProps.length === 2,
-      `Relationship (on) between "${parTblMeta.Entity.name}" and "${Entity.name}" must contain exactly 2 properties.`);
+      assert(onProps.length === 2,
+        `Relationship (on) between "${parTblMeta.Entity.name}" and "${Entity.name}" must contain exactly 2 properties.`);
 
-    const cond = {$eq: {[`${onProps[0]}`]: `${onProps[1]}`}};
+      joinCond = {$eq: {[`${onProps[0]}`]: `${onProps[1]}`}};
+    }
+    else if (joinParams !== undefined) {
+      // Store the parameters for the join condition.
+      this.paramList.addParameters(joinParams);
+    }
 
     // Store the metadata about the table.
     this.fromMeta
-      .addTable(Entity, alias, parAlias, parProperty, joinType, cond);
+      .addTable(Entity, alias, parAlias, parProperty, joinType, joinCond);
 
     return this;
   }
@@ -113,15 +140,29 @@ export class From {
   /**
    * Inner join in a table.  See [[From.join]].
    */
-  innerJoin(Entity: EntityType, alias: string, fqParentProperty: string): From {
-    return this.join('INNER JOIN', Entity, alias, fqParentProperty);
+  innerJoin(
+    Entity: EntityType,
+    alias: string,
+    fqParentProperty: string,
+    joinCond?: object,
+    joinParams?: ParameterType): From {
+
+    return this
+      .join('INNER JOIN', Entity, alias, fqParentProperty, joinCond, joinParams);
   }
 
   /**
    * Left outer join in a table.  See [[From.join]].
    */
-  leftOuterJoin(Entity: EntityType, alias: string, fqParentProperty: string): From {
-    return this.join('LEFT OUTER JOIN', Entity, alias, fqParentProperty);
+  leftOuterJoin(
+    Entity: EntityType,
+    alias: string,
+    fqParentProperty: string,
+    joinCond?: object,
+    joinParams?: ParameterType): From {
+
+    return this
+      .join('LEFT OUTER JOIN', Entity, alias, fqParentProperty, joinCond, joinParams);
   }
 }
 

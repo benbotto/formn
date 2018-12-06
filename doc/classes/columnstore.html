@@ -89,7 +89,6 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="columnstore.html#getcolumnmetadatabymapping" class="tsd-kind-icon">get<wbr>Column<wbr>Metadata<wbr>ByMapping</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="columnstore.html#getcolumnmetadatabyname" class="tsd-kind-icon">get<wbr>Column<wbr>Metadata<wbr>ByName</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="columnstore.html#getprimarykey" class="tsd-kind-icon">get<wbr>Primary<wbr>Key</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="columnstore.html#getpropertymap" class="tsd-kind-icon">get<wbr>Property<wbr>Map</a></li>
 							</ul>
 						</section>
 					</div>
@@ -107,7 +106,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/column/column-store.ts#L15">metadata/column/column-store.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/column/column-store.ts#L13">metadata/column/column-store.ts:13</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -135,7 +134,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/column/column-store.ts#L42">metadata/column/column-store.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/column/column-store.ts#L30">metadata/column/column-store.ts:30</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -163,7 +162,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/column/column-store.ts#L66">metadata/column/column-store.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/column/column-store.ts#L54">metadata/column/column-store.ts:54</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -195,7 +194,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/column/column-store.ts#L53">metadata/column/column-store.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/column/column-store.ts#L41">metadata/column/column-store.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -226,7 +225,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/column/column-store.ts#L92">metadata/column/column-store.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/column/column-store.ts#L66">metadata/column/column-store.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -241,37 +240,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="columnmetadata.html" class="tsd-signature-type">ColumnMetadata</a><span class="tsd-signature-symbol">[]</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getpropertymap" class="tsd-anchor"></a>
-					<h3>get<wbr>Property<wbr>Map</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Property<wbr>Map<span class="tsd-signature-symbol">(</span>Entity<span class="tsd-signature-symbol">: </span><a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#propertymaptype" class="tsd-signature-type">PropertyMapType</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/column/column-store.ts#L81">metadata/column/column-store.ts:81</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get the property map for a table.  For each property in the
-										<a href="../globals.html#table">Table</a>-decorated Entity, the property map is a simple key-value pair.
-										The keys are all the properties of Entity, and each maps to the property
-									name as a string.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>Entity: <a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../globals.html#propertymaptype" class="tsd-signature-type">PropertyMapType</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -313,9 +281,6 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="columnstore.html#getprimarykey" class="tsd-kind-icon">get<wbr>Primary<wbr>Key</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="columnstore.html#getpropertymap" class="tsd-kind-icon">get<wbr>Property<wbr>Map</a>
-							</li>
 						</ul>
 					</li>
 				</ul>
@@ -342,6 +307,18 @@
 						<a href="escaper.html" class="tsd-kind-icon">Escaper</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="from.html" class="tsd-kind-icon">From</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="fromcolumnmeta.html" class="tsd-kind-icon">From<wbr>Column<wbr>Meta</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="fromtablemeta.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="fromtablemetalist.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="lexertoken.html" class="tsd-kind-icon">Lexer<wbr>Token</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -352,6 +329,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="parsetree.html" class="tsd-kind-icon">Parse<wbr>Tree</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="propertymapstore.html" class="tsd-kind-icon">Property<wbr>Map<wbr>Store</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="relationshipmetaoptions.html" class="tsd-kind-icon">Relationship<wbr>Meta<wbr>Options</a>
@@ -385,6 +365,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#entitytype" class="tsd-kind-icon">Entity<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#jointype" class="tsd-kind-icon">Join<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#parametertype" class="tsd-kind-icon">Parameter<wbr>Type</a>

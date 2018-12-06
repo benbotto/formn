@@ -11,7 +11,7 @@ import { FromColumnMeta } from './from-column-meta';
 import { JoinType } from './join-type';
 
 /**
- * A helper class for keeping meta data about a list of tables.  Used in the
+ * A helper class for keeping metadata about a list of tables.  Used in the
  * [[From]] class.
  */
 export class FromTableMetaList {
@@ -33,7 +33,7 @@ export class FromTableMetaList {
    * values.  The same mapping can be used multiple times, but each mapping
    * must be unique to a parent.  For example, it's valid for a person to have
    * a "photo" and a building to have a "photo," but there cannot be two
-   * "photo" properties at the top level, nor under person.
+   * "photo" properties at same level (e.g. under person).
    */
   public mapHierarchy: Map<string, Set<string>> = new Map();
   

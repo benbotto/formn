@@ -14,8 +14,8 @@ export class FromTableMeta {
    * @param parentAlias - The alias of the parent table, if any.
    * @param relationshipMetadata - Metadata about the relationship from the parent to
    * the child.
-   * @param joinType - The type of join (inner/outer), if this table was joined
-   * in, or null for the parent.
+   * @param joinType - The type of join (inner/outer) if this table was joined
+   * in, or null for the top-level table.
    * @param cond - A join condition for the two tables.
    */
   constructor(

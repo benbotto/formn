@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ConditionCompiler | formn</title>
+	<title>FromTableMeta | formn</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,10 +52,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="conditioncompiler.html">ConditionCompiler</a>
+					<a href="fromtablemeta.html">FromTableMeta</a>
 				</li>
 			</ul>
-			<h1>Class ConditionCompiler</h1>
+			<h1>Class FromTableMeta</h1>
 		</div>
 	</div>
 </header>
@@ -65,8 +65,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A class that compiles a <a href="parsetree.html">ParseTree</a>, as created by a <a href="conditionparser.html">ConditionParser</a>
-						instance, into a SQL condition.</p>
+						<p>Keeps metadata about a table that is used in the FROM portion of a query.</p>
 					</div>
 				</div>
 			</section>
@@ -74,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ConditionCompiler</span>
+						<span class="target">FromTableMeta</span>
 					</li>
 				</ul>
 			</section>
@@ -85,14 +84,18 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="conditioncompiler.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="fromtablemeta.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
-							<h3>Methods</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="conditioncompiler.html#compile" class="tsd-kind-icon">compile</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="conditioncompiler.html#getcolumns" class="tsd-kind-icon">get<wbr>Columns</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="fromtablemeta.html#alias" class="tsd-kind-icon">alias</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="fromtablemeta.html#cond" class="tsd-kind-icon">cond</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="fromtablemeta.html#jointype" class="tsd-kind-icon">join<wbr>Type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="fromtablemeta.html#parentalias" class="tsd-kind-icon">parent<wbr>Alias</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="fromtablemeta.html#relationshipmetadata" class="tsd-kind-icon">relationship<wbr>Metadata</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="fromtablemeta.html#tablemetadata" class="tsd-kind-icon">table<wbr>Metadata</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,115 +107,173 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Condition<wbr>Compiler<span class="tsd-signature-symbol">(</span>escaper<span class="tsd-signature-symbol">: </span><a href="escaper.html" class="tsd-signature-type">Escaper</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="conditioncompiler.html" class="tsd-signature-type">ConditionCompiler</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>From<wbr>Table<wbr>Meta<span class="tsd-signature-symbol">(</span>tableMetadata<span class="tsd-signature-symbol">: </span><a href="tablemetadata.html" class="tsd-signature-type">TableMetadata</a>, alias<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, parentAlias<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, relationshipMetadata<span class="tsd-signature-symbol">?: </span><a href="relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a>, joinType<span class="tsd-signature-symbol">?: </span><a href="../globals.html#jointype" class="tsd-signature-type">JoinType</a>, cond<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="fromtablemeta.html" class="tsd-signature-type">FromTableMeta</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/condition/condition-compiler.ts#L11">query/condition/condition-compiler.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta.ts#L8">query/from/from-table-meta.ts:8</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Initialize the compiler.</p>
+									<p>Store the table metadata.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>escaper: <a href="escaper.html" class="tsd-signature-type">Escaper</a></h5>
+									<h5>tableMetadata: <a href="tablemetadata.html" class="tsd-signature-type">TableMetadata</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>An instance of an <a href="escaper.html">Escaper</a> that matches the database
-												type (e.g. <a href="mysqlescaper.html">MySQLEscaper</a> or <a href="mssqlescaper.html">MSSQLEscaper</a>).  This is used for
-											escaping column names.</p>
+											<p>Metadata about the table.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>alias: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>An alias for the table.  This is needed if, for example,
+											the same table is joined in multiple times.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> parentAlias: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The alias of the parent table, if any.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> relationshipMetadata: <a href="relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Metadata about the relationship from the parent to
+											the child.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> joinType: <a href="../globals.html#jointype" class="tsd-signature-type">JoinType</a><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The type of join (inner/outer) if this table was joined
+											in, or null for the top-level table.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> cond: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>A join condition for the two tables.</p>
 										</div>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="conditioncompiler.html" class="tsd-signature-type">ConditionCompiler</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="fromtablemeta.html" class="tsd-signature-type">FromTableMeta</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="compile" class="tsd-anchor"></a>
-					<h3>compile</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">compile<span class="tsd-signature-symbol">(</span>parseTree<span class="tsd-signature-symbol">: </span><a href="parsetree.html" class="tsd-signature-type">ParseTree</a>, params<span class="tsd-signature-symbol">?: </span><a href="../globals.html#parametertype" class="tsd-signature-type">ParameterType</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/condition/condition-compiler.ts#L31">query/condition/condition-compiler.ts:31</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Compile the parse tree.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>parseTree: <a href="parsetree.html" class="tsd-signature-type">ParseTree</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>A <a href="parsetree.html">ParseTree</a> object, as created by the
-										<a href="conditionparser.html#parse">ConditionParser.parse</a> method.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> params: <a href="../globals.html#parametertype" class="tsd-signature-type">ParameterType</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>An object containing key-value pairs that are
-											used to replace parameters in the query.  The compiler verifies that
-											there is a replacement for every parameter, but does not perform the
-										actual replacement.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-							<p>The compiled condition as a SQL string.</p>
-						</li>
-					</ul>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="alias" class="tsd-anchor"></a>
+					<h3>alias</h3>
+					<div class="tsd-signature tsd-kind-icon">alias<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta.ts#L23">query/from/from-table-meta.ts:23</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An alias for the table.  This is needed if, for example,
+							the same table is joined in multiple times.</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getcolumns" class="tsd-anchor"></a>
-					<h3>get<wbr>Columns</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Columns<span class="tsd-signature-symbol">(</span>parseTree<span class="tsd-signature-symbol">: </span><a href="parsetree.html" class="tsd-signature-type">ParseTree</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/condition/condition-compiler.ts#L141">query/condition/condition-compiler.ts:141</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get all the columns referenced in the <a href="parsetree.html">ParseTree</a> and return them as an
-										array.  The columns will be distinct (that is, if the same column appears
-										multiple times in the same condition, it will exist in the returned array
-									only once).</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>parseTree: <a href="parsetree.html" class="tsd-signature-type">ParseTree</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The <a href="parsetree.html">ParseTree</a>, as created by a <a href="conditionparser.html">ConditionParser</a>.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="cond" class="tsd-anchor"></a>
+					<h3>cond</h3>
+					<div class="tsd-signature tsd-kind-icon">cond<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta.ts#L27">query/from/from-table-meta.ts:27</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A join condition for the two tables.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="jointype" class="tsd-anchor"></a>
+					<h3>join<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">join<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../globals.html#jointype" class="tsd-signature-type">JoinType</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta.ts#L26">query/from/from-table-meta.ts:26</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The type of join (inner/outer) if this table was joined
+							in, or null for the top-level table.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="parentalias" class="tsd-anchor"></a>
+					<h3>parent<wbr>Alias</h3>
+					<div class="tsd-signature tsd-kind-icon">parent<wbr>Alias<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta.ts#L24">query/from/from-table-meta.ts:24</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The alias of the parent table, if any.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="relationshipmetadata" class="tsd-anchor"></a>
+					<h3>relationship<wbr>Metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">relationship<wbr>Metadata<span class="tsd-signature-symbol">:</span> <a href="relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta.ts#L25">query/from/from-table-meta.ts:25</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Metadata about the relationship from the parent to
+							the child.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="tablemetadata" class="tsd-anchor"></a>
+					<h3>table<wbr>Metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">table<wbr>Metadata<span class="tsd-signature-symbol">:</span> <a href="tablemetadata.html" class="tsd-signature-type">TableMetadata</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta.ts#L22">query/from/from-table-meta.ts:22</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Metadata about the table.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -235,24 +296,9 @@
 					<li class=" tsd-kind-class">
 						<a href="columnstore.html" class="tsd-kind-icon">Column<wbr>Store</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class=" tsd-kind-class">
 						<a href="conditioncompiler.html" class="tsd-kind-icon">Condition<wbr>Compiler</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="conditioncompiler.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="conditioncompiler.html#compile" class="tsd-kind-icon">compile</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="conditioncompiler.html#getcolumns" class="tsd-kind-icon">get<wbr>Columns</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="conditionerror.html" class="tsd-kind-icon">Condition<wbr>Error</a>
 					</li>
@@ -277,9 +323,36 @@
 					<li class=" tsd-kind-class">
 						<a href="fromcolumnmeta.html" class="tsd-kind-icon">From<wbr>Column<wbr>Meta</a>
 					</li>
-					<li class=" tsd-kind-class">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
 						<a href="fromtablemeta.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="fromtablemeta.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="fromtablemeta.html#alias" class="tsd-kind-icon">alias</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="fromtablemeta.html#cond" class="tsd-kind-icon">cond</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="fromtablemeta.html#jointype" class="tsd-kind-icon">join<wbr>Type</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="fromtablemeta.html#parentalias" class="tsd-kind-icon">parent<wbr>Alias</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="fromtablemeta.html#relationshipmetadata" class="tsd-kind-icon">relationship<wbr>Metadata</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="fromtablemeta.html#tablemetadata" class="tsd-kind-icon">table<wbr>Metadata</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="fromtablemetalist.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta<wbr>List</a>
 					</li>

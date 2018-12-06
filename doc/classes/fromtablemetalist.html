@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ConditionCompiler | formn</title>
+	<title>FromTableMetaList | formn</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,10 +52,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="conditioncompiler.html">ConditionCompiler</a>
+					<a href="fromtablemetalist.html">FromTableMetaList</a>
 				</li>
 			</ul>
-			<h1>Class ConditionCompiler</h1>
+			<h1>Class FromTableMetaList</h1>
 		</div>
 	</div>
 </header>
@@ -65,8 +65,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A class that compiles a <a href="parsetree.html">ParseTree</a>, as created by a <a href="conditionparser.html">ConditionParser</a>
-						instance, into a SQL condition.</p>
+						<p>A helper class for keeping metadata about a list of tables.  Used in the
+						<a href="from.html">From</a> class.</p>
 					</div>
 				</div>
 			</section>
@@ -74,7 +74,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ConditionCompiler</span>
+						<span class="target">FromTableMetaList</span>
 					</li>
 				</ul>
 			</section>
@@ -85,14 +85,22 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="conditioncompiler.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="fromtablemetalist.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="fromtablemetalist.html#availablecols" class="tsd-kind-icon">available<wbr>Cols</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="fromtablemetalist.html#maphierarchy" class="tsd-kind-icon">map<wbr>Hierarchy</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="fromtablemetalist.html#tablemetas" class="tsd-kind-icon">table<wbr>Metas</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="conditioncompiler.html#compile" class="tsd-kind-icon">compile</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="conditioncompiler.html#getcolumns" class="tsd-kind-icon">get<wbr>Columns</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="fromtablemetalist.html#addtable" class="tsd-kind-icon">add<wbr>Table</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="fromtablemetalist.html#iscolumnavailable" class="tsd-kind-icon">is<wbr>Column<wbr>Available</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,113 +112,202 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Condition<wbr>Compiler<span class="tsd-signature-symbol">(</span>escaper<span class="tsd-signature-symbol">: </span><a href="escaper.html" class="tsd-signature-type">Escaper</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="conditioncompiler.html" class="tsd-signature-type">ConditionCompiler</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>From<wbr>Table<wbr>Meta<wbr>List<span class="tsd-signature-symbol">(</span>colStore<span class="tsd-signature-symbol">: </span><a href="columnstore.html" class="tsd-signature-type">ColumnStore</a>, tblStore<span class="tsd-signature-symbol">: </span><a href="tablestore.html" class="tsd-signature-type">TableStore</a>, relStore<span class="tsd-signature-symbol">: </span><a href="relationshipstore.html" class="tsd-signature-type">RelationshipStore</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="fromtablemetalist.html" class="tsd-signature-type">FromTableMetaList</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/condition/condition-compiler.ts#L11">query/condition/condition-compiler.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta-list.ts#L38">query/from/from-table-meta-list.ts:38</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Initialize the compiler.</p>
+									<p>Initialize.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>escaper: <a href="escaper.html" class="tsd-signature-type">Escaper</a></h5>
+									<h5>colStore: <a href="columnstore.html" class="tsd-signature-type">ColumnStore</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>An instance of an <a href="escaper.html">Escaper</a> that matches the database
-												type (e.g. <a href="mysqlescaper.html">MySQLEscaper</a> or <a href="mssqlescaper.html">MSSQLEscaper</a>).  This is used for
-											escaping column names.</p>
+											<p>Used for accessing columns in tables.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>tblStore: <a href="tablestore.html" class="tsd-signature-type">TableStore</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Used for accessing tables in the database.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>relStore: <a href="relationshipstore.html" class="tsd-signature-type">RelationshipStore</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Used for finding relationships between parent and child
+											tables.</p>
 										</div>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="conditioncompiler.html" class="tsd-signature-type">ConditionCompiler</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="fromtablemetalist.html" class="tsd-signature-type">FromTableMetaList</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="availablecols" class="tsd-anchor"></a>
+					<h3>available<wbr>Cols</h3>
+					<div class="tsd-signature tsd-kind-icon">available<wbr>Cols<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="fromcolumnmeta.html" class="tsd-signature-type">FromColumnMeta</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Map()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta-list.ts#L28">query/from/from-table-meta-list.ts:28</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A map from fully-qualified property name to <a href="fromcolumnmeta.html">FromColumnMeta</a>.  These are
+								the columns that are available for selecting, performing conditions on, or
+							ordering by.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="maphierarchy" class="tsd-anchor"></a>
+					<h3>map<wbr>Hierarchy</h3>
+					<div class="tsd-signature tsd-kind-icon">map<wbr>Hierarchy<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Map()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta-list.ts#L38">query/from/from-table-meta-list.ts:38</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Holds the mapping (<a href="relationshipmetadata.html#mapto">RelationshipMetadata.mapTo</a>) hierarchy.  The map
+								uses the parent alias as the key and a Set of mapping names (mapTo) as the
+								values.  The same mapping can be used multiple times, but each mapping
+								must be unique to a parent.  For example, it&#39;s valid for a person to have
+								a &quot;photo&quot; and a building to have a &quot;photo,&quot; but there cannot be two
+							&quot;photo&quot; properties at same level (e.g. under person).</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="tablemetas" class="tsd-anchor"></a>
+					<h3>table<wbr>Metas</h3>
+					<div class="tsd-signature tsd-kind-icon">table<wbr>Metas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="fromtablemeta.html" class="tsd-signature-type">FromTableMeta</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Map()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta-list.ts#L21">query/from/from-table-meta-list.ts:21</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A map from table alias to <a href="fromtablemeta.html">FromTableMeta</a> objects.</p>
+						</div>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="compile" class="tsd-anchor"></a>
-					<h3>compile</h3>
+					<a name="addtable" class="tsd-anchor"></a>
+					<h3>add<wbr>Table</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">compile<span class="tsd-signature-symbol">(</span>parseTree<span class="tsd-signature-symbol">: </span><a href="parsetree.html" class="tsd-signature-type">ParseTree</a>, params<span class="tsd-signature-symbol">?: </span><a href="../globals.html#parametertype" class="tsd-signature-type">ParameterType</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Table<span class="tsd-signature-symbol">(</span>Entity<span class="tsd-signature-symbol">: </span><a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a>, alias<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, parentAlias<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, property<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, joinType<span class="tsd-signature-symbol">?: </span><a href="../globals.html#jointype" class="tsd-signature-type">JoinType</a>, cond<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="fromtablemetalist.html" class="tsd-signature-type">FromTableMetaList</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/condition/condition-compiler.ts#L31">query/condition/condition-compiler.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta-list.ts#L64">query/from/from-table-meta-list.ts:64</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Compile the parse tree.</p>
+									<p>Add a table to the list and make all the columns in the table &quot;available&quot;
+									for use in a select, condition, or order clause.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>parseTree: <a href="parsetree.html" class="tsd-signature-type">ParseTree</a></h5>
+									<h5>Entity: <a href="../globals.html#entitytype" class="tsd-signature-type">EntityType</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>A <a href="parsetree.html">ParseTree</a> object, as created by the
-										<a href="conditionparser.html#parse">ConditionParser.parse</a> method.</p>
+										<p>Constructor of the <a href="../globals.html#table">Table</a>-decorated class.</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> params: <a href="../globals.html#parametertype" class="tsd-signature-type">ParameterType</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<h5>alias: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An object containing key-value pairs that are
-											used to replace parameters in the query.  The compiler verifies that
-											there is a replacement for every parameter, but does not perform the
-										actual replacement.</p>
+										<p>Alias of the table.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> parentAlias: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Alias of the parent table.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> property: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property in the parent Entity to which children will be
+										mapped.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> joinType: <a href="../globals.html#jointype" class="tsd-signature-type">JoinType</a><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>How this table was joined to from the parent.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> cond: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A join condition object for the two tables.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-							<p>The compiled condition as a SQL string.</p>
+							<h4 class="tsd-returns-title">Returns <a href="fromtablemetalist.html" class="tsd-signature-type">FromTableMetaList</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getcolumns" class="tsd-anchor"></a>
-					<h3>get<wbr>Columns</h3>
+					<a name="iscolumnavailable" class="tsd-anchor"></a>
+					<h3>is<wbr>Column<wbr>Available</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Columns<span class="tsd-signature-symbol">(</span>parseTree<span class="tsd-signature-symbol">: </span><a href="parsetree.html" class="tsd-signature-type">ParseTree</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Column<wbr>Available<span class="tsd-signature-symbol">(</span>fqProp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/condition/condition-compiler.ts#L141">query/condition/condition-compiler.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/from-table-meta-list.ts#L136">query/from/from-table-meta-list.ts:136</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get all the columns referenced in the <a href="parsetree.html">ParseTree</a> and return them as an
-										array.  The columns will be distinct (that is, if the same column appears
-										multiple times in the same condition, it will exist in the returned array
-									only once).</p>
+									<p>Check if the column is available (for selecting, for a condition, or for
+									an order by clause).</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>parseTree: <a href="parsetree.html" class="tsd-signature-type">ParseTree</a></h5>
+									<h5>fqProp: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The <a href="parsetree.html">ParseTree</a>, as created by a <a href="conditionparser.html">ConditionParser</a>.</p>
+										<p>The fully-qualified property name to look for.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -235,24 +332,9 @@
 					<li class=" tsd-kind-class">
 						<a href="columnstore.html" class="tsd-kind-icon">Column<wbr>Store</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class=" tsd-kind-class">
 						<a href="conditioncompiler.html" class="tsd-kind-icon">Condition<wbr>Compiler</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="conditioncompiler.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="conditioncompiler.html#compile" class="tsd-kind-icon">compile</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="conditioncompiler.html#getcolumns" class="tsd-kind-icon">get<wbr>Columns</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="conditionerror.html" class="tsd-kind-icon">Condition<wbr>Error</a>
 					</li>
@@ -280,9 +362,33 @@
 					<li class=" tsd-kind-class">
 						<a href="fromtablemeta.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta</a>
 					</li>
-					<li class=" tsd-kind-class">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
 						<a href="fromtablemetalist.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta<wbr>List</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="fromtablemetalist.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="fromtablemetalist.html#availablecols" class="tsd-kind-icon">available<wbr>Cols</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="fromtablemetalist.html#maphierarchy" class="tsd-kind-icon">map<wbr>Hierarchy</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="fromtablemetalist.html#tablemetas" class="tsd-kind-icon">table<wbr>Metas</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="fromtablemetalist.html#addtable" class="tsd-kind-icon">add<wbr>Table</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="fromtablemetalist.html#iscolumnavailable" class="tsd-kind-icon">is<wbr>Column<wbr>Available</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="lexertoken.html" class="tsd-kind-icon">Lexer<wbr>Token</a>
 					</li>

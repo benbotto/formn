@@ -76,10 +76,15 @@
 								<li class="tsd-kind-class"><a href="classes/converter.html" class="tsd-kind-icon">Converter</a></li>
 								<li class="tsd-kind-class"><a href="classes/datamapper.html" class="tsd-kind-icon">Data<wbr>Mapper</a></li>
 								<li class="tsd-kind-class"><a href="classes/escaper.html" class="tsd-kind-icon">Escaper</a></li>
+								<li class="tsd-kind-class"><a href="classes/from.html" class="tsd-kind-icon">From</a></li>
+								<li class="tsd-kind-class"><a href="classes/fromcolumnmeta.html" class="tsd-kind-icon">From<wbr>Column<wbr>Meta</a></li>
+								<li class="tsd-kind-class"><a href="classes/fromtablemeta.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta</a></li>
+								<li class="tsd-kind-class"><a href="classes/fromtablemetalist.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta<wbr>List</a></li>
 								<li class="tsd-kind-class"><a href="classes/lexertoken.html" class="tsd-kind-icon">Lexer<wbr>Token</a></li>
 								<li class="tsd-kind-class"><a href="classes/mssqlescaper.html" class="tsd-kind-icon">MSSQLEscaper</a></li>
 								<li class="tsd-kind-class"><a href="classes/mysqlescaper.html" class="tsd-kind-icon">MySQLEscaper</a></li>
 								<li class="tsd-kind-class"><a href="classes/parsetree.html" class="tsd-kind-icon">Parse<wbr>Tree</a></li>
+								<li class="tsd-kind-class"><a href="classes/propertymapstore.html" class="tsd-kind-icon">Property<wbr>Map<wbr>Store</a></li>
 								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/relationshipmetaoptions.html" class="tsd-kind-icon">Relationship<wbr>Meta<wbr>Options</a></li>
 								<li class="tsd-kind-class"><a href="classes/relationshipmetadata.html" class="tsd-kind-icon">Relationship<wbr>Metadata</a></li>
 								<li class="tsd-kind-class"><a href="classes/relationshipstore.html" class="tsd-kind-icon">Relationship<wbr>Store</a></li>
@@ -96,6 +101,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias"><a href="globals.html#cardinalitytype" class="tsd-kind-icon">Cardinality<wbr>Type</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#entitytype" class="tsd-kind-icon">Entity<wbr>Type</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#jointype" class="tsd-kind-icon">Join<wbr>Type</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#parametertype" class="tsd-kind-icon">Parameter<wbr>Type</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#propertymaptype" class="tsd-kind-icon">Property<wbr>Map<wbr>Type</a></li>
 							</ul>
@@ -123,7 +129,7 @@
 					<div class="tsd-signature tsd-kind-icon">Cardinality<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"OneToOne"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"OneToMany"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ManyToOne"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/relationship/cardinality-type.ts#L4">metadata/relationship/cardinality-type.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/relationship/cardinality-type.ts#L4">metadata/relationship/cardinality-type.ts:4</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -138,7 +144,7 @@
 					<div class="tsd-signature tsd-kind-icon">Entity<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/table/entity-type.ts#L4">metadata/table/entity-type.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/table/entity-type.ts#L4">metadata/table/entity-type.ts:4</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -153,12 +159,27 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="jointype" class="tsd-anchor"></a>
+					<h3>Join<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">Join<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"INNER JOIN"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"LEFT OUTER JOIN"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"RIGHT OUTER JOIN"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/from/join-type.ts#L4">query/from/join-type.ts:4</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Describes how two tables join to each other.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="parametertype" class="tsd-anchor"></a>
 					<h3>Parameter<wbr>Type</h3>
 					<div class="tsd-signature tsd-kind-icon">Parameter<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/query/condition/parameter-type.ts#L5">query/condition/parameter-type.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/query/condition/parameter-type.ts#L5">query/condition/parameter-type.ts:5</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -182,7 +203,7 @@
 					<div class="tsd-signature tsd-kind-icon">Property<wbr>Map<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/column/property-map-type.ts#L6">metadata/column/property-map-type.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/property/property-map-type.ts#L6">metadata/property/property-map-type.ts:6</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -214,7 +235,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/column/column.decorator.ts#L13">metadata/column/column.decorator.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/column/column.decorator.ts#L13">metadata/column/column.decorator.ts:13</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -244,7 +265,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/relationship/many-to-one.decorator.ts#L6">metadata/relationship/many-to-one.decorator.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/relationship/many-to-one.decorator.ts#L6">metadata/relationship/many-to-one.decorator.ts:6</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -322,7 +343,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/relationship/one-to-many.decorator.ts#L6">metadata/relationship/one-to-many.decorator.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/relationship/one-to-many.decorator.ts#L6">metadata/relationship/one-to-many.decorator.ts:6</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -400,7 +421,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/relationship/one-to-one.decorator.ts#L6">metadata/relationship/one-to-one.decorator.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/relationship/one-to-one.decorator.ts#L6">metadata/relationship/one-to-one.decorator.ts:6</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -478,7 +499,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/relationship/relationship.decorator.ts#L9">metadata/relationship/relationship.decorator.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/relationship/relationship.decorator.ts#L9">metadata/relationship/relationship.decorator.ts:9</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -516,7 +537,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/metadata/table/table.decorator.ts#L12">metadata/table/table.decorator.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/metadata/table/table.decorator.ts#L12">metadata/table/table.decorator.ts:12</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -547,7 +568,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/benbotto/formn/blob/e54e11f/src/error/assert.ts#L7">error/assert.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/benbotto/formn/blob/38f2386/src/error/assert.ts#L7">error/assert.ts:7</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -618,6 +639,18 @@
 						<a href="classes/escaper.html" class="tsd-kind-icon">Escaper</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/from.html" class="tsd-kind-icon">From</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/fromcolumnmeta.html" class="tsd-kind-icon">From<wbr>Column<wbr>Meta</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/fromtablemeta.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/fromtablemetalist.html" class="tsd-kind-icon">From<wbr>Table<wbr>Meta<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/lexertoken.html" class="tsd-kind-icon">Lexer<wbr>Token</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -628,6 +661,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/parsetree.html" class="tsd-kind-icon">Parse<wbr>Tree</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/propertymapstore.html" class="tsd-kind-icon">Property<wbr>Map<wbr>Store</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/relationshipmetaoptions.html" class="tsd-kind-icon">Relationship<wbr>Meta<wbr>Options</a>
@@ -661,6 +697,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#entitytype" class="tsd-kind-icon">Entity<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#jointype" class="tsd-kind-icon">Join<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#parametertype" class="tsd-kind-icon">Parameter<wbr>Type</a>

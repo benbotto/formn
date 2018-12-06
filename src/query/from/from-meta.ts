@@ -235,7 +235,7 @@ export class FromMeta {
         throw new ConditionError(`The column "${columns[i]}" is not available for a condition.`);
     }
 
-    return compiler.compile(tree, this.paramList.params);
+    return compiler.compile(tree, this.paramList.params, this.columnLookup);
   }
 }
 

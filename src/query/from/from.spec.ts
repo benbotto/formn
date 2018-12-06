@@ -69,7 +69,7 @@ describe('From()', () => {
       expect(meta.parentAlias).toBe('u');
       expect(meta.joinType).toBe('INNER JOIN');
       expect(meta.cond).toEqual({$eq: {'u.id': 'pn.userID'}});
-      expect(meta.condStr).toBe('`u`.`id` = `pn`.`userID`');
+      expect(meta.condStr).toBe('`u`.`userID` = `pn`.`userID`');
       expect(meta.relationshipMetadata).toBe(relStore.getRelationship(User, PhoneNumber, 'phoneNumbers'));
       expect(meta.tableMetadata).toBe(tblStore.getTable(PhoneNumber));
     });
@@ -90,7 +90,8 @@ describe('From()', () => {
 
       const meta = from.getJoinMeta()[0];
       expect(meta.cond).toBe(cond);
-      expect(meta.condStr).toBe('`u`.`id` = `pn`.`id`');
+      // Note that the FQ properties are mapped to FQ column names.
+      expect(meta.condStr).toBe('`u`.`userID` = `pn`.`phoneNumberID`');
     });
 
     it('stores the join parameters if supplied.', () => {
@@ -141,7 +142,7 @@ describe('From()', () => {
 
       const meta = from.getBaseTableMeta();
       expect(meta.cond).toBe(cond);
-      expect(meta.condStr).toBe('`u`.`id` = :me');
+      expect(meta.condStr).toBe('`u`.`userID` = :me');
       expect(from.getParameterList().params.me).toBe(42);
     });
 

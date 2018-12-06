@@ -133,18 +133,20 @@ describe('FromMeta()', function() {
         fromMeta.addTable(User, 'u');
         fromMeta.addTable(PhoneNumber, 'pn', 'u', 'phoneNumbers', 'INNER JOIN', cond);
         expect(fromMeta.tableMetas.get('pn').cond).toBe(cond);
-        expect(fromMeta.tableMetas.get('pn').condStr).toBe('`u`.`id` = `pn`.`userID`');
+        // Note that the column name u.id is mapped to u.userID in the condition string.
+        expect(fromMeta.tableMetas.get('pn').condStr).toBe('`u`.`userID` = `pn`.`userID`');
       });
 
       it('stores the join parameters if supplied.', () => {
         const cond = {
           $and: [
             {$eq: {'u.id': 'pn.id'}},
+            {$eq: {'u.first': ':myFirst'}},
             {$eq: {'pn.type': ':mobile'}}
           ]
         };
 
-        const params = {mobile: 'cell'};
+        const params = {myFirst: 'Ben', mobile: 'cell',};
 
         fromMeta.addTable(User, 'u');
         fromMeta.addTable(PhoneNumber, 'pn', 'u', 'phoneNumbers', 'INNER JOIN', cond, params);
@@ -152,7 +154,7 @@ describe('FromMeta()', function() {
         expect(fromMeta.paramList.params.mobile).toBe('cell');
         expect(fromMeta.tableMetas.get('pn').cond).toBe(cond);
         expect(fromMeta.tableMetas.get('pn').condStr)
-          .toBe('(`u`.`id` = `pn`.`id` AND `pn`.`type` = :mobile)');
+          .toBe('(`u`.`userID` = `pn`.`phoneNumberID` AND `u`.`firstName` = :myFirst AND `pn`.`type` = :mobile)');
       });
 
       it('throws an exception if one of the properties in the join condition is not available.', () => {

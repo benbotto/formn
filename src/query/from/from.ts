@@ -186,7 +186,7 @@ export class From {
    */
   getFromString(): string {
     const baseMeta  = this.getBaseTableMeta();
-    const baseName  = this.escaper.escapeProperty(baseMeta.tableMetadata.name);
+    const baseName  = this.escaper.escapeFullyQualifiedColumn(baseMeta.tableMetadata.getFQName());
     const baseAlias = this.escaper.escapeProperty(baseMeta.alias);
 
     return `FROM    ${baseName} AS ${baseAlias}`;
@@ -201,7 +201,7 @@ export class From {
     // next() call on the table iterator.
     return this.getJoinMeta()
       .map(tblMeta  => {
-        const joinName  = this.escaper.escapeProperty(tblMeta.tableMetadata.name);
+        const joinName  = this.escaper.escapeFullyQualifiedColumn(tblMeta.tableMetadata.getFQName());
         const joinAlias = this.escaper.escapeProperty(tblMeta.alias);
         let   sql       = `${tblMeta.joinType} ${joinName} AS ${joinAlias}`;
 

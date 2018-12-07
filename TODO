@@ -26,3 +26,11 @@ class ParameterizedCondition {
 }
 
 It would be nice if empty conditions returned empty strings, but it's kind of complex to implement.  Eg {} = '', {$and: []} = '', {$in: {col: []}} = ''
+
+To add composite support:
+  Schema.
+  From (when creating joins).
+
+For MSSQL support:
+  MSSQLExecuter.
+  Test fully-qualified table names with schema.

@@ -34,3 +34,9 @@ To add composite support:
 For MSSQL support:
   MSSQLExecuter.
   Test fully-qualified table names with schema.
+
+For transactions:
+  Each method in Executor needs an optional connection parameter, which is a
+  connection acquired from the pool (pool.getConnection()/conn.release()).
+
+  The execute method in Query then needs an optional connection parameter.

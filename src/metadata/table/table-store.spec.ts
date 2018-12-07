@@ -54,5 +54,21 @@ describe('TableStore()', () => {
       }
     });
   });
+
+  describe('.getFQName()', () => {
+    it('returns the name of the table.', () => {
+      const tbl = tblStore.getTable(User);
+
+      expect(tbl.getFQName()).toBe('users');
+    });
+
+    it('returns the name with the schema prefix.', () => {
+      const tbl = tblStore.getTable(User);
+
+      tbl.schema = 'dbo';
+
+      expect(tbl.getFQName()).toBe('dbo.users');
+    });
+  });
 });
 

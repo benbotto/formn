@@ -19,7 +19,7 @@ export function Table(options: TableMetaOptions = new TableMetaOptions()) {
 
     metaFactory
       .getTableStore()
-      .addTableMetadata(new TableMetadata(ctor, options.name, options.database));
+      .addTableMetadata(new TableMetadata(ctor, options.name, options.database, options.schema));
   }
 }
 

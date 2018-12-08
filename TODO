@@ -30,6 +30,7 @@ It would be nice if empty conditions returned empty strings, but it's kind of co
 To add composite support:
   Schema.
   From (when creating joins).
+  Select (in execute).
 
 For MSSQL support:
   MSSQLExecuter.
@@ -40,3 +41,4 @@ For transactions:
   connection acquired from the pool (pool.getConnection()/conn.release()).
 
   The execute method in Query then needs an optional connection parameter.
+

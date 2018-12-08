@@ -39,7 +39,7 @@ describe('MySQLExecuter()', function() {
   describe('.insert()', function() {
     it('uses pool.query() to execute insert statements.', function(done) {
       const params   = {};
-      const query    = 'INSERT INTO users (userName) VALUES (:username)';
+      const query    = 'INSERT INTO users (firstName) VALUES (:firstName)';
 
       con.query.and.returnValue(Promise.resolve([{insertId: 42}, {}]));
 

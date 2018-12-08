@@ -20,6 +20,7 @@ import { PhoneNumber } from '../../test/entity/phone-number.entity';
 import { UserXProduct } from '../../test/entity/user-x-product.entity';
 import { Product } from '../../test/entity/product.entity';
 import { Photo } from '../../test/entity/photo.entity';
+import { toPlain } from '../../test/util/to-plain';
 
 describe('Select()', function() {
   let relStore: RelationshipStore;
@@ -31,10 +32,6 @@ describe('Select()', function() {
   let con: jasmine.SpyObj<Connection>;
   let getFrom: (FromEntity: EntityType, fromAlias?: string) => From;
   let getSelect: <T>(from: From) => Select<T>;
-
-  function toPlain(p: any) {
-    return JSON.parse(JSON.stringify(p));
-  }
 
   beforeEach(function() {
     initDB();

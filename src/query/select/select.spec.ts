@@ -198,7 +198,7 @@ describe('Select()', function() {
       expect(selectSpy).toHaveBeenCalled();
     });
 
-    it('passes the pareters to the QueryExecuter\'s select() method.', function() {
+    it('passes the parameters to the Executer\'s select() method.', function() {
       selectSpy.and.returnValue(Promise.resolve([{}]));
 
       const params = {userID: 12, firstName: 'Joe'};
@@ -275,7 +275,7 @@ describe('Select()', function() {
           });
       });
 
-      it('propagates errors that originate in the QueryExecuter.', function(done) {
+      it('propagates errors that originate in the Executer.', function(done) {
         selectSpy.and.returnValue(Promise.reject(new Error('test')));
         getSelect<User>(getFrom(User, 'u'))
           .select()

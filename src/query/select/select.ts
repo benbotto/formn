@@ -115,7 +115,7 @@ export class Select<T> extends Query {
 
           assert(this.selectCols.has(pkAlias),
             'The primary key of every table must be selected, but the primary key ' +
-            `of table "${tblMeta.name}" (alias "${tblAlias}") ` +
+            `of table "${tblMeta.getFQName()}" (alias "${tblAlias}") ` +
             'was not selected.');
         }
       });
@@ -278,7 +278,7 @@ export class Select<T> extends Query {
   buildQuery(): ExecutableQuery {
     return {
       query: this.toString(),
-      params: this.from.getFromMeta().paramList.params
+      params: this.from.getFromMeta().paramList.getParams()
     };
   }
 }

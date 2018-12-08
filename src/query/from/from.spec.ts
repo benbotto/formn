@@ -108,7 +108,7 @@ describe('From()', () => {
 
       const meta = from.getJoinMeta()[0];
       expect(meta.cond).toBe(cond);
-      expect(from.getParameterList().params.mobile).toBe('cell');
+      expect(from.getParameterList().getParams().mobile).toBe('cell');
     });
   });
 
@@ -143,7 +143,7 @@ describe('From()', () => {
       const meta = from.getBaseTableMeta();
       expect(meta.cond).toBe(cond);
       expect(meta.condStr).toBe('`u`.`userID` = :me');
-      expect(from.getParameterList().params.me).toBe(42);
+      expect(from.getParameterList().getParams().me).toBe(42);
     });
 
     it('throws an error if a where condition already exists.', () => {

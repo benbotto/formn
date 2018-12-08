@@ -49,6 +49,6 @@ export abstract class Query {
    * Execute the query and return the results.
    * @param exe An ExecutableQuery instance with a query string and parameters.
    */
-  abstract execute(exe: ExecutableQuery): any;
+  abstract execute(exe: ExecutableQuery): Promise<any>;
 }
 

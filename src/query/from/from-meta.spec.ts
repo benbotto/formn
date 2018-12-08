@@ -242,5 +242,23 @@ describe('FromMeta()', function() {
       expect(fromMeta.isColumnAvailable('u.other')).toBe(false);
     });
   });
+
+  describe('.getFromColumnMetaByProp()', () => {
+    it('returns the metadata about the column.', () => {
+      fromMeta.addTable(User, 'u');
+
+      const meta = fromMeta.getFromColumnMetaByProp('u.id');
+      expect(meta.fqColName).toBe('u.userID');
+      expect(meta.fqProp).toBe('u.id');
+      expect(meta.tableAlias).toBe('u');
+    });
+
+    it('throws an error if the column is not available.', () => {
+      fromMeta.addTable(User, 'u');
+
+      expect(() => fromMeta.getFromColumnMetaByProp('foo'))
+        .toThrowError('Column "foo" is not available.  Columns must be fully-qualified (<table-alias>.<property>).');
+    });
+  });
 });
 

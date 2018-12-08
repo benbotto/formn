@@ -195,6 +195,24 @@ export class FromMeta {
   }
 
   /**
+   * Get the [[FromColumnMeta]] for a column by fully-qualified property.
+   * @param fqProp - The fully-qualified property name to look for.
+   */
+  getFromColumnMetaByProp(fqProp: string): FromColumnMeta {
+    assert(this.isColumnAvailable(fqProp),
+      `Column "${fqProp}" is not available.  Columns must be fully-qualified (<table-alias>.<property>).`);
+
+    return this.availableCols.get(fqProp);
+  }
+
+  /**
+   * Get the metadata for all available columns as an array.
+   */
+  getFromColumnMeta(): FromColumnMeta[] {
+    return Array.from(this.availableCols.values());
+  }
+
+  /**
    * Get the [[FromTableMeta]] for a table by alias or throw.
    * @param alias - Alias of the table.
    */
@@ -211,6 +229,13 @@ export class FromMeta {
    */
   getTableMetadataByAlias(alias: string): TableMetadata {
     return this.getFromTableMetaByAlias(alias).tableMetadata;
+  }
+
+  /**
+   * Get all the [[FromTableMeta]] as an array.
+   */
+  getFromTableMeta(): FromTableMeta[] {
+    return Array.from(this.tableMetas.values());
   }
 
   /**

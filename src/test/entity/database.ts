@@ -23,9 +23,6 @@ export function initDB() {
   colDec = Column({name: 'userID', isPrimary: true, isGenerated: true});
   colDec(User.prototype, 'id');
 
-  colDec = Column({maxLength: 255});
-  colDec(User.prototype, 'username');
-
   colDec = Column({name: 'firstName', maxLength: 255});
   colDec(User.prototype, 'first');
 

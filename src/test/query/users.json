@@ -1,0 +1,26 @@
+[
+  {
+    "u.id": 1,
+    "u.first": "Joe",
+    "u.last": "Shmo",
+    "u.createdOn": "2018-12-02T23:52:21.000Z"
+  },
+  {
+    "u.id": 2,
+    "u.first": "Rand",
+    "u.last": "AlThore",
+    "u.createdOn": "2018-12-02T23:52:21.000Z"
+  },
+  {
+    "u.id": 3,
+    "u.first": "Holly",
+    "u.last": "Davis",
+    "u.createdOn": "2018-12-02T23:52:21.000Z"
+  },
+  {
+    "u.id": 4,
+    "u.first": "Jenny",
+    "u.last": "Mather",
+    "u.createdOn": "2018-12-02T23:52:21.000Z"
+  }
+]

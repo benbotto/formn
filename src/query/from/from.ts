@@ -241,19 +241,17 @@ export class From {
   }
 
   /**
-   * Get the [[FromTableMeta]] for a table by alias.  Throws if the alias is
-   * not present.
-   * @param alias - Alias of the table.
-   */
-  getFromTableMetaByAlias(alias: string): FromTableMeta {
-    return this.fromMeta.getFromTableMetaByAlias(alias);
-  }
-
-  /**
    * Get the list of parameters for the From.
    */
   getParameterList(): ParameterList {
     return this.fromMeta.paramList;
+  }
+
+  /**
+   * Get the metadata (tables, columns, and parameters).
+   */
+  getFromMeta(): FromMeta {
+    return this.fromMeta;
   }
 }
 

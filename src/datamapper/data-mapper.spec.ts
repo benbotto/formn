@@ -15,6 +15,7 @@ import { PhoneNumber } from '../test/entity/phone-number.entity';
 import { UserXProduct } from '../test/entity/user-x-product.entity';
 import { Product } from '../test/entity/product.entity';
 import { Photo } from '../test/entity/photo.entity';
+import { toPlain } from '../test/util/to-plain';
 
 describe('DataMapper()', function() {
   let tblStore: TableStore;
@@ -26,12 +27,6 @@ describe('DataMapper()', function() {
   let prodSchema: Schema;
   let photoSchema: Schema;
   let dm: DataMapper;
-
-  // Helper to convert to an object.  Jasmine's .toEqual match checks
-  // constructors, so this converts instances to objects.
-  function toPlain(p: any) {
-    return JSON.parse(JSON.stringify(p));
-  }
 
   beforeEach(() => {
     initDB();

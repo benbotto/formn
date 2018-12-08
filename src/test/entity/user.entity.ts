@@ -10,9 +10,6 @@ export class User {
   @Column({name: 'userID', isPrimary: true, isGenerated: true})
   id: number;
 
-  @Column({maxLength: 255})
-  username: string;
-
   @Column({name: 'firstName', maxLength: 255})
   first: string;
 

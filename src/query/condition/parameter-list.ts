@@ -9,9 +9,7 @@ import { ConditionError } from '../../error/condition-error';
 export class ParameterList {
   private paramID: number;
 
-  /**
-   * Key-value pairs.  Each key is a parameter in a query.
-   */
+  // Key-value pairs.  Each key is a parameter in a query.
   private params: Map<string, any> = new Map();
 
   /**
@@ -46,6 +44,13 @@ export class ParameterList {
     assert(this.params.has(key), `Parameter "${key}" not found.`);
 
     return this.params.get(key);
+  }
+
+  /**
+   * Get all the parameter names.
+   */
+  getParamNames(): string[] {
+    return Array.from(this.params.keys());
   }
 
   /**

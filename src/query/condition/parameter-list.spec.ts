@@ -52,6 +52,17 @@ describe('ParameterList()', function() {
     });
   });
 
+  describe('.getParamNames()', () => {
+    it('returns all the parameter names as an array.', () => {
+      const paramList = new ParameterList();
+
+      paramList.addParameter('foo', 'bar');
+      paramList.addParameter('baz', 'boo');
+
+      expect(paramList.getParamNames()).toEqual(['foo', 'baz']);
+    });
+  });
+
   describe('.createParameterName()', function() {
     let paramList: ParameterList;
 

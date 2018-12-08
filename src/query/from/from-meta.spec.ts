@@ -151,7 +151,7 @@ describe('FromMeta()', function() {
         fromMeta.addTable(User, 'u');
         fromMeta.addTable(PhoneNumber, 'pn', 'u', 'phoneNumbers', 'INNER JOIN', cond, params);
 
-        expect(fromMeta.paramList.params.mobile).toBe('cell');
+        expect(fromMeta.paramList.getParams().mobile).toBe('cell');
         expect(fromMeta.tableMetas.get('pn').cond).toBe(cond);
         expect(fromMeta.tableMetas.get('pn').condStr)
           .toBe('(`u`.`userID` = `pn`.`phoneNumberID` AND `u`.`firstName` = :myFirst AND `pn`.`type` = :mobile)');

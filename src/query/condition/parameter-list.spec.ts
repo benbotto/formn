@@ -5,7 +5,7 @@ describe('ParameterList()', function() {
     it('initially contains no parameters.', function() {
       const paramList = new ParameterList();
 
-      expect(Object.keys(paramList.params).length).toBe(0);
+      expect(Object.keys(paramList.getParams()).length).toBe(0);
     });
 
     it('can copy parameters from another list.', function() {
@@ -16,11 +16,39 @@ describe('ParameterList()', function() {
       const paramList2 = new ParameterList(paramList1);
       paramList2.addParameter(paramList2.createParameterName('occupation'), 'developer');
 
-      expect(paramList2.params).toEqual({
+      expect(paramList2.getParams()).toEqual({
         name_0:       'Jack',
         age_1:        30,
         occupation_2: 'developer'
       });
+    });
+  });
+
+  describe('.getParam()', () => {
+    it('throws an error if the parameter does not exist.', () => {
+      const paramList = new ParameterList();
+
+      expect(() => paramList.getParam('foo'))
+        .toThrowError('Parameter "foo" not found.');
+    });
+
+    it('returns the parameter.', () => {
+      const paramList = new ParameterList();
+
+      paramList.addParameter('foo', 'bar');
+
+      expect(paramList.getParam('foo')).toBe('bar');
+    });
+  });
+
+  describe('.getParams()', () => {
+    it('returns all the parameters as a key-value pair.', () => {
+      const paramList = new ParameterList();
+
+      paramList.addParameter('foo', 'bar');
+      paramList.addParameter('baz', 'boo');
+
+      expect(paramList.getParams()).toEqual({foo: 'bar', baz: 'boo'});
     });
   });
 
@@ -47,7 +75,7 @@ describe('ParameterList()', function() {
 
     it('stores the parameter.', function() {
       paramList.addParameter('name', 'Jack');
-      expect(paramList.params.name).toBe('Jack');
+      expect(paramList.getParams().name).toBe('Jack');
     });
 
     it('raises an exception if the param already exists and the value is different.', function() {

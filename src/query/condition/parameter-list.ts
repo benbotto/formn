@@ -1,3 +1,5 @@
+import { assert } from '../../error/assert';
+
 import { ParameterType } from './parameter-type';
 import { ConditionError } from '../../error/condition-error';
 
@@ -10,7 +12,7 @@ export class ParameterList {
   /**
    * Key-value pairs.  Each key is a parameter in a query.
    */
-  public params: ParameterType = {};
+  private params: Map<string, any> = new Map();
 
   /**
    * Initialize the list of parameters.
@@ -18,11 +20,32 @@ export class ParameterList {
    */
   constructor(paramList?: ParameterList) {
     if (paramList) {
-      this.addParameters(paramList.params);
+      this.addParameters(paramList.getParams());
       this.paramID = paramList.getParamID();
     }
     else
       this.paramID = 0;
+  }
+
+  /**
+   * Get all the parameters as key-value pairs.
+   */
+  getParams(): ParameterType {
+    const paramObj: ParameterType = {};
+
+    for (let [key, val] of this.params)
+      paramObj[key] = val;
+
+    return paramObj;
+  }
+
+  /**
+   * Get a single param or throw.
+   */
+  getParam(key: string): any {
+    assert(this.params.has(key), `Parameter "${key}" not found.`);
+
+    return this.params.get(key);
   }
 
   /**
@@ -54,10 +77,10 @@ export class ParameterList {
     if (!key.match(/^[A-Za-z][\w\-]*$/))
       throw new ConditionError('Parameter keys must match "/^[A-Za-z][\\w\\-]*$/".');
 
-    if (this.params[key] !== undefined && this.params[key] !== value && !overwrite)
-      throw new ConditionError(`Parameter "${key}" already exists with value "${this.params[key]}".`);
+    if (this.params.has(key) && this.params.get(key) !== value && !overwrite)
+      throw new ConditionError(`Parameter "${key}" already exists with value "${this.params.get(key)}".`);
 
-    this.params[key] = value;
+    this.params.set(key, value);
 
     return this;
   }

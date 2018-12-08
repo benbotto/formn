@@ -20,10 +20,9 @@ describe('ColumnStore()', () => {
       const cols = colStore.getColumnMetadata(User);
 
       expect(cols[0].mapTo).toBe('id');
-      expect(cols[1].mapTo).toBe('username');
-      expect(cols[2].mapTo).toBe('first');
-      expect(cols[3].mapTo).toBe('last');
-      expect(cols[4].mapTo).toBe('createdOn');
+      expect(cols[1].mapTo).toBe('first');
+      expect(cols[2].mapTo).toBe('last');
+      expect(cols[3].mapTo).toBe('createdOn');
     });
 
     it('throws an error if the Entity is not decorated.', () => {

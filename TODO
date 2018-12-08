@@ -31,6 +31,7 @@ To add composite support:
   Schema.
   From (when creating joins).
   Select (in execute).
+  Insert (in execute).
 
 For MSSQL support:
   MSSQLExecuter.

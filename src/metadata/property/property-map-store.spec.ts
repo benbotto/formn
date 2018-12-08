@@ -21,7 +21,6 @@ describe('.PropertyMapStore()', () => {
       const pm = propStore.getPropertyMap(User);
 
       expect(pm.id).toBe('id');
-      expect(pm.username).toBe('username');
       expect(pm.first).toBe('first');
       expect(pm.last).toBe('last');
       expect(pm.createdOn).toBe('createdOn');
@@ -39,7 +38,6 @@ describe('.PropertyMapStore()', () => {
       const pm = propStore.getPropertyMap(User, 'u');
 
       expect(pm.id).toBe('u.id');
-      expect(pm.username).toBe('u.username');
       expect(pm.first).toBe('u.first');
       expect(pm.last).toBe('u.last');
       expect(pm.createdOn).toBe('u.createdOn');

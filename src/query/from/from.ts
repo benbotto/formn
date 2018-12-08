@@ -30,7 +30,7 @@ export class From {
    * @param propStore - Used for pulling table property maps (used in
    * conjunction with the relStore to get remote columns).
    * @param escaper - An [[Escaper]] matching the database type (e.g.
-   * [[MySQLEscaper]] or [[MSSQLEscaper]].  Used when escaping column names in
+   * [[MySQLEscaper]] or [[MSSQLEscaper]]).  Used when escaping column names in
    * compiled conditions.
    * @param FromEntity - Constructor of the FROM table.
    * @param fromAlias - Alias for the FROM table, used in conditions, joins,

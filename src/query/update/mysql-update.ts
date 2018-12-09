@@ -52,7 +52,7 @@ export class MySQLUpdate extends Update {
 
   /**
    * Get the SQL that represents the query.
-   * @return The SQL representing the select statement.
+   * @return The SQL representing the update statement.
    */
   toString(): string {
     if (this.updateCols.length === 0)

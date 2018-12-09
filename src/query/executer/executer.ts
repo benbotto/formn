@@ -1,8 +1,7 @@
 import { ParameterType } from '../condition/parameter-type';
 import { InsertResultType } from './insert-result-type';
 import { SelectResultType } from './select-result-type';
-import { UpdateResultType } from './update-result-type';
-import { DeleteResultType } from './delete-result-type';
+import { MutateResultType } from './mutate-result-type';
 
 /**
  * An Executer executes database queries.
@@ -37,7 +36,7 @@ export interface Executer {
    * @return An object that has an affectedRows property indicating the number
    * of rows affected (changed) by the query.
    */
-  update(query: string, params: ParameterType): Promise<UpdateResultType>;
+  update(query: string, params: ParameterType): Promise<MutateResultType>;
 
   /**
    * Execute a delete query.
@@ -47,6 +46,6 @@ export interface Executer {
    * @return An object that has an affectedRows property indicating the number
    * of rows affected (changed) by the query.
    */
-  delete(query: string, params: ParameterType): Promise<DeleteResultType>;
+  delete(query: string, params: ParameterType): Promise<MutateResultType>;
 }
 

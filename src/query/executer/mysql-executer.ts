@@ -4,8 +4,7 @@ import { Connection, Pool } from 'mysql2/promise'
 import { SelectResultType } from './select-result-type';
 import { ParameterType } from '../condition/parameter-type';
 import { InsertResultType } from './insert-result-type';
-import { UpdateResultType } from './update-result-type';
-import { DeleteResultType } from './delete-result-type';
+import { MutateResultType } from './mutate-result-type';
 
 /**
  * An Executer for executing MySQL queries.
@@ -56,10 +55,10 @@ export class MySQLExecuter implements Executer {
    * @return An object that has an affectedRows property indicating the number
    * of rows affected (changed) by the query.
    */
-  update(query: string, params: ParameterType): Promise<UpdateResultType> {
+  update(query: string, params: ParameterType): Promise<MutateResultType> {
     return this.pool
       .query(query, params)
-      .then(([result]) => result as UpdateResultType);
+      .then(([result]) => result as MutateResultType);
   }
 
   /**
@@ -70,10 +69,10 @@ export class MySQLExecuter implements Executer {
    * @return An object that has an affectedRows property indicating the number
    * of rows affected (changed) by the query.
    */
-  delete(query: string, params: ParameterType): Promise<DeleteResultType> {
+  delete(query: string, params: ParameterType): Promise<MutateResultType> {
     return this.pool
       .query(query, params)
-      .then(([result]) => result as DeleteResultType);
+      .then(([result]) => result as MutateResultType);
   }
 }
 

@@ -15,7 +15,7 @@ import { Executer } from '../executer/executer';
 import { From } from '../from/from';
 import { FromColumnMeta } from '../from/from-column-meta';
 import { ExecutableQuery } from '../executable-query';
-import { UpdateResultType } from '../executer/update-result-type';
+import { MutateResultType } from '../executer/mutate-result-type';
 
 /**
  * A [[Query]] that represents an UPDATE.
@@ -130,7 +130,7 @@ export abstract class Update extends Query {
    * "affectedRows" property.  If an error occurs when executing the query, the
    * returned promise shall be rejected with the error (unmodified).
    */
-  execute(): Promise<UpdateResultType> {
+  execute(): Promise<MutateResultType> {
     const exe = this.buildQuery();
 
     if (exe.query === '')

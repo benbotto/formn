@@ -17,13 +17,13 @@ import { From } from '../from/from';
 import { Query } from '../query';
 import { MySQLUpdate } from './mysql-update';
 import { Converter } from '../../converter/converter';
+import { UCConverter } from '../../test/converter/uc-converter';
 import { UpdateType } from './update-type';
 
 import { User } from '../../test/entity/user.entity';
 import { PhoneNumber } from '../../test/entity/phone-number.entity';
 
-// TODO: Test converters.
-describe('Update()', () => {
+describe('MySQLUpdate()', () => {
   let relStore: RelationshipStore;
   let tblStore: TableStore;
   let colStore: ColumnStore;
@@ -185,6 +185,29 @@ describe('Update()', () => {
           expect(e).toBe(err);
           done();
         });
+    });
+
+    it('uses converts when present.', (done) => {
+      colStore
+        .getColumnMetadataByMapping(User, 'first')
+        .converter = new UCConverter();
+
+      const upd = getUpdate(
+        getFrom(User, 'u'), {'u.first': 'Ben', 'u.last': 'Botto'});
+      const err = new Error();
+
+      upd
+        .execute()
+        .then(() => done());
+
+      expect(updateSpy.calls.argsFor(0)[0]).toBe(
+        'UPDATE  `users` AS `u`\n' +
+        'SET\n' +
+        '`u`.`firstName` = :u_first_0,\n' +
+        '`u`.`lastName` = :u_last_1');
+
+      expect(updateSpy.calls.argsFor(0)[1]).toEqual(
+        {u_first_0: 'BEN', u_last_1: 'Botto'});
     });
   });
 });

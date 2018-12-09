@@ -9,6 +9,7 @@ import { Schema } from './schema';
 import { DataMapper } from './data-mapper';
 
 import { Converter } from '../converter/converter';
+import { UCConverter } from '../test/converter/uc-converter';
 
 import { User } from '../test/entity/user.entity';
 import { PhoneNumber } from '../test/entity/phone-number.entity';
@@ -161,12 +162,6 @@ describe('DataMapper()', function() {
     });
 
     it('uses converters when serializing.', function() {
-      class UCConverter extends Converter {
-        onRetrieve(name: string): string {
-          return name.toUpperCase();
-        }
-      }
-
       class IDConverter extends Converter {
         onRetrieve(id: number): number {
           return id + 10;

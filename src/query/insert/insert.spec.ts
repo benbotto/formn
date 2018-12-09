@@ -17,6 +17,7 @@ import { Query } from '../query';
 import { ParameterType } from '../condition/parameter-type';
 
 import { Converter } from '../../converter/converter';
+import { UCConverter } from '../../test/converter/uc-converter';
 
 import { User } from '../../test/entity/user.entity';
 
@@ -158,12 +159,6 @@ describe('Insert()', () => {
     });
 
     it('uses the converters defined on the model, if any.', (done) => {
-      class UCConverter extends Converter {
-        onSave(val: string): string {
-          return val.toUpperCase();
-        }
-      }
-
       // Convert first name to uppercase.
       colStore
         .getColumnMetadataByMapping(User, 'first')

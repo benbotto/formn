@@ -35,9 +35,12 @@ To add composite support:
 
 For MSSQL support:
   MSSQLExecuter.
-  Test fully-qualified table names with schema.
-  Test fully-qualified table names in FROM.
-  Test fully-qualified table names in insert.
+  MSSQLUpdate.
+  MSSQLUpdateModel.
+  Test fully-qualified table names with Schema.
+  Test fully-qualified table names in From.
+  Test fully-qualified table names in Insert.
+  Test fully-qualified table names in UpdateModel.
 
 For transactions:
   Each method in Executor needs an optional connection parameter, which is a

@@ -5,7 +5,7 @@ import { initDB } from '../../test/entity/database';
 
 import { User } from '../../test/entity/user.entity';
 
-describe('.PropertyMapStore()', () => {
+describe('PropertyMapStore()', () => {
   let propStore: PropertyMapStore;
 
   beforeAll(function() {

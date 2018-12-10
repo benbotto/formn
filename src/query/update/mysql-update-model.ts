@@ -23,11 +23,9 @@ export class MySQLUpdateModel<T> extends UpdateModel<T> {
    * @param relStore - Used for accessing relationships between tables.
    * @param propStore - Used for pulling table property maps (used in
    * conjunction with the relStore to get remote columns).
-   * @param escaper - An [[Escaper]] matching the database type (e.g.
-   * [[MySQLEscaper]] or [[MSSQLEscaper]]).  Used when escaping column names in
-   * compiled conditions.
-   * @param executer - An [[Executer]] instance that matches the database type
-   * (e.g. [[MySQLExecuter]]).
+   * @param escaper - A [[MySQLEscaper]] instance.  Used when escaping column
+   * names in compiled conditions.
+   * @param executer - A [[MySQLExecuter]] instance for executing queries.
    * @param Entity - The type of model to update, which is the constructor of a
    * [[Table]]-decorated class.
    * @param model - An Entity instance to update, which must have the primary

@@ -86,8 +86,6 @@ export abstract class UpdateModel<T> extends MutateModel<Update, T> {
    * Produce an [[Update]] instance that's appropriate for the database (e.g. a
    * [[MySQLUpdate]]).
    * @param from - A [[From]] instance, passed to the [[Update]] constructor.
-   * @param updateModel - An updatable model, passed to the [[Update]]
-   * constructor.
    */
   protected abstract produceQuery(from: From): Update;
 

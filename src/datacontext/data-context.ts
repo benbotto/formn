@@ -27,11 +27,9 @@ export abstract class DataContext {
   protected propStore: PropertyMapStore;
 
   /**
-   * Initialize the DataContext with connection options.
-   * @param connOpts - Connection options for setting up a connection to the
-   * database.
+   * Initialize the DataContext.
    */
-  constructor(protected connOpts: ConnectionOptions) {
+  constructor() {
     // These stores contain metadata about the database (tables, columns,
     // etc.).  All the metadata come from decoractors.
     this.tblStore  = metaFactory.getTableStore();
@@ -107,7 +105,15 @@ export abstract class DataContext {
   }
 
   /**
-   * End the connection.
+   * Connect to the database.
+   * @param connOpts - Connection options for setting up a connection to the
+   * database.
+   * @return A promise that will be resolved with this [[DataContext]] instance.
+   */
+  abstract connect(connOpts: ConnectionOptions): Promise<this>;
+
+  /**
+   * End the connection pool.
    */
   abstract end(): void;
 }

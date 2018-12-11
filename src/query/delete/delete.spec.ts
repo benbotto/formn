@@ -9,6 +9,7 @@ import { TableStore } from '../../metadata/table/table-store';
 import { ColumnStore } from '../../metadata/column/column-store';
 import { PropertyMapStore } from '../../metadata/property/property-map-store';
 import { EntityType } from '../../metadata/table/entity-type';
+import { TableType } from '../../metadata/table/table-type';
 
 import { MySQLEscaper } from '../escaper/mysql-escaper';
 import { MySQLExecuter } from '../executer/mysql-executer';
@@ -30,7 +31,7 @@ describe('Delete()', () => {
   let escaper: MySQLEscaper;
   let executer: MySQLExecuter;
   let con: jasmine.SpyObj<Connection>;
-  let getFrom: (FromEntity: EntityType, fromAlias?: string) => From;
+  let getFrom: (FromEntity: TableType, fromAlias?: string) => From;
   let getDelete: (from: From, alias?: string) => Delete;
 
   beforeEach(() => {
@@ -45,7 +46,7 @@ describe('Delete()', () => {
     executer  = new MySQLExecuter(con);
 
     // From curry: produce a From instance with just an entity and alias.
-    getFrom = (FromEntity: EntityType, fromAlias?: string) =>
+    getFrom = (FromEntity: TableType, fromAlias?: string) =>
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getDelete = (from: From, alias?: string) =>

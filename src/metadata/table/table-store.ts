@@ -1,11 +1,11 @@
 import { TableMetadata } from './table-metadata';
 import { assert } from '../../error/assert';
-import { EntityType } from './entity-type';
+import { TableType } from './table-type';
 
 /** Provides storage and lookup operations for [[Table]]-decorated entities. */
 export class TableStore {
   private tblMetadata: TableMetadata[] = [];
-  private tblMap: Map<EntityType, TableMetadata> = new Map();
+  private tblMap: Map<TableType, TableMetadata> = new Map();
   private dbMap: Map<string, TableMetadata[]> = new Map();
 
   /**
@@ -22,7 +22,7 @@ export class TableStore {
       .get(tbl.database)
       .push(tbl);
 
-    // Keep a map of EntityType to TableMetadata.
+    // Keep a map of Entity to TableMetadata.
     this.tblMap.set(tbl.Entity, tbl);
 
     return this;
@@ -42,7 +42,7 @@ export class TableStore {
   /**
    * Get a table by type.
    */
-  getTable(Entity: EntityType): TableMetadata {
+  getTable(Entity: TableType): TableMetadata {
     const tbl = this.tblMap.get(Entity);
 
     assert(tbl, `Table "${Entity.name}" not found in TableStore.  It must be decorated with @Table.`);

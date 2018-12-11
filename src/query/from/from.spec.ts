@@ -3,7 +3,7 @@ import { TableStore } from '../../metadata/table/table-store';
 import { ColumnStore } from '../../metadata/column/column-store';
 import { RelationshipStore } from '../../metadata/relationship/relationship-store';
 import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { EntityType } from '../../metadata/table/entity-type';
+import { TableType } from '../../metadata/table/table-type';
 
 import { MySQLEscaper } from '../escaper/mysql-escaper';
 
@@ -22,7 +22,7 @@ describe('From()', () => {
   let colStore: ColumnStore;
   let propStore: PropertyMapStore;
   let escaper: MySQLEscaper;
-  let getFrom: (FromEntity: EntityType, fromAlias?: string) => From;
+  let getFrom: (FromEntity: TableType, fromAlias?: string) => From;
 
   beforeEach(function() {
     initDB();
@@ -34,7 +34,7 @@ describe('From()', () => {
     escaper   = new MySQLEscaper();
 
     // From curry: produce a From instance with just an entity and alias.
-    getFrom = (FromEntity: EntityType, fromAlias?: string) =>
+    getFrom = (FromEntity: TableType, fromAlias?: string) =>
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
   });
 

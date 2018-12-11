@@ -55,7 +55,7 @@ export abstract class MutateModel<Q extends Query, T> extends Query {
     protected propStore: PropertyMapStore,
     protected escaper: Escaper,
     protected executer: Executer,
-    protected Entity: EntityType,
+    protected Entity: EntityType<T>,
     protected model: T) {
 
     super(colStore, tblStore, relStore, propStore, escaper, executer);

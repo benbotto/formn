@@ -1,13 +1,13 @@
 import { ColumnMetaOptions } from './column-meta-options';
 import { Converter } from '../../converter/converter';
-import { EntityType } from '../table/entity-type';
+import { TableType } from '../table/table-type';
 
 /**
  * Stores metadata about [[Column]]-decorated properties on
  * [[Table]]-decorated classes (Entities).
  */
 export class ColumnMetadata {
-  Entity: EntityType;
+  Entity: TableType;
   mapTo: string;
   name: string;
   isPrimary: boolean;
@@ -28,7 +28,7 @@ export class ColumnMetadata {
    * metadata like dataType, column name, etc.
    */
   constructor(
-    Entity: EntityType,
+    Entity: TableType,
     mapTo: string,
     options: ColumnMetaOptions) {
 

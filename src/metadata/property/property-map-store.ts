@@ -1,6 +1,7 @@
-import { EntityType } from '../table/entity-type';
-import { PropertyMapType } from './property-map-type';
 import { assert } from '../../error/assert';
+
+import { PropertyMapType } from './property-map-type';
+import { TableType } from '../table/table-type';
 
 /**
  * Stores property maps for each [[Table]]-decorated Entity.  A property map is
@@ -8,12 +9,12 @@ import { assert } from '../../error/assert';
  * each maps to the property name as a string.
  */
 export class PropertyMapStore {
-  private propMaps: Map<EntityType, PropertyMapType> = new Map();
+  private propMaps: Map<TableType, PropertyMapType> = new Map();
 
   /**
    * Add a property to the store.
    */
-  addProperty(Entity: EntityType, property: string): this {
+  addProperty(Entity: TableType, property: string): this {
     // Keep a local map of Table to Property names.
     // (See RelationshipMetaOptions: This is what's passed to "on.").
     if (!this.propMaps.has(Entity))
@@ -36,7 +37,7 @@ export class PropertyMapStore {
    * @param alias - An optional table alias.  If supplied each value in the property map will
    * be prefixed with the alias as &lt;alias&gt;.&lt;property&gt;.
    */
-  getPropertyMap(Entity: EntityType, alias?: string): PropertyMapType {
+  getPropertyMap(Entity: TableType, alias?: string): PropertyMapType {
     const pm = this.propMaps.get(Entity);
 
     assert(pm, `Failed to get property map for type "${Entity.name}."  The type must be decorated with @Table.`);

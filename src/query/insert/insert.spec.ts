@@ -29,7 +29,7 @@ describe('Insert()', () => {
   let escaper: MySQLEscaper;
   let executer: MySQLExecuter;
   let con: jasmine.SpyObj<Connection>;
-  let getInsert: <T>(Entity: EntityType, model: T) => Insert<T>;
+  let getInsert: <T>(Entity: EntityType<T>, model: T) => Insert<T>;
 
   beforeEach(() => {
     initDB();
@@ -43,7 +43,7 @@ describe('Insert()', () => {
     executer  = new MySQLExecuter(con);
 
     // Insert curry to produce an Insert instance with just an entity and model.
-    getInsert = <T>(Entity: EntityType, model: T) =>
+    getInsert = <T>(Entity: EntityType<T>, model: T) =>
       new Insert<T>(colStore, tblStore, relStore, propStore, escaper, executer, Entity, model);
   });
 

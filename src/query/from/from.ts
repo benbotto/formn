@@ -1,12 +1,13 @@
+import { assert } from '../../error/assert';
+import { ConditionError } from '../../error/condition-error';
+
 import { ColumnStore } from '../../metadata/column/column-store';
 import { TableStore } from '../../metadata/table/table-store';
 import { RelationshipStore } from '../../metadata/relationship/relationship-store';
 import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { Escaper } from '../escaper/escaper';
-import { EntityType } from '../../metadata/table/entity-type';
+import { TableType } from '../../metadata/table/table-type';
 
-import { assert } from '../../error/assert';
-import { ConditionError } from '../../error/condition-error';
+import { Escaper } from '../escaper/escaper';
 
 import { ParameterType } from '../condition/parameter-type';
 import { ParameterList } from '../condition/parameter-list';
@@ -42,7 +43,7 @@ export class From {
     protected relStore: RelationshipStore,
     protected propStore: PropertyMapStore,
     protected escaper: Escaper,
-    FromEntity: EntityType,
+    FromEntity: TableType,
     fromAlias?: string) {
 
     this.fromMeta = new FromMeta(this.colStore, this.tblStore,
@@ -86,9 +87,9 @@ export class From {
    * @param joinParams - An optional set of parameters that will be used to
    * replace values in joinCond.
    */
-  join(
+  join<J>(
     joinType: JoinType,
-    Entity: EntityType,
+    Entity: TableType,
     alias: string,
     fqParentProperty: string,
     joinCond?: object,
@@ -132,8 +133,8 @@ export class From {
   /**
    * Inner join in a table.  See [[From.join]].
    */
-  innerJoin(
-    Entity: EntityType,
+  innerJoin<J>(
+    Entity: TableType,
     alias: string,
     fqParentProperty: string,
     joinCond?: object,
@@ -146,8 +147,8 @@ export class From {
   /**
    * Left outer join in a table.  See [[From.join]].
    */
-  leftOuterJoin(
-    Entity: EntityType,
+  leftOuterJoin<J>(
+    Entity: TableType,
     alias: string,
     fqParentProperty: string,
     joinCond?: object,

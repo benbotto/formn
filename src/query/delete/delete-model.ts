@@ -40,7 +40,7 @@ export class DeleteModel<T> extends MutateModel<Delete, T> {
     protected propStore: PropertyMapStore,
     protected escaper: Escaper,
     protected executer: Executer,
-    protected Entity: EntityType,
+    protected Entity: EntityType<T>,
     protected model: T) {
 
     super(colStore, tblStore, relStore, propStore, escaper, executer, Entity, model);

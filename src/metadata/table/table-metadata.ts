@@ -1,5 +1,5 @@
 import { TableMetaOptions } from './table-meta-options';
-import { EntityType } from './entity-type';
+import { TableType } from './table-type';
 
 /**
  * Stores metadata about [[Table]]-decorated classes.
@@ -13,7 +13,7 @@ export class TableMetadata {
    * @param schema - The database schema, if any.
    */
   constructor(
-    public Entity: EntityType,
+    public Entity: TableType,
     public name: string,
     public database: string,
     public schema?: string) {

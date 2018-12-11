@@ -49,7 +49,7 @@ export class Insert<T> extends Query {
     protected propStore: PropertyMapStore,
     protected escaper: Escaper,
     protected executer: Executer,
-    private Entity: EntityType,
+    private Entity: EntityType<T>,
     private model: T) {
 
     super(colStore, tblStore, relStore, propStore, escaper, executer);

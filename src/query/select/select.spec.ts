@@ -10,7 +10,7 @@ import { ColumnStore } from '../../metadata/column/column-store';
 import { PropertyMapStore } from '../../metadata/property/property-map-store';
 import { MySQLEscaper } from '../escaper/mysql-escaper';
 import { MySQLExecuter } from '../executer/mysql-executer';
-import { EntityType } from '../../metadata/table/entity-type';
+import { TableType } from '../../metadata/table/table-type';
 
 import { From } from '../from/from';
 import { Select } from './select';
@@ -30,7 +30,7 @@ describe('Select()', function() {
   let escaper: MySQLEscaper;
   let executer: MySQLExecuter;
   let con: jasmine.SpyObj<Connection>;
-  let getFrom: (FromEntity: EntityType, fromAlias?: string) => From;
+  let getFrom: (FromEntity: TableType, fromAlias?: string) => From;
   let getSelect: <T>(from: From) => Select<T>;
 
   beforeEach(function() {
@@ -45,7 +45,7 @@ describe('Select()', function() {
     executer  = new MySQLExecuter(con);
 
     // From curry: produce a From instance with just an entity and alias.
-    getFrom = (FromEntity: EntityType, fromAlias?: string) =>
+    getFrom = (FromEntity: TableType, fromAlias?: string) =>
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getSelect = <T>(from: From) =>

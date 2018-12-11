@@ -1,4 +1,5 @@
 /**
- * Type definition for the type (constructor) of a [[Table]]-decorated class.
+ * Type definition for Entity ([[Table]]-decorated class with type safety).
  */
-export type EntityType = {new(): any};
+export type EntityType<T> = {new(): T};
+

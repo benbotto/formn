@@ -1,6 +1,7 @@
-import { RelationshipMetadata } from './relationship-metadata';
-import { EntityType } from '../table/entity-type';
 import { assert } from '../../error/assert';
+
+import { RelationshipMetadata } from './relationship-metadata';
+import { TableType } from '../table/table-type';
 
 /** Stores relationships and provides lookup functions. */
 export class RelationshipStore {
@@ -27,8 +28,8 @@ export class RelationshipStore {
    * @return An array of RelationshipMetadata instances.
    */
   getRelationships(
-    Entity1: EntityType,
-    Entity2: EntityType,
+    Entity1: TableType,
+    Entity2: TableType,
     oneWay = false,
     mapTo: string = null): RelationshipMetadata[] {
 
@@ -63,8 +64,8 @@ export class RelationshipStore {
    * @return The RelationshipMetadata for the relationship.
    */
   getRelationship(
-    Entity1: EntityType,
-    Entity2: EntityType,
+    Entity1: TableType,
+    Entity2: TableType,
     mapTo: string): RelationshipMetadata {
 
     const rels = this.getRelationships(Entity1, Entity2, true, mapTo);

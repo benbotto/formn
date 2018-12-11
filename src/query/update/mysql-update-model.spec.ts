@@ -24,7 +24,7 @@ describe('MySQLUpdateModel()', () => {
   let escaper: MySQLEscaper;
   let executer: MySQLExecuter;
   let con: jasmine.SpyObj<Connection>;
-  let getUpdate: <T>(Entity: EntityType, model: T) => MySQLUpdateModel<T>;
+  let getUpdate: <T>(Entity: EntityType<T>, model: T) => MySQLUpdateModel<T>;
 
   beforeEach(() => {
     initDB();
@@ -38,7 +38,7 @@ describe('MySQLUpdateModel()', () => {
     executer  = new MySQLExecuter(con);
 
     // Get a MySQLUpdateModel instance using an entity type and entity.
-    getUpdate = <T>(Entity: EntityType, model: T) =>
+    getUpdate = <T>(Entity: EntityType<T>, model: T) =>
       new MySQLUpdateModel(colStore, tblStore, relStore, propStore, escaper, executer, Entity, model);
   });
 

@@ -38,7 +38,7 @@ export class MySQLUpdateModel<T> extends UpdateModel<T> {
     protected propStore: PropertyMapStore,
     protected escaper: MySQLEscaper,
     protected executer: MySQLExecuter,
-    protected Entity: EntityType,
+    protected Entity: EntityType<T>,
     protected model: T) {
 
     super(colStore, tblStore, relStore, propStore, escaper, executer, Entity, model);

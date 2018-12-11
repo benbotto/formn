@@ -5,7 +5,7 @@ import { TableStore } from '../../metadata/table/table-store';
 import { ColumnStore } from '../../metadata/column/column-store';
 import { RelationshipStore } from '../../metadata/relationship/relationship-store';
 import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { EntityType } from '../../metadata/table/entity-type';
+import { TableType } from '../../metadata/table/table-type';
 
 import { initDB } from '../../test/entity/database';
 import { User } from '../../test/entity/user.entity';
@@ -24,7 +24,7 @@ describe('MySQLFromAdapter()', () => {
   let con: jasmine.SpyObj<Connection>;
   let escaper: MySQLEscaper;
   let executer: MySQLExecuter;
-  let getFrom: (FromEntity: EntityType, fromAlias?: string) => MySQLFromAdapter;
+  let getFrom: (FromEntity: TableType, fromAlias?: string) => MySQLFromAdapter;
 
   beforeEach(function() {
     initDB();
@@ -38,7 +38,7 @@ describe('MySQLFromAdapter()', () => {
     executer  = new MySQLExecuter(con);
 
     // From curry: produce a FromAdapter instance with just an entity and alias.
-    getFrom = (FromEntity: EntityType, fromAlias?: string) =>
+    getFrom = (FromEntity: TableType, fromAlias?: string) =>
       new MySQLFromAdapter(colStore, tblStore, relStore, propStore, escaper, executer, FromEntity, fromAlias);
   });
 

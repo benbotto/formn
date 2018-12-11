@@ -3,7 +3,7 @@ import { TableStore } from '../../metadata/table/table-store';
 import { RelationshipStore } from '../../metadata/relationship/relationship-store';
 import { PropertyMapStore } from '../../metadata/property/property-map-store';
 import { ColumnMetadata } from '../../metadata/column/column-metadata';
-import { EntityType } from '../../metadata/table/entity-type';
+import { TableType } from '../../metadata/table/table-type';
 
 import { Escaper } from '../escaper/escaper';
 import { Executer } from '../executer/executer';
@@ -43,7 +43,7 @@ export abstract class FromAdapter extends From {
     protected propStore: PropertyMapStore,
     protected escaper: Escaper,
     protected executer: Executer,
-    FromEntity: EntityType,
+    FromEntity: TableType,
     fromAlias?: string) {
 
     super(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);

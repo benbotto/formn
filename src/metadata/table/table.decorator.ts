@@ -1,6 +1,6 @@
 import { TableMetaOptions } from './table-meta-options';
 import { TableMetadata } from './table-metadata';
-import { EntityType } from './entity-type';
+import { TableType } from './table-type';
 import metaFactory from '../metadata-factory';
 
 /**
@@ -10,7 +10,7 @@ import metaFactory from '../metadata-factory';
  * the [[TableStore]].
  */
 export function Table(options: TableMetaOptions = new TableMetaOptions()) {
-  return function(ctor: EntityType) {
+  return function(ctor: TableType) {
     if (!options.name)
       options.name = ctor.name;
 

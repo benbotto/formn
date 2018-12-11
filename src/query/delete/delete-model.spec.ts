@@ -24,7 +24,7 @@ describe('DeleteModel()', () => {
   let escaper: MySQLEscaper;
   let executer: MySQLExecuter;
   let con: jasmine.SpyObj<Connection>;
-  let getDelete: <T>(Entity: EntityType, model: T) => DeleteModel<T>;
+  let getDelete: <T>(Entity: EntityType<T>, model: T) => DeleteModel<T>;
 
   beforeEach(() => {
     initDB();
@@ -38,7 +38,7 @@ describe('DeleteModel()', () => {
     executer  = new MySQLExecuter(con);
 
     // Get a DeleteModel instance using an entity type and entity.
-    getDelete = <T>(Entity: EntityType, model: T) =>
+    getDelete = <T>(Entity: EntityType<T>, model: T) =>
       new DeleteModel(colStore, tblStore, relStore, propStore, escaper, executer, Entity, model);
   });
 

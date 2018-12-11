@@ -44,7 +44,7 @@ export abstract class UpdateModel<T> extends MutateModel<Update, T> {
     protected propStore: PropertyMapStore,
     protected escaper: Escaper,
     protected executer: Executer,
-    protected Entity: EntityType,
+    protected Entity: EntityType<T>,
     protected model: T) {
 
     super(colStore, tblStore, relStore, propStore, escaper, executer, Entity, model);

@@ -1,11 +1,12 @@
-import { ColumnMetadata } from './column-metadata';
-import { EntityType } from '../table/entity-type';
 import { assert } from '../../error/assert';
+
+import { ColumnMetadata } from './column-metadata';
+import { TableType } from '../table/table-type';
 
 /** Storage for [[ColumnMetadata]] with lookup operations. */
 export class ColumnStore {
   private colMetadata: ColumnMetadata[] = [];
-  private tableCols: Map<EntityType, ColumnMetadata[]> = new Map();
+  private tableCols: Map<TableType, ColumnMetadata[]> = new Map();
 
   /**
    * Add a column's metadata.
@@ -27,7 +28,7 @@ export class ColumnStore {
   /**
    * Get all the [[ColumnMetadata]] for a [[Table]]-decorated Entity.
    */
-  getColumnMetadata(Entity: EntityType): ColumnMetadata[] {
+  getColumnMetadata(Entity: TableType): ColumnMetadata[] {
     const cols = this.tableCols.get(Entity);
 
     assert(cols, `Failed to get column metadata for type "${Entity.name}."  The type must be decorated with @Table.`);
@@ -38,7 +39,7 @@ export class ColumnStore {
   /**
    * Get the [[ColumnMetadata]] for a [[Table]]-decorated Entity by column name.
    */
-  getColumnMetadataByName(Entity: EntityType, name: string): ColumnMetadata {
+  getColumnMetadataByName(Entity: TableType, name: string): ColumnMetadata {
     const cols = this.getColumnMetadata(Entity);
     const col  = cols.find(col => col.name === name);
 
@@ -51,7 +52,7 @@ export class ColumnStore {
    * Get the [[ColumnMetadata]] for a [[Table]]-decorated Entity by column
    * mapping (property name in parent Entity).
    */
-  getColumnMetadataByMapping(Entity: EntityType, mapTo: string): ColumnMetadata {
+  getColumnMetadataByMapping(Entity: TableType, mapTo: string): ColumnMetadata {
     const cols = this.getColumnMetadata(Entity);
     const col  = cols.find(col => col.mapTo === mapTo);
 
@@ -63,7 +64,7 @@ export class ColumnStore {
   /**
    * Get the primary key for a table.
    */
-  getPrimaryKey(Entity: EntityType): ColumnMetadata[] {
+  getPrimaryKey(Entity: TableType): ColumnMetadata[] {
     const cols = this.getColumnMetadata(Entity);
     const pk   = cols.filter(col => col.isPrimary);
 

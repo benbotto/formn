@@ -1,5 +1,5 @@
 import { CardinalityType } from './cardinality-type';
-import { EntityType } from '../table/entity-type';
+import { TableType } from '../table/table-type';
 import { PropertyMapType } from '../property/property-map-type';
 
 /** Represents a relationship between two tables. */
@@ -20,9 +20,9 @@ export class RelationshipMetadata {
    * @param cardinality - The relationship type (e.g. OneToMany).
    */
   constructor(
-    public Entity: EntityType,
+    public Entity: TableType,
     public mapTo: string,
-    public to: () => EntityType,
+    public to: () => TableType,
     public on: (entity: PropertyMapType, refEntity: PropertyMapType) => string[],
     public cardinality: CardinalityType) {
   }

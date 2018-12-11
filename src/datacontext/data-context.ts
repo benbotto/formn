@@ -5,6 +5,7 @@ import { TableStore } from '../metadata/table/table-store';
 import { RelationshipStore } from '../metadata/relationship/relationship-store';
 import { PropertyMapStore } from '../metadata/property/property-map-store';
 import { EntityType } from '../metadata/table/entity-type';
+import { TableType } from '../metadata/table/table-type';
 
 import { ConnectionOptions } from './connection-options';
 
@@ -57,7 +58,7 @@ export abstract class DataContext {
    * @return An [[Insert]] instance that can be executed using
    * [[Insert.execute]].
    */
-  insert<T>(Entity: EntityType, model: T): Insert<T> {
+  insert<T>(Entity: EntityType<T>, model: T): Insert<T> {
     return new Insert<T>(this.colStore, this.tblStore, this.relStore,
       this.propStore, this.getEscaper(), this.getExecuter(), Entity, model);
   }
@@ -72,7 +73,7 @@ export abstract class DataContext {
    * @return A [[FromAdapter]] that implements [[FromAdapter.select]],
    * [[FromAdapter.update]], and [[FromAdapter.delete]].
    */
-  abstract from(Entity: EntityType, alias: string): FromAdapter;
+  abstract from(Entity: TableType, alias: string): FromAdapter;
 
   /**
    * Create a new [[UpdateModel]] instance that can be used to update a model
@@ -86,7 +87,7 @@ export abstract class DataContext {
    * @return An [[UpdateModel]] instance that can be executed using
    * [[UpdateModel.execute]].
    */
-  abstract update<T>(Entity: EntityType, model: T): UpdateModel<T>;
+  abstract update<T>(Entity: EntityType<T>, model: T): UpdateModel<T>;
 
   /**
    * Create a new [[DeleteModel]] instance that can be used to delete a model
@@ -100,7 +101,7 @@ export abstract class DataContext {
    * @return A [[DeleteModel]] instance that can be executed using
    * [[DeleteModel.execute]].
    */
-  delete<T>(Entity: EntityType, model: T): DeleteModel<T> {
+  delete<T>(Entity: EntityType<T>, model: T): DeleteModel<T> {
     return new DeleteModel(this.colStore, this.tblStore, this.relStore,
       this.propStore, this.getEscaper(), this.getExecuter(), Entity, model);
   }

@@ -4,10 +4,10 @@ import { ConditionError } from '../../error/condition-error';
 import { ColumnStore } from '../../metadata/column/column-store';
 import { TableStore } from '../../metadata/table/table-store';
 import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { EntityType } from '../../metadata/table/entity-type';
 import { ColumnMetadata } from '../../metadata/column/column-metadata';
 import { ColumnLookup } from '../../metadata/column/column-lookup';
 import { TableMetadata } from '../../metadata/table/table-metadata';
+import { TableType } from '../../metadata/table/table-type';
 
 import { ConditionLexer } from '../condition/condition-lexer';
 import { ConditionParser } from '../condition/condition-parser';
@@ -93,7 +93,7 @@ export class FromMeta {
    * @param params - Any parameters used in the condition.
    */
   addTable(
-    Entity: EntityType,
+    Entity: TableType,
     alias: string,
     parentAlias: string = null,
     property: string = null,

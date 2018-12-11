@@ -99,7 +99,7 @@ export class FromMeta {
     property: string = null,
     joinType: JoinType = null,
     cond: object = null,
-    params: ParameterType = null): FromMeta {
+    params: ParameterType = null): this {
 
     let parentTblMeta = null;
     let relationshipMetadata = null;
@@ -171,7 +171,7 @@ export class FromMeta {
    * @param cond - The condition object to add and compile.
    * @param params - Any parameters in the cond object.
    */
-  setCondition(alias: string, cond: object, params: ParameterType = null): FromMeta {
+  setCondition(alias: string, cond: object, params: ParameterType = null): this {
     const tblMeta = this.getFromTableMetaByAlias(alias);
 
     if (params)

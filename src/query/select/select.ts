@@ -62,7 +62,7 @@ export class Select<T> extends Query {
    * &lt;table-alias&gt;.&lt;property&gt;.  If no columns are specified, then
    * all columns are selected.
    */
-  select(...cols: string[]): Select<T> {
+  select(...cols: string[]): this {
     const fromMeta = this.from.getFromMeta();
 
     // Select may only be performed once on a query.
@@ -129,7 +129,7 @@ export class Select<T> extends Query {
    * &lt;table-alias&gt;.&lt;property&gt;, or an array of [[OrderByType]] with
    * the fully-qualified property and direction.
    */
-  orderBy(...orders: OrderByType[] | string[]): Select<T> {
+  orderBy(...orders: OrderByType[] | string[]): this {
     // orderBy may only be called once.
     assert(this.order.length === 0,
       'orderBy already performed on query.');

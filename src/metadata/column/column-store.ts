@@ -10,7 +10,7 @@ export class ColumnStore {
   /**
    * Add a column's metadata.
    */
-  addColumnMetadata(col: ColumnMetadata): ColumnStore {
+  addColumnMetadata(col: ColumnMetadata): this {
     this.colMetadata.push(col)
 
     // Keep a local map of Table to Columns.

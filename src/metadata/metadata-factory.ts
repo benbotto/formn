@@ -11,9 +11,8 @@ class MetadataFactory {
 
   /**
    * Clear all metadata (useful in unit tests).
-   * @return {this}
    */
-  clear(): MetadataFactory {
+  clear(): this {
     this.tblStore = new TableStore();
     this.colStore = new ColumnStore();
     this.relStore = new RelationshipStore();

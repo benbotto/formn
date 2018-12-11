@@ -63,7 +63,7 @@ export class Schema {
    * [[Converter]].
    * @param name - The name of the column in the to-be-serialized query.
    */
-  addColumn(meta: ColumnMetadata, name: string): Schema {
+  addColumn(meta: ColumnMetadata, name: string): this {
     // The property names must be unique.
     assert(!this.propertyLookup.has(meta.mapTo),
       `Property "${meta.mapTo}" already present in schema.`);
@@ -83,7 +83,7 @@ export class Schema {
    * Schema's [[Table]] to the sub-Schema's [[Table]].
    * @param {Schema} schema - A Schema instance.
    */
-  addSchema(schema: Schema, relationship: RelationshipMetadata): Schema {
+  addSchema(schema: Schema, relationship: RelationshipMetadata): this {
     // The property names must be unique.
     assert(!this.propertyLookup.has(relationship.mapTo),
       `Property "${relationship.mapTo}" already present in schema.`);

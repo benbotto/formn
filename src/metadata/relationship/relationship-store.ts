@@ -9,7 +9,7 @@ export class RelationshipStore {
   /**
    * Add a relationship.
    */
-  addRelationshipMetadata(rel: RelationshipMetadata): RelationshipStore {
+  addRelationshipMetadata(rel: RelationshipMetadata): this {
     this.relMetadata.push(rel);
 
     return this;

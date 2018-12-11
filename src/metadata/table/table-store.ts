@@ -11,7 +11,7 @@ export class TableStore {
   /**
    * Add a Table's metadata to the store.
    */
-  addTableMetadata(tbl: TableMetadata): TableStore {
+  addTableMetadata(tbl: TableMetadata): this {
     this.tblMetadata.push(tbl);
 
     // Keep a lookup of database name to TableMetadata.

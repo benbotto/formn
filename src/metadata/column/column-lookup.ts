@@ -17,7 +17,7 @@ export class ColumnLookup {
    * [[ColumnMetadata.createFQName]]), but it can be any string that's
    * associated with property.
    */
-  addColumn(property: string, fqColName: string): ColumnLookup {
+  addColumn(property: string, fqColName: string): this {
     this.colMap.set(property, fqColName);
 
     return this;

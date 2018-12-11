@@ -78,7 +78,7 @@ export class ParameterList {
    * matching key already exists and the value is different.  If this flag is
    * set to true, however, then parameters will be blindly overwritten.
    */
-  addParameter(key: string, value: any, overwrite: boolean = false): ParameterList {
+  addParameter(key: string, value: any, overwrite: boolean = false): this {
     if (!key.match(/^[A-Za-z][\w\-]*$/))
       throw new ConditionError('Parameter keys must match "/^[A-Za-z][\\w\\-]*$/".');
 
@@ -96,7 +96,7 @@ export class ParameterList {
    * @param overwrite - Whether or not to blindly overwrite existing
    * parameters.
    */
-  addParameters(params: ParameterType, overwrite: boolean = false): ParameterList {
+  addParameters(params: ParameterType, overwrite: boolean = false): this {
     for (let key in params)
       this.addParameter(key, params[key], overwrite);
 

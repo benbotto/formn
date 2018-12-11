@@ -37,11 +37,11 @@ export class From {
    * and column selection.  Optional: defaults to the name of the table.
    */
   constructor(
-    private colStore: ColumnStore,
-    private tblStore: TableStore,
-    private relStore: RelationshipStore,
-    private propStore: PropertyMapStore,
-    private escaper: Escaper,
+    protected colStore: ColumnStore,
+    protected tblStore: TableStore,
+    protected relStore: RelationshipStore,
+    protected propStore: PropertyMapStore,
+    protected escaper: Escaper,
     FromEntity: EntityType,
     fromAlias?: string) {
 
@@ -92,7 +92,7 @@ export class From {
     alias: string,
     fqParentProperty: string,
     joinCond?: object,
-    joinParams?: ParameterType): From {
+    joinParams?: ParameterType): this {
 
     // Get the parent alias and property name.
     const propRE = /^(\w+)\.(\w+)$/;
@@ -137,7 +137,7 @@ export class From {
     alias: string,
     fqParentProperty: string,
     joinCond?: object,
-    joinParams?: ParameterType): From {
+    joinParams?: ParameterType): this {
 
     return this
       .join('INNER JOIN', Entity, alias, fqParentProperty, joinCond, joinParams);
@@ -151,7 +151,7 @@ export class From {
     alias: string,
     fqParentProperty: string,
     joinCond?: object,
-    joinParams?: ParameterType): From {
+    joinParams?: ParameterType): this {
 
     return this
       .join('LEFT OUTER JOIN', Entity, alias, fqParentProperty, joinCond, joinParams);
@@ -163,7 +163,7 @@ export class From {
    * @param cond - The where condition object.
    * @param params - Any parameter replacements in the condition object.
    */
-  where(cond: object, params: ParameterType): From {
+  where(cond: object, params: ParameterType): this {
     const tblMeta = this.getBaseTableMeta();
 
     assert(tblMeta.cond === null,

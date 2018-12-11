@@ -13,7 +13,7 @@ export class PropertyMapStore {
   /**
    * Add a property to the store.
    */
-  addProperty(Entity: EntityType, property: string): PropertyMapStore {
+  addProperty(Entity: EntityType, property: string): this {
     // Keep a local map of Table to Property names.
     // (See RelationshipMetaOptions: This is what's passed to "on.").
     if (!this.propMaps.has(Entity))

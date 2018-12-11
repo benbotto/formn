@@ -27,5 +27,10 @@ export class ConnectionOptions {
    * The database to use.
    */
   database: string;
+
+  /**
+   * Maximum number of connections to obtain.
+   */
+  poolSize: number;
 }
 

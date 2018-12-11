@@ -37,6 +37,7 @@ For MSSQL support:
   MSSQLExecuter.
   MSSQLUpdate.
   MSSQLUpdateModel.
+  MSSQLFromAdapter.
   Test fully-qualified table names with Schema.
   Test fully-qualified table names in From.
   Test fully-qualified table names in Insert.

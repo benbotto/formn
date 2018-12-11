@@ -7,7 +7,7 @@ import { PropertyMapStore } from '../metadata/property/property-map-store';
 import { EntityType } from '../metadata/table/entity-type';
 import { TableType } from '../metadata/table/table-type';
 
-import { ConnectionOptions } from './connection-options';
+import { ConnectionOptions } from '../connection/connection-options';
 
 import { Executer } from '../query/executer/executer';
 import { Escaper } from '../query/escaper/escaper';

@@ -1,6 +1,6 @@
 {
   "name": "formn",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "formn, pronounced foreman, is an object-relational mapper for Node.js.  What's the \"F\" stand for?  It depends on your mood.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,8 @@
     "test:debug": "node --inspect-brk=0.0.0.0:9229 -r ts-node/register ./node_modules/.bin/jasmine --config=./jasmine.json --reporter=jasmine-console-reporter",
     "clean": "rm -rf doc dist",
     "watch:test": "chokidar --initial \"src/**/*.ts\" -c \"npm run test\"",
-    "watch:doc": "chokidar --initial \"src/**/*.ts\" -c \"npm run doc\""
+    "watch:doc": "chokidar --initial \"src/**/*.ts\" -c \"npm run doc\"",
+    "prepublishOnly": "npm run test && npm run clean && npm run build && npm run doc"
   },
   "devDependencies": {
     "@types/jasmine": "~3.3.0",

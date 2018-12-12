@@ -71,7 +71,7 @@ export abstract class DataContext {
    * @return A [[FromAdapter]] that implements [[FromAdapter.select]],
    * [[FromAdapter.update]], and [[FromAdapter.delete]].
    */
-  abstract from(Entity: TableType, alias: string): FromAdapter;
+  abstract from<T>(Entity: TableType, alias: string): FromAdapter<T>;
 
   /**
    * Create a new [[UpdateModel]] instance that can be used to update a model
@@ -115,6 +115,6 @@ export abstract class DataContext {
   /**
    * End the connection pool.
    */
-  abstract end(): void;
+  abstract end(): Promise<void>;
 }
 

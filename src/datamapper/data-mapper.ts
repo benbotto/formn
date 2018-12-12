@@ -14,7 +14,7 @@ export class DataMapper {
    * containing keys as properties and values from a database query.
    * @param schema - The [[Schema]] instance describing how to serialize the
    * query.
-   * @return {Object[]} A normalized document (an array of objects).
+   * @return A normalized document (an array of T instances).
    */
   serialize<T>(query: object[], schema: Schema): T[] {
     const collection: T[] = [];

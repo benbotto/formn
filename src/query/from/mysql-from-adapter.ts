@@ -3,7 +3,7 @@ import { TableStore } from '../../metadata/table/table-store';
 import { RelationshipStore } from '../../metadata/relationship/relationship-store';
 import { PropertyMapStore } from '../../metadata/property/property-map-store';
 import { ColumnMetadata } from '../../metadata/column/column-metadata';
-import { TableType } from '../../metadata/table/table-type';
+import { EntityType } from '../../metadata/table/entity-type';
 
 import { MySQLEscaper } from '../escaper/mysql-escaper';
 import { MySQLExecuter } from '../executer/mysql-executer';
@@ -14,7 +14,7 @@ import { MySQLUpdate } from '../update/mysql-update';
 /**
  * A specialized [[FromAdapter]] for MySQL databases.  See [[FromAdapter]].
  */
-export class MySQLFromAdapter extends FromAdapter {
+export class MySQLFromAdapter<T> extends FromAdapter<T> {
   /**
    * Initialize the From instance.
    * @param colStore - Used for accessing columns in tables.
@@ -36,7 +36,7 @@ export class MySQLFromAdapter extends FromAdapter {
     protected propStore: PropertyMapStore,
     protected escaper: MySQLEscaper,
     protected executer: MySQLExecuter,
-    FromEntity: TableType,
+    FromEntity: EntityType<T>,
     fromAlias?: string) {
 
     super(colStore, tblStore, relStore, propStore, escaper, executer, FromEntity, fromAlias);

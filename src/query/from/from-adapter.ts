@@ -3,7 +3,7 @@ import { TableStore } from '../../metadata/table/table-store';
 import { RelationshipStore } from '../../metadata/relationship/relationship-store';
 import { PropertyMapStore } from '../../metadata/property/property-map-store';
 import { ColumnMetadata } from '../../metadata/column/column-metadata';
-import { TableType } from '../../metadata/table/table-type';
+import { EntityType } from '../../metadata/table/entity-type';
 
 import { Escaper } from '../escaper/escaper';
 import { Executer } from '../executer/executer';
@@ -19,7 +19,7 @@ import { UpdateType } from '../update/update-type';
  * [[Select]], [[Delete]], and [[Update]], all of which depend on a [[From]]
  * instance.
  */
-export abstract class FromAdapter extends From {
+export abstract class FromAdapter<T> extends From {
   /**
    * Initialize the From instance.
    * @param colStore - Used for accessing columns in tables.
@@ -43,7 +43,7 @@ export abstract class FromAdapter extends From {
     protected propStore: PropertyMapStore,
     protected escaper: Escaper,
     protected executer: Executer,
-    FromEntity: TableType,
+    FromEntity: EntityType<T>,
     fromAlias?: string) {
 
     super(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
@@ -54,7 +54,7 @@ export abstract class FromAdapter extends From {
    * @param cols - An optional set of columns to select.
    * @return An executable [[Select]] instance.
    */
-  select<T>(...cols: string[]): Select<T> {
+  select(...cols: string[]): Select<T> {
     return new Select<T>(this.colStore, this.tblStore, this.relStore,
       this.propStore, this.escaper, this.executer, this)
       .select(...cols);

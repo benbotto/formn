@@ -10,6 +10,7 @@ import { ConnectionStateType } from './connection-state-type';
  * A [[ConnectionManager]] class specialized for MySQL.
  */
 export class MySQLConnectionManager extends ConnectionManager<Pool> {
+  private getConn: Promise<Pool>;
   private conn: Pool;
   private state: ConnectionStateType = 'DISCONNECTED';
 
@@ -26,8 +27,8 @@ export class MySQLConnectionManager extends ConnectionManager<Pool> {
    * instance.
    */
   connect(connOpts: ConnectionOptions): Promise<Pool> {
-    if (this.getConnectionState() === 'CONNECTED')
-      return Promise.resolve(this.conn);
+    if (this.getConnectionState() !== 'DISCONNECTED')
+      return this.getConn;
 
     this.connOpts = {
       host               : connOpts.host,
@@ -45,26 +46,32 @@ export class MySQLConnectionManager extends ConnectionManager<Pool> {
     };
 
     this.conn  = createPool(this.connOpts);
-    this.state = 'CONNECTED';
+    this.state = 'CONNECTING';
 
-    return Promise
-      .resolve(this.conn);
+    // Get a connection from the pool to verify that the connection options
+    // work.
+    return this.getConn = this.conn
+      .getConnection()
+      .then(conn => {
+        conn.release();
+        this.state = 'CONNECTED';
+        return this.conn;
+      });
   }
 
   /**
    * End the connection pool.
    */
   end(): Promise<void> {
-    if (this.getConnectionState() === 'CONNECTED') {
-      return this.conn
-        .end()
-        .then(() => {
-          this.state = 'DISCONNECTED';
-          return;
-        });
-    }
+    if (this.getConnectionState() === 'DISCONNECTED')
+      return Promise.resolve();
 
-    return Promise.resolve();
+    return this.getConn
+      .then(() => this.conn.end())
+      .then(() => {
+        this.state = 'DISCONNECTED';
+        return;
+      });
   }
 
   /**

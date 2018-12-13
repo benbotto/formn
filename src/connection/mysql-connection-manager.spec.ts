@@ -6,11 +6,15 @@ import { ConnectionOptions } from './connection-options';
 describe('MySQLConnectionManager()', () => {
   let createPoolSpy: jasmine.Spy;
   let mockPool: jasmine.SpyObj<mysql2.Pool>;
+  let mockConn: jasmine.SpyObj<mysql2.Connection>;
   let connOpts: ConnectionOptions;
 
   beforeEach(() => {
-    mockPool = jasmine.createSpyObj('Pool', ['end']);
+    mockPool = jasmine.createSpyObj('Pool', ['end', 'getConnection']);
     mockPool.end.and.returnValue(Promise.resolve());
+
+    mockConn = jasmine.createSpyObj('Conn', ['release']);
+    mockPool.getConnection.and.returnValue(Promise.resolve(mockConn));
 
     createPoolSpy = spyOn(mysql2, 'createPool')
       .and.returnValue(mockPool);
@@ -25,12 +29,18 @@ describe('MySQLConnectionManager()', () => {
   });
 
   describe('.connect()', () => {
-    it('creates a pool with the appropriate options.', () => {
+    it('creates a pool with the appropriate options.', (done) => {
       const connMan = new MySQLConnectionManager();
 
       expect(connMan.getConnectionState()).toBe('DISCONNECTED');
-      connMan.connect(connOpts);
-      expect(connMan.getConnectionState()).toBe('CONNECTED');
+      connMan
+        .connect(connOpts)
+        .then(pool => {
+          expect(connMan.getConnectionState()).toBe('CONNECTED');
+          done();
+        });
+
+      expect(connMan.getConnectionState()).toBe('CONNECTING');
 
       const connOptArgs = createPoolSpy.calls.argsFor(0)[0];
 
@@ -65,14 +75,13 @@ describe('MySQLConnectionManager()', () => {
       connMan
         .end()
         .then(() => {
+          expect(mockPool.end).toHaveBeenCalled();
           expect(connMan.getConnectionState()).toBe('DISCONNECTED');
           done();
         });
-
-      expect(mockPool.end).toHaveBeenCalled();
     });
 
-    it('returns immediately if the pools is disconnected.', (done) => {
+    it('returns immediately if the pool is disconnected.', (done) => {
       const connMan = new MySQLConnectionManager();
 
       connMan
@@ -92,12 +101,15 @@ describe('MySQLConnectionManager()', () => {
       
     });
 
-    it('returns the connect pool.', () => {
+    it('returns the connect pool.', (done) => {
       const connMan = new MySQLConnectionManager();
 
-      connMan.connect(connOpts);
-
-      expect(connMan.getConnection()).toBe(mockPool);
+      connMan
+        .connect(connOpts)
+        .then(() => {
+          expect(connMan.getConnection()).toBe(mockPool);
+          done();
+        });
     });
   });
 });

@@ -69,7 +69,7 @@ export class MySQLDataContext extends DataContext {
    * @return A [[MySQLFromAdapter]] that implements [[MySQLFromAdapter.select]],
    * [[MySQLFromAdapter.update]], and [[MySQLFromAdapter.delete]].
    */
-  from<T>(Entity: EntityType<T>, alias: string): MySQLFromAdapter<T> {
+  from<T>(Entity: EntityType<T>, alias?: string): MySQLFromAdapter<T> {
     return new MySQLFromAdapter(this.colStore, this.tblStore, this.relStore,
       this.propStore, this.getEscaper(), this.getExecuter(), Entity, alias);
   }

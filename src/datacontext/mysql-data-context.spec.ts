@@ -15,11 +15,15 @@ import { User } from '../test/entity/user.entity';
 describe('MySQLDataContext()', () => {
   let createPoolSpy: jasmine.Spy;
   let mockPool: jasmine.SpyObj<mysql2.Pool>;
+  let mockConn: jasmine.SpyObj<mysql2.Connection>;
   let connOpts: ConnectionOptions;
 
   beforeEach(() => {
-    mockPool = jasmine.createSpyObj('Pool', ['end']);
+    mockPool = jasmine.createSpyObj('Pool', ['end', 'getConnection']);
     mockPool.end.and.returnValue(Promise.resolve());
+
+    mockConn = jasmine.createSpyObj('Conn', ['release']);
+    mockPool.getConnection.and.returnValue(Promise.resolve(mockConn));
 
     createPoolSpy = spyOn(mysql2, 'createPool')
       .and.returnValue(mockPool);

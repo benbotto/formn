@@ -136,14 +136,14 @@ export class Select<T> extends Query {
 
     for (let i = 0; i < orders.length; ++i) {
       const order: OrderByType = typeof orders[i] === 'string' ?
-        {fqProperty: orders[i], dir: 'ASC'} as OrderByType :
+        {property: orders[i], dir: 'ASC'} as OrderByType :
         orders[i] as OrderByType;
 
       // Make sure the column is available for ordering.
       const fromMeta = this.from.getFromMeta();
 
-      assert(fromMeta.isColumnAvailable(order.fqProperty),
-        `"${order.fqProperty}" is not available for orderBy.`);
+      assert(fromMeta.isColumnAvailable(order.property),
+        `"${order.property}" is not available for orderBy.`);
 
       this.order.push(order);
     }
@@ -191,7 +191,7 @@ export class Select<T> extends Query {
 
       sql += this.order
         .map(order => {
-          const colMeta = fromMeta.getFromColumnMetaByProp(order.fqProperty);
+          const colMeta = fromMeta.getFromColumnMetaByProp(order.property);
           const colName = this.escaper.escapeFullyQualifiedColumn(colMeta.fqColName);
 
           return `${colName} ${order.dir}`;

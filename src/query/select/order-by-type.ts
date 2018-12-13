@@ -7,7 +7,7 @@ export type OrderByType = {
   /**
    * Fully-qualified property name (e.g. &lt;table-alias&gt;.&lt;property&gt;);
    */
-  fqProperty: string;
+  property: string;
 
   /**
    * Direction (ASC or DESC).

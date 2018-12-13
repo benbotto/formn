@@ -170,9 +170,9 @@ describe('Select()', function() {
       const query = getSelect<User>(getFrom(User, 'u'))
         .select('u.id', 'u.first', 'u.last')
         .orderBy(
-          {fqProperty: 'u.id', dir: 'ASC'},
-          {fqProperty: 'u.first', dir: 'ASC'},
-          {fqProperty: 'u.last', dir: 'DESC'});
+          {property: 'u.id', dir: 'ASC'},
+          {property: 'u.first', dir: 'ASC'},
+          {property: 'u.last', dir: 'DESC'});
 
       expect(query.toString()).toBe(
         'SELECT  `u`.`userID` AS `u.id`,\n'       +

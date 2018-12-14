@@ -56,6 +56,10 @@ export class MySQLConnectionManager extends ConnectionManager<Pool> {
         conn.release();
         this.state = 'CONNECTED';
         return this.conn;
+      })
+      .catch(err => {
+        this.state = 'DISCONNECTED';
+        return Promise.reject(err);
       });
   }
 
@@ -71,6 +75,10 @@ export class MySQLConnectionManager extends ConnectionManager<Pool> {
       .then(() => {
         this.state = 'DISCONNECTED';
         return;
+      })
+      .catch(err => {
+        this.state = 'DISCONNECTED';
+        return Promise.reject(err);
       });
   }
 

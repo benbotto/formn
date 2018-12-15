@@ -3,7 +3,7 @@ import { runSelect } from './run-select';
 const sql = `
   SELECT  u.userID, u.firstName, u.lastName,
           pn.phoneNumberID, pn.phoneNumber,
-          uxp.userXProductID,
+          uxp.userID AS uxp_userID, uxp.productID AS uxp_productID,
           p.productID, p.description,
           ph.photoID, ph.photoURL
   FROM    users u

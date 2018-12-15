@@ -19,7 +19,8 @@
     ],
     "userXProducts": [
       {
-        "id": 1,
+        "userID": 1,
+        "productID": 1,
         "product": {
           "id": 1,
           "description": "Nike",
@@ -40,7 +41,8 @@
         }
       },
       {
-        "id": 2,
+        "userID": 1,
+        "productID": 3,
         "product": {
           "id": 3,
           "description": "Rebok",
@@ -70,7 +72,8 @@
     ],
     "userXProducts": [
       {
-        "id": 3,
+        "userID": 2,
+        "productID": 2,
         "product": {
           "id": 2,
           "description": "Crystals",
@@ -86,7 +89,8 @@
     "phoneNumbers": [],
     "userXProducts": [
       {
-        "id": 4,
+        "userID": 3,
+        "productID": 1,
         "product": {
           "id": 1,
           "description": "Nike",

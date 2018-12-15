@@ -7,13 +7,10 @@ import { Product } from './product.entity';
 
 @Table({name: 'users_x_products'})
 export class UserXProduct {
-  @Column({name: 'userXProductID', isPrimary: true, isGenerated: true})
-  id: number;
-
-  @Column()
+  @Column({isPrimary: true})
   userID: number;
 
-  @Column()
+  @Column({isPrimary: true})
   productID: number;
 
   @ManyToOne<UserXProduct, User>(() => User, (uxp, u) => [uxp.userID, u.id])

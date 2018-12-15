@@ -114,13 +114,10 @@ export function initDB() {
   tblDec(Photo);
 
   // UserXProduct.
-  colDec = Column({name: 'userXProductID', isPrimary: true, isGenerated: true});
-  colDec(UserXProduct.prototype, 'id');
-
-  colDec = Column();
+  colDec = Column({isPrimary: true});
   colDec(UserXProduct.prototype, 'userID');
 
-  colDec = Column();
+  colDec = Column({isPrimary: true});
   colDec(UserXProduct.prototype, 'productID');
 
   relDec = ManyToOne<UserXProduct, User>(() => User, (uxp, u) => [uxp.userID, u.id]);

@@ -225,16 +225,15 @@ export class Select<T> extends Query {
 
     fromTblMetas
       .forEach(fromTblMeta => {
-        const pk = this.colStore.getPrimaryKey(fromTblMeta.tableMetadata.Entity);
+        const pks = this.colStore.getPrimaryKey(fromTblMeta.tableMetadata.Entity);
 
-        // TODO: Composite keys are not yet implemented.
-        assert(pk.length === 1, 'Composite keys are not currently supported.');
-
-        // Create the schema.  In the query, the PK column name will be the
+        // Create the schema.  In the query, the PK column name(s) will be the
         // fully-qualified property.
-        const fqProp  = ColumnMetadata.createFQName(fromTblMeta.alias, pk[0].mapTo);
-        const colMeta = this.selectCols.get(fqProp);
-        const schema  = new Schema(fromTblMeta.tableMetadata, colMeta.columnMetadata, fqProp);
+        const fqProps = pks
+          .map(pk => ColumnMetadata.createFQName(fromTblMeta.alias, pk.mapTo));
+        const colMetas = fqProps
+          .map(fqProp => this.selectCols.get(fqProp).columnMetadata);
+        const schema  = new Schema(fromTblMeta.tableMetadata, colMetas, fqProps);
 
         // Keep a lookup of table alias->schema.
         schemaLookup.set(fromTblMeta.alias, schema);

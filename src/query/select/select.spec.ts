@@ -263,7 +263,7 @@ describe('Select()', function() {
           .select(
             'u.id', 'u.first', 'u.last',
             'pn.id', 'pn.phoneNumber',
-            'uxp.id',
+            'uxp.userID', 'uxp.productID',
             'p.id', 'p.description',
             'ph.id', 'ph.photoURL');
 

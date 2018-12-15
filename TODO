@@ -27,10 +27,8 @@ class ParameterizedCondition {
 It would be nice if empty conditions returned empty strings, but it's kind of complex to implement.  Eg {} = '', {$and: []} = '', {$in: {col: []}} = ''
 
 To add composite support:
-  Schema.
-  From (when creating joins).
-  Select (in execute).
-  Insert (in execute).
+  From (when creating joins on composite keys).
+  Relationship decorator (allow join predicates on multiple columns).
 
 For MSSQL support:
   MSSQLExecuter.

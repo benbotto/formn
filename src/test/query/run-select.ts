@@ -24,6 +24,11 @@ export function runSelect(query: string, params: ParameterType): Promise<SelectR
       conn.end();
       console.log(JSON.stringify(results, null, 2));
       return results;
+    })
+    .catch(err => {
+      console.error(err);
+      conn.end();
+      return Promise.reject(err);
     });
 }
 

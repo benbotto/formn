@@ -38,32 +38,32 @@ describe('DataMapper()', function() {
 
     userSchema = new Schema(
       tblStore.getTable(User),
-      colStore.getPrimaryKey(User)[0],
-      'userID')
+      colStore.getPrimaryKey(User),
+      ['userID'])
       .addColumn(colStore.getColumnMetadataByName(User, 'firstName'), 'firstName')
       .addColumn(colStore.getColumnMetadataByName(User, 'lastName'), 'lastName');
 
     pnSchema = new Schema(
       tblStore.getTable(PhoneNumber),
-      colStore.getPrimaryKey(PhoneNumber)[0],
-      'phoneNumberID')
+      colStore.getPrimaryKey(PhoneNumber),
+      ['phoneNumberID'])
       .addColumn(colStore.getColumnMetadataByName(PhoneNumber, 'phoneNumber'), 'phoneNumber');
 
     userXProdSchema = new Schema(
       tblStore.getTable(UserXProduct),
-      colStore.getPrimaryKey(UserXProduct)[0],
-      'userXProductID');
+      colStore.getPrimaryKey(UserXProduct),
+      ['userID', 'productID']);
 
     prodSchema = new Schema(
       tblStore.getTable(Product),
-      colStore.getPrimaryKey(Product)[0],
-      'productID')
+      colStore.getPrimaryKey(Product),
+      ['productID'])
       .addColumn(colStore.getColumnMetadataByName(Product, 'description'), 'description');
 
     photoSchema = new Schema(
       tblStore.getTable(Photo),
-      colStore.getPrimaryKey(Photo)[0],
-      'photoID')
+      colStore.getPrimaryKey(Photo),
+      ['photoID'])
       .addColumn(colStore.getColumnMetadataByName(Photo, 'photoURL'), 'photoURL');
 
     dm = new DataMapper();
@@ -222,8 +222,8 @@ describe('DataMapper()', function() {
 
       const schema = new Schema(
         tblStore.getTable(User),
-        colStore.getPrimaryKey(User)[0],
-        'col1')
+        colStore.getPrimaryKey(User),
+        ['col1'])
         .addColumn(colStore.getColumnMetadataByName(User, 'firstName'), 'col2')
         .addColumn(colStore.getColumnMetadataByName(User, 'lastName'), 'col3');
 
@@ -258,6 +258,7 @@ describe('DataMapper()', function() {
       const users = toPlain(dm.serialize(query, userSchema));
 
       expect(users).toEqual(require('../test/query/users-with-phone-numbers-products-and-photos.serialized'));
+      console.log(JSON.stringify(users, null, 2));
     });
 
     it('serializes sub-documents to null if the PK is not present.', () => {

@@ -31,14 +31,17 @@ export class DataMapper {
       lookup: LookupType,
       collection?: R[]): R {
 
-      const keyCol = schema.getKeyColumn().name;
-      const keyVal = queryRow[keyCol];
-      let doc;
-
       // The keyCol is null, meaning this was an outer join and there is no
       // related data.
-      if (!keyVal)
+      if (schema.getKeyColumns().some(keyCol => queryRow[keyCol.name] === null))
         return null;
+
+      // The key may be composed of multiple columns.  Convert key values to
+      // a string so that an entity lookup can be kept.
+      const keyVal = schema.getKeyColumns()
+        .map(keyCol => queryRow[keyCol.name])
+        .toString();
+      let doc;
         
       // First time encountering this key.  Create a document for it.
       if (lookup[keyVal] === undefined) {

@@ -8,6 +8,7 @@ import { RelationshipMetadata } from '../metadata/relationship/relationship-meta
 import { Schema } from './schema';
 import { User } from '../test/entity/user.entity';
 import { PhoneNumber } from '../test/entity/phone-number.entity';
+import { UserXProduct } from '../test/entity/user-x-product.entity';
 
 describe('Schema()', function() {
   let tblStore: TableStore;
@@ -24,8 +25,8 @@ describe('Schema()', function() {
 
     userSchema = new Schema(
       tblStore.getTable(User),
-      colStore.getPrimaryKey(User)[0],
-      'userID');
+      colStore.getPrimaryKey(User),
+      ['userID']);
   });
 
   describe('.constructor()', function() {
@@ -33,12 +34,28 @@ describe('Schema()', function() {
       const cols = userSchema.columns;
 
       expect(cols.length).toBe(1);
-      expect(cols[0]).toBe(userSchema.getKeyColumn());
+      expect(cols[0]).toBe(userSchema.getKeyColumns()[0]);
       expect(cols[0].meta.mapTo).toBe('id');
       expect(cols[0].name).toBe('userID');
       expect(cols[0].meta.name).toBe('userID');
       expect(userSchema.table.name).toBe('users');
       expect(userSchema.table.Entity).toBe(User);
+    });
+
+    it('stores composite key columns.', () => {
+      const schema = new Schema(
+        tblStore.getTable(UserXProduct),
+        colStore.getPrimaryKey(UserXProduct),
+        ['userID', 'productID']);
+
+      const cols = schema.columns;
+
+      expect(cols.length).toBe(2);
+      expect(cols[0]).toBe(schema.getKeyColumns()[0]);
+      expect(cols[1]).toBe(schema.getKeyColumns()[1]);
+      expect(cols[0].name).toBe('userID');
+      expect(cols[1].name).toBe('productID');
+      expect(schema.table.name).toBe('users_x_products');
     });
   });
 
@@ -67,8 +84,8 @@ describe('Schema()', function() {
     beforeEach(() => {
       pnSchema = new Schema(
         tblStore.getTable(PhoneNumber),
-        colStore.getPrimaryKey(PhoneNumber)[0],
-        'phoneNumberID');
+        colStore.getPrimaryKey(PhoneNumber),
+        ['phoneNumberID']);
       
       rel = relStore.getRelationships(User, PhoneNumber, true, 'phoneNumbers')[0];
     });
@@ -81,7 +98,7 @@ describe('Schema()', function() {
       expect(schemata.length).toBe(1);
       expect(schemata[0].relationship.mapTo).toBe('phoneNumbers');
       expect(schemata[0].relationship.cardinality).toBe('OneToMany');
-      expect(schemata[0].schema.getKeyColumn().name).toBe('phoneNumberID');
+      expect(schemata[0].schema.getKeyColumns()[0].name).toBe('phoneNumberID');
       expect(schemata[0].schema.table.Entity).toBe(PhoneNumber);
     });
 

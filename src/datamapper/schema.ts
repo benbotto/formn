@@ -15,6 +15,9 @@ export class Schema {
   // Used to verify that the same property is not added twice.
   private propertyLookup: Set<string> = new Set();
 
+  // Stores the key columns, which are generally the primary key column(s).
+  private keyColumns: SchemaColumn[] = [];
+
   /**
    * All the [[SubSchema]] instances of this schema.
    */
@@ -32,27 +35,29 @@ export class Schema {
    * efficiency boost, and speed is important here.
    * @param table - Metadata for the [[Table]]-decorated Entity.  This is used
    * to produce an instance of the Entity.
-   * @param keyColumnMeta - Metadata for the unique column in the table, generally
-   * the primary key.  The metadata comes from a [[Column]]-decorated property
-   * of a [[Table]]-decorated class and has the name of the column, the
-   * property in the Entity, and an optional [[Converter]].
-   * @param keyColumnName - The name of the column associated with keyColumn in
-   * the to-be-serialized query.
+   * @param keyColumnMetas - Metadata for the unique column(s) in the table,
+   * generally the primary key.  The metadata come from [[Column]]-decorated
+   * properties of a [[Table]]-decorated class.  Each has the name of the
+   * column, the property in the Entity, and an optional [[Converter]].
+   * @param keyColumnNames - The name(s) of the column associated with
+   * keyColumn in the to-be-serialized query.
    */
   constructor(
     public table: TableMetadata,
-    keyColumnMeta: ColumnMetadata,
-    keyColumnName: string) {
+    keyColumnMetas: ColumnMetadata[],
+    keyColumnNames: string[]) {
 
-    this.addColumn(keyColumnMeta, keyColumnName);
+    for (let i = 0; i < keyColumnMetas.length; ++i) {
+      this.addColumn(keyColumnMetas[i], keyColumnNames[i]);
+      this.keyColumns.push(this.columns.slice(-1)[0]);
+    }
   }
 
   /**
-   * Helper function to get the key column data (first column in the list of
-   * [[SchemaColumn]]s).
+   * Helper function to get the key column data.
    */
-  getKeyColumn(): SchemaColumn {
-    return this.columns[0];
+  getKeyColumns(): SchemaColumn[] {
+    return this.keyColumns;
   }
 
   /**

@@ -156,8 +156,8 @@ export class Insert<T> extends Query {
         if (result.insertId !== undefined) {
           const pk = this.colStore.getPrimaryKey(this.Entity);
 
-          // TODO: Composite keys are not yet implemented.
-          assert(pk.length === 1, 'Composite keys are not currently supported.');
+          assert(pk.length === 1,
+            'insertID present in INSERT results for a table with a composite key.');
 
           (this.model as ParameterType)[pk[0].mapTo] = result.insertId;
         }

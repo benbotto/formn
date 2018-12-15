@@ -1,7 +1,8 @@
 CREATE TABLE users_x_products (
-  userXProductID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   userID INT NOT NULL,
   productID INT NOT NULL,
+
+  PRIMARY KEY (userID, productID),
 
   CONSTRAINT fk__users_x_products__userID__users
     FOREIGN KEY (userID) REFERENCES users(userID)

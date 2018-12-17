@@ -16,14 +16,16 @@ export class RelationshipMetadata {
    * the names of the local and remote properties. E.g. (user, phoneNumber) =>
    * [user.id, phoneNumber.userID] (returns ['userID', 'phoneNumberID']).  The
    * function will be passed [[PropertyMapType]]s containing all the decorated
-   * properties of Entity and RefEntity.
+   * properties of Entity and RefEntity.  If the relationship between Entity
+   * and RefEntity depends on multiple columns, then an array of arrays should
+   * be returned.
    * @param cardinality - The relationship type (e.g. OneToMany).
    */
   constructor(
     public Entity: TableType,
     public mapTo: string,
     public to: () => TableType,
-    public on: (entity: PropertyMapType, refEntity: PropertyMapType) => string[],
+    public on: (entity: PropertyMapType, refEntity: PropertyMapType) => string[]|string[][],
     public cardinality: CardinalityType) {
   }
 }

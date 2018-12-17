@@ -14,10 +14,13 @@ export class RelationshipMetaOptions<ENT_T, REF_ENT_T> {
 
   /**
    * How ENT_T and REF_ENT_T are related.  This is a function that, given ENT_T
-   * and REF_ENT_T [[PropertyMapType]]s returns an array of Column-decorated
-   * property names that will be used to join the two tables.
+   * and REF_ENT_T [[PropertyMapType]]s, returns an array of
+   * [[Column]]-decorated property names that will be used to join the two
+   * tables.  For example, joining Users (u) and PhoneNumbers (pn): (u, pn) =>
+   * [u.id, pn.userID].  If the relationship is composite, then an array of
+   * arrays should be returned.
    */
-  on: ((ent: ENT_T|PropertyMapType, refEnt: REF_ENT_T|PropertyMapType) => string[]|any[]);
+  on: ((ent: ENT_T|PropertyMapType, refEnt: REF_ENT_T|PropertyMapType) => string[]|string[][]|any[]);
 
   /**
    * Cardinality of the relationship (e.g. OneToOne, ManyToOne, etc.).

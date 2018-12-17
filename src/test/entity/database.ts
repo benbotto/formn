@@ -11,6 +11,8 @@ import { OneToMany } from '../../metadata/relationship/one-to-many.decorator';
 import { OneToOne } from '../../metadata/relationship/one-to-one.decorator';
 
 import metaFactory from '../../metadata/metadata-factory';
+import { Vehicle } from './vehicle.entity';
+import { VehiclePackage } from './vehicle-packages.entity';
 
 // This file clears all the metadata cache and manually decorates each class
 // when testing.
@@ -128,5 +130,46 @@ export function initDB() {
 
   tblDec = Table({name: 'users_x_products'});
   tblDec(UserXProduct);
+
+  // Vehicle.
+  colDec = Column({isPrimary: true});
+  colDec(Vehicle.prototype, 'make');
+
+  colDec = Column({isPrimary: true});
+  colDec(Vehicle.prototype, 'model');
+
+  relDec = OneToMany<Vehicle, VehiclePackage>(() => VehiclePackage, (v, vp) => [
+    [v.make, vp.make],
+    [v.model, vp.model]
+  ]);
+  relDec(Vehicle.prototype, 'packages');
+
+  tblDec = Table({name: 'vehicles'});
+  tblDec(Vehicle);
+
+  // VehiclePackage.
+  colDec = Column({name: 'vehiclePackageID', isPrimary: true});
+  colDec(VehiclePackage.prototype, 'id');
+
+  colDec = Column();
+  colDec(VehiclePackage.prototype, 'interior');
+
+  colDec = Column();
+  colDec(VehiclePackage.prototype, 'heatedSeats');
+
+  colDec = Column();
+  colDec(VehiclePackage.prototype, 'make');
+
+  colDec = Column();
+  colDec(VehiclePackage.prototype, 'model');
+
+  relDec = ManyToOne<VehiclePackage, Vehicle>(() => Vehicle, (vp, v) => [
+    [vp.make, v.make],
+    [vp.model, v.model]
+  ]);
+  relDec(VehiclePackage.prototype, 'vehicle');
+
+  tblDec = Table({name: 'vehicle_packages'});
+  tblDec(VehiclePackage);
 }
 

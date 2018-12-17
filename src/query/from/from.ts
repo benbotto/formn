@@ -112,15 +112,27 @@ export class From {
 
     if (joinCond === undefined) {
       // Create the join condition.
-      const onProps = relationship
+      let onPropsArr: any = relationship
         .on(
           this.propStore.getPropertyMap(parTblMeta.Entity, parAlias),
           this.propStore.getPropertyMap(Entity, alias));
 
-      assert(onProps.length === 2,
-        `Relationship (on) between "${parTblMeta.Entity.name}" and "${Entity.name}" must contain exactly 2 properties.`);
+      // The join condition is usually between two properties, but with joins
+      // involving composite keys onProps will be an array of arrays.
+      if (!Array.isArray(onPropsArr[0]))
+        onPropsArr = [onPropsArr];
 
-      joinCond = {$eq: {[`${onProps[0]}`]: `${onProps[1]}`}};
+      // Create the join condition(s).
+      const conds = onPropsArr
+        .map((onProps: string[]) => {
+          assert(onProps.length === 2,
+            `Relationship (on) between "${parTblMeta.Entity.name}" and "${Entity.name}" must contain exactly 2 properties.`);
+
+          return {$eq: {[`${onProps[0]}`]: `${onProps[1]}`}};
+        });
+
+      // If there is more than one condition then they're AND'd.
+      joinCond = conds.length === 1 ? conds[0] : {$and: conds};
     }
 
     // Store the metadata about the table.

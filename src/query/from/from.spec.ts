@@ -12,6 +12,8 @@ import { PhoneNumber } from '../../test/entity/phone-number.entity';
 import { Photo } from '../../test/entity/photo.entity';
 import { UserXProduct } from '../../test/entity/user-x-product.entity';
 import { Product } from '../../test/entity/product.entity';
+import { Vehicle } from '../../test/entity/vehicle.entity';
+import { VehiclePackage } from '../../test/entity/vehicle-packages.entity';
 
 import { initDB } from '../../test/entity/database';
 import { From } from './from';
@@ -72,6 +74,21 @@ describe('From()', () => {
       expect(meta.condStr).toBe('`u`.`userID` = `pn`.`userID`');
       expect(meta.relationshipMetadata).toBe(relStore.getRelationship(User, PhoneNumber, 'phoneNumbers'));
       expect(meta.tableMetadata).toBe(tblStore.getTable(PhoneNumber));
+    });
+
+    it('stores metadata about composite joins.', () => {
+      const from = getFrom(Vehicle, 'v')
+        .join('INNER JOIN', VehiclePackage, 'vp', 'v.packages');
+
+      const meta = from.getJoinMeta()[0];
+
+      expect(meta.alias).toBe('vp');
+      expect(meta.parentAlias).toBe('v');
+      expect(meta.joinType).toBe('INNER JOIN');
+      expect(meta.cond).toEqual({$and: [{$eq: {'v.make': 'vp.make'}}, {$eq: {'v.model': 'vp.model'}}]});
+      expect(meta.condStr).toBe('(`v`.`make` = `vp`.`make` AND `v`.`model` = `vp`.`model`)');
+      expect(meta.relationshipMetadata).toBe(relStore.getRelationship(Vehicle, VehiclePackage, 'packages'));
+      expect(meta.tableMetadata).toBe(tblStore.getTable(VehiclePackage));
     });
 
     it('throws an error if the relationship between the two tables contains the wrong number of properties.', () => {

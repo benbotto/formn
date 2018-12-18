@@ -65,6 +65,21 @@ describe('MySQLConnectionManager()', () => {
 
       expect(createPoolSpy.calls.count()).toBe(1);
     });
+
+    it('sets the connection state to DISCONNECTED if there is a failure connecting.', (done) => {
+      const err = new Error('');
+      mockPool.getConnection.and.returnValue(Promise.reject(err));
+
+      const connMan = new MySQLConnectionManager();
+
+      connMan
+        .connect(connOpts)
+        .catch(e => {
+          expect(e).toBe(err);
+          expect(connMan.getConnectionState()).toBe('DISCONNECTED');
+          done();
+        });
+    });
   });
 
   describe('.end()', () => {
@@ -89,6 +104,36 @@ describe('MySQLConnectionManager()', () => {
         .then(() => done());
 
       expect(mockPool.end).not.toHaveBeenCalled();
+    });
+
+    it('waits for the connection to finish if the pool is in a CONNECTING state.', (done) => {
+      const connMan = new MySQLConnectionManager();
+
+      connMan.connect(connOpts);
+      connMan
+        .end()
+        .then(() => {
+          expect(mockPool.end).toHaveBeenCalled();
+          expect(connMan.getConnectionState()).toBe('DISCONNECTED');
+          done();
+        });
+    });
+
+    it('sets the connection state to DISCONNECTED if there is a failure connecting.', (done) => {
+      const err = new Error('');
+      mockPool.getConnection.and.returnValue(Promise.reject(err));
+
+      const connMan = new MySQLConnectionManager();
+
+      connMan.connect(connOpts);
+      connMan
+        .end()
+        .catch(e => {
+          expect(e).toBe(err);
+          expect(mockPool.end).not.toHaveBeenCalled();
+          expect(connMan.getConnectionState()).toBe('DISCONNECTED');
+          done();
+        });
     });
   });
 

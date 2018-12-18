@@ -1,4 +1,4 @@
-import { createPool, Pool } from 'mysql2/promise';
+import { createPool, Pool, PoolConnection } from 'mysql2/promise';
 
 import { assert } from '../error/assert';
 
@@ -9,9 +9,9 @@ import { ConnectionStateType } from './connection-state-type';
 /**
  * A [[ConnectionManager]] class specialized for MySQL.
  */
-export class MySQLConnectionManager extends ConnectionManager<Pool> {
+export class MySQLConnectionManager extends ConnectionManager<Pool, PoolConnection> {
   private getConn: Promise<Pool>;
-  private conn: Pool;
+  private pool: Pool;
   private state: ConnectionStateType = 'DISCONNECTED';
 
   // This is a PoolOptions object, but PoolOptions is missing some properties
@@ -45,17 +45,17 @@ export class MySQLConnectionManager extends ConnectionManager<Pool> {
       namedPlaceholders  : true,
     };
 
-    this.conn  = createPool(this.connOpts);
+    this.pool  = createPool(this.connOpts);
     this.state = 'CONNECTING';
 
     // Get a connection from the pool to verify that the connection options
     // work.
-    return this.getConn = this.conn
+    return this.getConn = this.pool
       .getConnection()
       .then(conn => {
         conn.release();
         this.state = 'CONNECTED';
-        return this.conn;
+        return this.pool;
       })
       .catch(err => {
         this.state = 'DISCONNECTED';
@@ -71,7 +71,7 @@ export class MySQLConnectionManager extends ConnectionManager<Pool> {
       return Promise.resolve();
 
     return this.getConn
-      .then(() => this.conn.end())
+      .then(() => this.pool.end())
       .then(() => {
         this.state = 'DISCONNECTED';
         return;
@@ -90,13 +90,30 @@ export class MySQLConnectionManager extends ConnectionManager<Pool> {
   }
 
   /**
-   * Get the underlying connection object.
+   * Get the underlying connection pool object.
    */
-   getConnection(): Pool {
-     assert(this.getConnectionState() === 'CONNECTED',
-       'MySQLConnectionManager.getConnection() called but the connection is not established.  Call connect().');
+  getPool(): Pool {
+    assert(this.getConnectionState() === 'CONNECTED',
+      'MySQLConnectionManager.getPool() called but the connection is not established.  Call connect().');
 
-     return this.conn;
-   }
+    return this.pool;
+  }
+
+  /**
+   * Get a single connection from the pool.
+   */
+  getConnection(): Promise<PoolConnection> {
+    assert(this.getConnectionState() === 'CONNECTED',
+      'MySQLConnectionManager.getConnection() called but the connection is not established.  Call connect().');
+
+    return this.pool.getConnection();
+  }
+
+  /**
+   * Release the connection.
+   */
+  release(conn: PoolConnection): void {
+    conn.release();
+  }
 }
 

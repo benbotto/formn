@@ -6,7 +6,7 @@ import { ConnectionOptions } from './connection-options';
 describe('MySQLConnectionManager()', () => {
   let createPoolSpy: jasmine.Spy;
   let mockPool: jasmine.SpyObj<mysql2.Pool>;
-  let mockConn: jasmine.SpyObj<mysql2.Connection>;
+  let mockConn: jasmine.SpyObj<mysql2.PoolConnection>;
   let connOpts: ConnectionOptions;
 
   beforeEach(() => {
@@ -101,13 +101,50 @@ describe('MySQLConnectionManager()', () => {
       
     });
 
-    it('returns the connect pool.', (done) => {
+    it('returns a connection from the pool.', (done) => {
+      const connMan = new MySQLConnectionManager();
+
+      connMan
+        .connect(connOpts)
+        .then(() => connMan.getConnection())
+        .then(conn => {
+          expect(conn).toBe(mockConn);
+          done();
+        });
+    });
+  });
+
+  describe('.getPool()', () => {
+    it('throws an error if the pool is not connected.', () => {
+      const connMan = new MySQLConnectionManager();
+
+      expect(() => connMan.getPool())
+        .toThrowError('MySQLConnectionManager.getPool() called but the connection is not established.  Call connect().');
+      
+    });
+
+    it('returns the pool.', (done) => {
       const connMan = new MySQLConnectionManager();
 
       connMan
         .connect(connOpts)
         .then(() => {
-          expect(connMan.getConnection()).toBe(mockPool);
+          expect(connMan.getPool()).toBe(mockPool);
+          done();
+        });
+    });
+  });
+
+  describe('.release()', () => {
+    it('releases the connection.', (done) => {
+      const connMan = new MySQLConnectionManager();
+
+      connMan
+        .connect(connOpts)
+        .then(() => connMan.getConnection())
+        .then(conn => {
+          connMan.release(conn);
+          expect(mockConn.release).toHaveBeenCalled();
           done();
         });
     });

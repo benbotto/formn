@@ -1,6 +1,6 @@
 import { Executer } from './executer';
 
-import { Connection, Pool } from 'mysql2/promise'
+import { Connection, Pool, PoolConnection } from 'mysql2/promise'
 import { SelectResultType } from './select-result-type';
 import { ParameterType } from '../condition/parameter-type';
 import { InsertResultType } from './insert-result-type';
@@ -15,7 +15,7 @@ export class MySQLExecuter implements Executer {
    * @param pool - A MySQL connection instance (pool or single connection)
    */
   constructor(
-    public pool: Connection | Pool) {
+    public pool: Connection | Pool | PoolConnection) {
   }
 
   /**

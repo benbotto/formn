@@ -258,7 +258,6 @@ describe('DataMapper()', function() {
       const users = toPlain(dm.serialize(query, userSchema));
 
       expect(users).toEqual(require('../test/query/users-with-phone-numbers-products-and-photos.serialized'));
-      console.log(JSON.stringify(users, null, 2));
     });
 
     it('serializes sub-documents to null if the PK is not present.', () => {

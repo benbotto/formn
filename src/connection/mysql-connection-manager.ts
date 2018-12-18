@@ -9,7 +9,7 @@ import { ConnectionStateType } from './connection-state-type';
 /**
  * A [[ConnectionManager]] class specialized for MySQL.
  */
-export class MySQLConnectionManager extends ConnectionManager<Pool, PoolConnection> {
+export class MySQLConnectionManager extends ConnectionManager<Pool> {
   private getConn: Promise<Pool>;
   private pool: Pool;
   private state: ConnectionStateType = 'DISCONNECTED';
@@ -100,7 +100,10 @@ export class MySQLConnectionManager extends ConnectionManager<Pool, PoolConnecti
   }
 
   /**
-   * Get a single connection from the pool.
+   * Get a single connection from the pool.  (MySQL specific.)
+   * @returns A PoolConnection instance, which is a single connection from the
+   * pool.  It is the users responsibility to release() this connection using
+   * [[MySQLConnectionManager.release]] method.
    */
   getConnection(): Promise<PoolConnection> {
     assert(this.getConnectionState() === 'CONNECTED',

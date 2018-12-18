@@ -3,8 +3,10 @@ import { ConnectionStateType } from './connection-state-type';
 
 /**
  * Manages database connections.
+ * @typeparam P The type of the underlying connection pool, returned from the
+ * [[ConnectionManager.getPool]] method.
  */
-export abstract class ConnectionManager<P, C> {
+export abstract class ConnectionManager<P> {
   /**
    * Connect to the database.
    * @param connOpts - Connection options for setting up a connection to the
@@ -29,15 +31,5 @@ export abstract class ConnectionManager<P, C> {
    * specific.
    */
   abstract getPool(): P;
-
-  /**
-   * Get a single connection from the pool.
-   */
-  abstract getConnection(): Promise<C>;
-
-  /**
-   * Release the connection.
-   */
-  abstract release(conn: C): void;
 }
 

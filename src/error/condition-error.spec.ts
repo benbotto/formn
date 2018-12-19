@@ -1,4 +1,4 @@
-import { ConditionError } from './condition-error';
+import { ConditionError } from './';
 
 describe('ConditionError()', function() {
   describe('.constructor()', function() {

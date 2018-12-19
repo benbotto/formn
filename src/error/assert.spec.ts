@@ -1,44 +1,44 @@
-import { assert } from './assert';
+import { assert } from './';
 
-describe('assert()', function() {
-  it('allows booleans to be used directly.', function() {
-    expect(function() {
+describe('assert()', () => {
+  it('allows booleans to be used directly.', () => {
+    expect(() => {
       assert(false, 'Error!');
     }).toThrowError('Error!');
 
-    expect(function() {
+    expect(() => {
       assert(true, 'Error!');
     }).not.toThrow();
   });
 
-  it('can use truthy values.', function() {
-    expect(function() {
+  it('can use truthy values.', () => {
+    expect(() => {
       assert('test', 'Error!');
     }).not.toThrow();
 
-    expect(function() {
+    expect(() => {
       assert(1, 'Error!');
     }).not.toThrow();
 
-    expect(function() {
+    expect(() => {
       assert(1 === 1, 'Error!');
     }).not.toThrow();
   });
 
-  it('throws on falsy values.', function() {
-    expect(function() {
+  it('throws on falsy values.', () => {
+    expect(() => {
       assert(0, 'Error!');
     }).toThrowError('Error!');
 
-    expect(function() {
+    expect(() => {
       assert(undefined, 'Error!');
     }).toThrowError('Error!');
 
-    expect(function() {
+    expect(() => {
       assert(null, 'Error!');
     }).toThrowError('Error!');
 
-    expect(function() {
+    expect(() => {
       assert(false, 'Error!');
     }).toThrowError('Error!');
   });

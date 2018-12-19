@@ -1,20 +1,10 @@
-import metaFactory from '../metadata/metadata-factory';
+import { metaFactory, ColumnStore, TableStore, RelationshipStore,
+  PropertyMapStore, EntityType, TableType } from '../metadata/';
 
-import { ColumnStore } from '../metadata/column/column-store';
-import { TableStore } from '../metadata/table/table-store';
-import { RelationshipStore } from '../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../metadata/property/property-map-store';
-import { EntityType } from '../metadata/table/entity-type';
-import { TableType } from '../metadata/table/table-type';
+import { ConnectionOptions } from '../connection/';
 
-import { ConnectionOptions } from '../connection/connection-options';
-
-import { Executer } from '../query/executer/executer';
-import { Escaper } from '../query/escaper/escaper';
-import { Insert } from '../query/insert/insert';
-import { FromAdapter } from '../query/from/from-adapter';
-import { UpdateModel } from '../query/update/update-model';
-import { DeleteModel } from '../query/delete/delete-model';
+import { Executer, Escaper, Insert, FromAdapter, UpdateModel, DeleteModel }
+  from '../query/';
 
 /** 
  * This is the main interface to the ORM.  It provides access to CRUD

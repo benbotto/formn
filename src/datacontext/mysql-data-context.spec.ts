@@ -1,16 +1,13 @@
 import * as mysql2 from 'mysql2/promise';
 
-import { MySQLDataContext } from './mysql-data-context';
-import { MySQLExecuter } from '../query/executer/mysql-executer';
-import { MySQLEscaper } from '../query/escaper/mysql-escaper';
-import { MySQLFromAdapter } from '../query/from/mysql-from-adapter';
-import { Insert } from '../query/insert/insert';
-import { MySQLUpdateModel } from '../query/update/mysql-update-model';
-import { DeleteModel } from '../query/delete/delete-model';
+import { MySQLExecuter, MySQLEscaper, MySQLFromAdapter, Insert,
+  MySQLUpdateModel, DeleteModel } from '../query/';
 
-import { ConnectionOptions } from '../connection/connection-options';
+import { ConnectionOptions } from '../connection/';
 
-import { User } from '../test/entity/user.entity';
+import { User } from '../test/';
+
+import { MySQLDataContext } from './';
 
 describe('MySQLDataContext()', () => {
   let createPoolSpy: jasmine.Spy;

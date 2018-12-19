@@ -1,6 +1,6 @@
 import { createPool, Pool, PoolConnection } from 'mysql2/promise';
 
-import { assert } from '../error/assert';
+import { assert } from '../error/';
 
 import { ConnectionManager, ConnectionOptions, ConnectionStateType } from './';
 

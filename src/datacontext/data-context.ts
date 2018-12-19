@@ -110,12 +110,14 @@ export abstract class DataContext {
   /**
    * Begin a transaction.
    * @param transFunc - A user-supplied function that will be called with a
-   * [[DataContext]] instance.  All queries executed against the the
+   * [[DataContext]] instance.  All queries executed against the
    * [[DataContext]] will be part of the transaction.  The user-supplied
    * function should return a promise.  If that promise is resolved then the
    * transaction will be committed, otherwise it will be rolled back.
    * @return A promise that will be rejected if there is an error when
    * beginning the transaction.
+   * @typeparam C Connection type for the underlying database driver.
+   * @typeparam P Pool type for the underlying database driver.
    */
   abstract beginTransaction<C, P>(transFunc: (dc: DataContext) => Promise<any>): Promise<void>;
 }

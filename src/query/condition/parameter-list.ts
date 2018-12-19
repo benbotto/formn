@@ -1,7 +1,6 @@
-import { assert } from '../../error/assert';
+import { assert, ConditionError } from '../../error/';
 
-import { ParameterType } from './parameter-type';
-import { ConditionError } from '../../error/condition-error';
+import { ParameterType } from '../';
 
 /**
  * A class that holds query parameters.

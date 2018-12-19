@@ -1,18 +1,8 @@
-import metaFactory from '../../metadata/metadata-factory';
-import { TableStore } from '../../metadata/table/table-store';
-import { ColumnStore } from '../../metadata/column/column-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { initDB } from '../../test/entity/database';
+import { metaFactory, TableStore, ColumnStore, RelationshipStore } from '../../metadata/';
 
-import { MySQLEscaper } from '../escaper/mysql-escaper';
+import { initDB, User, PhoneNumber, Photo, UserXProduct, Product } from '../../test/';
 
-import { User } from '../../test/entity/user.entity';
-import { PhoneNumber } from '../../test/entity/phone-number.entity';
-import { Photo } from '../../test/entity/photo.entity';
-import { UserXProduct } from '../../test/entity/user-x-product.entity';
-import { Product } from '../../test/entity/product.entity';
-
-import { FromMeta } from './from-meta';
+import { FromMeta, MySQLEscaper } from '../';
 
 describe('FromMeta()', function() {
   let fromMeta: FromMeta;

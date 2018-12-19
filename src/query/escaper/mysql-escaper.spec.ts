@@ -1,5 +1,4 @@
-import { MySQLEscaper } from './mysql-escaper';
-import { Escaper } from './escaper';
+import { MySQLEscaper, Escaper } from '../';
 
 describe('MySQLEscaper()', function() {
   const escaper = new MySQLEscaper();

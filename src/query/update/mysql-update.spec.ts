@@ -1,27 +1,16 @@
 import { Connection } from 'mysql2/promise';
 
-import metaFactory from '../../metadata/metadata-factory';
+import { metaFactory, RelationshipStore, TableStore, ColumnStore,
+  PropertyMapStore, TableType } from '../../metadata/';
 
-import { initDB } from '../../test/entity/database';
-
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { ColumnStore } from '../../metadata/column/column-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { TableType } from '../../metadata/table/table-type';
+import { initDB, User, PhoneNumber, UCConverter } from '../../test/';
 
 import { MySQLEscaper } from '../escaper/mysql-escaper';
 import { MySQLExecuter } from '../executer/mysql-executer';
 
-import { From } from '../from/from';
-import { Query } from '../query';
-import { MySQLUpdate } from './mysql-update';
-import { Converter } from '../../converter/converter';
-import { UCConverter } from '../../test/converter/uc-converter';
-import { UpdateType } from './update-type';
+import { Converter } from '../../converter/';
 
-import { User } from '../../test/entity/user.entity';
-import { PhoneNumber } from '../../test/entity/phone-number.entity';
+import { From, Query, MySQLUpdate, UpdateType } from '../';
 
 describe('MySQLUpdate()', () => {
   let relStore: RelationshipStore;

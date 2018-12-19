@@ -1,7 +1,6 @@
-import { ConditionError } from '../../error/condition-error';
+import { ConditionError } from '../../error/';
 
-import { LexerToken } from './lexer-token';
-import { ParseTree } from './parse-tree';
+import { LexerToken, ParseTree } from '../';
 
 /**
  * A recursive decent parser for a SQL condition (WHERE or ON).  This parser

@@ -1,17 +1,9 @@
-import { assert } from '../../error/assert';
+import { assert } from '../../error/';
 
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
+import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore } from '../../metadata/';
 
-import { Query } from '../query';
-import { Escaper } from '../escaper/escaper';
-import { Executer } from '../executer/executer';
-import { From } from '../from/from';
-import { FromColumnMeta } from '../from/from-column-meta';
-import { ExecutableQuery } from '../executable-query';
-import { MutateResultType } from '../executer/mutate-result-type';
+import { Query, Escaper, Executer, From, FromColumnMeta, ExecutableQuery,
+  MutateResultType } from '../';
 
 /**
  * A [[Query]] class that represents a DELETE query.

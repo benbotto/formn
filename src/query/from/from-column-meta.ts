@@ -1,4 +1,4 @@
-import { ColumnMetadata } from '../../metadata/column/column-metadata';
+import { ColumnMetadata } from '../../metadata/';
 
 /**
  * Metadata about columns available to a query (used in [[From]]).

@@ -1,7 +1,4 @@
-import { ParameterType } from '../condition/parameter-type';
-import { InsertResultType } from './insert-result-type';
-import { SelectResultType } from './select-result-type';
-import { MutateResultType } from './mutate-result-type';
+import { ParameterType, InsertResultType, SelectResultType, MutateResultType } from '../';
 
 /**
  * An Executer executes database queries.

@@ -1,12 +1,7 @@
-import { MySQLEscaper } from '../escaper/mysql-escaper';
+import { ColumnLookup } from '../../metadata/';
 
-import { ColumnLookup } from '../../metadata/column/column-lookup';
-
-import { ConditionLexer } from './condition-lexer';
-import { ConditionParser } from './condition-parser';
-import { ConditionCompiler } from './condition-compiler';
-import { ParseTree } from './parse-tree';
-import { LexerToken } from './lexer-token';
+import { MySQLEscaper, ConditionLexer, ConditionParser, ConditionCompiler,
+  ParseTree, LexerToken } from '../';
 
 describe('ConditionCompiler()', function() {
   'use strict';

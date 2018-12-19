@@ -1,22 +1,12 @@
-import metaFactory from '../../metadata/metadata-factory';
-import { TableStore } from '../../metadata/table/table-store';
-import { ColumnStore } from '../../metadata/column/column-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { TableType } from '../../metadata/table/table-type';
+import { metaFactory, TableStore, ColumnStore, RelationshipStore,
+  PropertyMapStore, TableType } from '../../metadata/';
 
-import { MySQLEscaper } from '../escaper/mysql-escaper';
+import { MySQLEscaper } from '../';
 
-import { User } from '../../test/entity/user.entity';
-import { PhoneNumber } from '../../test/entity/phone-number.entity';
-import { Photo } from '../../test/entity/photo.entity';
-import { UserXProduct } from '../../test/entity/user-x-product.entity';
-import { Product } from '../../test/entity/product.entity';
-import { Vehicle } from '../../test/entity/vehicle.entity';
-import { VehiclePackage } from '../../test/entity/vehicle-packages.entity';
+import { User, PhoneNumber, Photo, UserXProduct, Product, Vehicle,
+  VehiclePackage, initDB } from '../../test/';
 
-import { initDB } from '../../test/entity/database';
-import { From } from './from';
+import { From } from '../';
 
 describe('From()', () => {
   let relStore: RelationshipStore;

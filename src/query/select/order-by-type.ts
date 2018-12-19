@@ -1,4 +1,4 @@
-import { OrderDirectionType } from './order-direction-type';
+import { OrderDirectionType } from '../';
 
 /**
  * Object describing how to order a select query.

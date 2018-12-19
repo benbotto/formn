@@ -1,6 +1,6 @@
-import { MySQLExecuter } from './mysql-executer';
 import { Connection } from 'mysql2/promise';
-import { Executer } from './executer';
+
+import { MySQLExecuter, Executer } from '../';
 
 describe('MySQLExecuter()', function() {
   let con: jasmine.SpyObj<Connection>;

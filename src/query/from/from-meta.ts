@@ -1,25 +1,10 @@
-import { assert } from '../../error/assert';
-import { ConditionError } from '../../error/condition-error';
+import { assert, ConditionError } from '../../error/';
 
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { ColumnMetadata } from '../../metadata/column/column-metadata';
-import { ColumnLookup } from '../../metadata/column/column-lookup';
-import { TableMetadata } from '../../metadata/table/table-metadata';
-import { TableType } from '../../metadata/table/table-type';
+import { ColumnStore, TableStore, RelationshipStore, ColumnMetadata,
+  ColumnLookup, TableMetadata, TableType } from '../../metadata/';
 
-import { ConditionLexer } from '../condition/condition-lexer';
-import { ConditionParser } from '../condition/condition-parser';
-import { ConditionCompiler } from '../condition/condition-compiler';
-import { ParameterList } from '../condition/parameter-list';
-import { ParameterType } from '../condition/parameter-type';
-
-import { Escaper } from '../escaper/escaper';
-
-import { FromTableMeta } from './from-table-meta';
-import { FromColumnMeta } from './from-column-meta';
-import { JoinType } from './join-type';
+import { ConditionLexer, ConditionParser, ConditionCompiler, ParameterList,
+  ParameterType, Escaper, FromTableMeta, FromColumnMeta, JoinType } from '../';
 
 /**
  * A helper class for keeping metadata about tables and columns used in a

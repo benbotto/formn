@@ -1,6 +1,6 @@
-import { TableMetadata } from '../../metadata/table/table-metadata';
-import { RelationshipMetadata } from '../../metadata/relationship/relationship-metadata';
-import { JoinType } from './join-type';
+import { TableMetadata, RelationshipMetadata } from '../../metadata/';
+
+import { JoinType } from '../';
 
 /**
  * Keeps metadata about a table that is used in the FROM portion of a query.

@@ -1,20 +1,10 @@
-import { assert } from '../../error/assert';
-import { ConditionError } from '../../error/condition-error';
+import { assert, ConditionError } from '../../error/';
 
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { TableType } from '../../metadata/table/table-type';
+import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
+  TableType } from '../../metadata/';
 
-import { Escaper } from '../escaper/escaper';
-
-import { ParameterType } from '../condition/parameter-type';
-import { ParameterList } from '../condition/parameter-list';
-
-import { FromMeta } from './from-meta';
-import { FromTableMeta } from './from-table-meta';
-import { JoinType } from './join-type';
+import { Escaper, ParameterType, ParameterList, FromMeta, FromTableMeta,
+  JoinType } from '../';
 
 /**
  * Represents the FROM portion of a query, with any JOINs and optionally a

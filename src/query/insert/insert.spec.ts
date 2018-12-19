@@ -1,25 +1,13 @@
 import { Connection } from 'mysql2/promise';
 
-import metaFactory from '../../metadata/metadata-factory';
+import { metaFactory, RelationshipStore, TableStore, ColumnStore,
+  PropertyMapStore, EntityType } from '../../metadata/';
 
-import { initDB } from '../../test/entity/database';
+import { Converter } from '../../converter';
 
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { ColumnStore } from '../../metadata/column/column-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { MySQLEscaper } from '../escaper/mysql-escaper';
-import { MySQLExecuter } from '../executer/mysql-executer';
-import { EntityType } from '../../metadata/table/entity-type';
+import { initDB, User, UCConverter } from '../../test/';
 
-import { Insert } from './insert';
-import { Query } from '../query';
-import { ParameterType } from '../condition/parameter-type';
-
-import { Converter } from '../../converter/converter';
-import { UCConverter } from '../../test/converter/uc-converter';
-
-import { User } from '../../test/entity/user.entity';
+import { Insert, Query, ParameterType, MySQLEscaper, MySQLExecuter } from '../';
 
 describe('Insert()', () => {
   let relStore: RelationshipStore;

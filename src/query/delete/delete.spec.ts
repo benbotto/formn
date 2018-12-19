@@ -1,27 +1,13 @@
 import { Connection } from 'mysql2/promise';
 
-import metaFactory from '../../metadata/metadata-factory';
+import { metaFactory, RelationshipStore, TableStore, ColumnStore,
+  PropertyMapStore, EntityType, TableType } from '../../metadata/';
 
-import { initDB } from '../../test/entity/database';
+import { Converter } from '../../converter/';
 
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { ColumnStore } from '../../metadata/column/column-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { EntityType } from '../../metadata/table/entity-type';
-import { TableType } from '../../metadata/table/table-type';
+import { initDB, UCConverter, User, PhoneNumber } from '../../test/';
 
-import { MySQLEscaper } from '../escaper/mysql-escaper';
-import { MySQLExecuter } from '../executer/mysql-executer';
-
-import { From } from '../from/from';
-import { Query } from '../query';
-import { Converter } from '../../converter/converter';
-import { UCConverter } from '../../test/converter/uc-converter';
-import { Delete } from './delete';
-
-import { User } from '../../test/entity/user.entity';
-import { PhoneNumber } from '../../test/entity/phone-number.entity';
+import { MySQLEscaper, MySQLExecuter, From, Query, Delete } from '../';
 
 describe('Delete()', () => {
   let relStore: RelationshipStore;

@@ -1,21 +1,9 @@
-import { UpdateType } from './update-type';
+import { assert } from '../../error/';
 
-import { assert } from '../../error/assert';
+import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore } from '../../metadata/';
 
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-
-import { ParameterList } from '../condition/parameter-list';
-
-import { Query } from '../query';
-import { Escaper } from '../escaper/escaper';
-import { Executer } from '../executer/executer';
-import { From } from '../from/from';
-import { FromColumnMeta } from '../from/from-column-meta';
-import { ExecutableQuery } from '../executable-query';
-import { MutateResultType } from '../executer/mutate-result-type';
+import { UpdateType, ParameterList, Query, Escaper, Executer, From,
+  FromColumnMeta, ExecutableQuery, MutateResultType } from '../';
 
 /**
  * A [[Query]] that represents an UPDATE.

@@ -1,15 +1,7 @@
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { ColumnMetadata } from '../../metadata/column/column-metadata';
-import { EntityType } from '../../metadata/table/entity-type';
+import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
+  ColumnMetadata, EntityType } from '../../metadata/';
 
-import { MySQLEscaper } from '../escaper/mysql-escaper';
-import { MySQLExecuter } from '../executer/mysql-executer';
-import { FromAdapter } from './from-adapter';
-import { UpdateType } from '../update/update-type';
-import { MySQLUpdate } from '../update/mysql-update';
+import { MySQLEscaper, MySQLExecuter, FromAdapter, UpdateType, MySQLUpdate } from '../';
 
 /**
  * A specialized [[FromAdapter]] for MySQL databases.  See [[FromAdapter]].

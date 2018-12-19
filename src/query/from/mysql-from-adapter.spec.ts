@@ -1,20 +1,10 @@
 import { Connection } from 'mysql2/promise';
 
-import metaFactory from '../../metadata/metadata-factory';
-import { TableStore } from '../../metadata/table/table-store';
-import { ColumnStore } from '../../metadata/column/column-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { EntityType } from '../../metadata/table/entity-type';
+import { metaFactory, TableStore, ColumnStore, RelationshipStore, PropertyMapStore, EntityType } from '../../metadata/';
 
-import { initDB } from '../../test/entity/database';
-import { User } from '../../test/entity/user.entity';
-import { PhoneNumber } from '../../test/entity/phone-number.entity';
+import { initDB, User, PhoneNumber } from '../../test/';
 
-import { MySQLEscaper } from '../escaper/mysql-escaper';
-import { MySQLExecuter } from '../executer/mysql-executer';
-import { MySQLFromAdapter } from './mysql-from-adapter';
-import { Select } from '../select/select';
+import { MySQLEscaper, MySQLExecuter, MySQLFromAdapter, Select } from '../';
 
 describe('MySQLFromAdapter()', () => {
   let relStore: RelationshipStore;

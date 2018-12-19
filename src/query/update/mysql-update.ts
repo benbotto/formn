@@ -1,20 +1,9 @@
-import { UpdateType } from './update-type';
+import { assert } from '../../error/';
 
-import { assert } from '../../error/assert';
+import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore } from '../../metadata/';
 
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-
-import { ParameterList } from '../condition/parameter-list';
-
-import { MySQLEscaper } from '../escaper/mysql-escaper';
-import { MySQLExecuter } from '../executer/mysql-executer';
-import { From } from '../from/from';
-import { FromColumnMeta } from '../from/from-column-meta';
-import { ExecutableQuery } from '../executable-query';
-import { Update } from './update';
+import { UpdateType, ParameterList, MySQLEscaper, MySQLExecuter, From, Update,
+  ExecutableQuery, FromColumnMeta } from '../';
 
 /**
  * A [[Query]] that represents an UPDATE for a MySQL database.

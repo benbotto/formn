@@ -1,5 +1,4 @@
-import { Escaper } from './escaper';
-import { MSSQLEscaper } from './mssql-escaper';
+import { Escaper, MSSQLEscaper } from '../';
 
 describe('MSSQLEscaper()', function() {
   const escaper = new MSSQLEscaper();

@@ -1,12 +1,8 @@
-import { ColumnLookup } from '../../metadata/column/column-lookup';
+import { ColumnLookup } from '../../metadata/';
 
-import { Escaper } from '../escaper/escaper';
+import { ConditionError } from '../../error/';
 
-import { ConditionError } from '../../error/condition-error';
-
-import { ParseTree } from './parse-tree';
-import { ParameterType } from './parameter-type';
-import { LexerToken } from './lexer-token';
+import { Escaper, ParseTree, ParameterType, LexerToken } from '../';
 
 /**
  * A class that compiles a [[ParseTree]], as created by a [[ConditionParser]]

@@ -1,4 +1,4 @@
-import { ConditionLexer } from './condition-lexer';
+import { ConditionLexer } from '../';
 
 describe('ConditionLexer()', function() {
   // Helper that parses a condition and returns a plain object for comparison.

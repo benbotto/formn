@@ -1,19 +1,10 @@
-import { assert } from '../../error/assert';
+import { assert } from '../../error/';
 
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { ColumnMetadata } from '../../metadata/column/column-metadata';
-import { EntityType } from '../../metadata/table/entity-type';
+import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
+  ColumnMetadata, EntityType } from '../../metadata/';
 
-import { ParameterType } from '../condition/parameter-type';
-import { ParameterList } from '../condition/parameter-list';
-
-import { Escaper } from '../escaper/escaper';
-import { Executer } from '../executer/executer';
-import { Query } from '../query';
-import { ExecutableQuery } from '../executable-query';
+import { ParameterType, ParameterList, Escaper, Executer, Query,
+  ExecutableQuery } from '../';
 
 /**
  * A [[Query]] class that represents an INSERT query.  Instances of the class

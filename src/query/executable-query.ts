@@ -1,4 +1,4 @@
-import { ParameterType } from './condition/parameter-type';
+import { ParameterType } from './';
 
 /**
  * A class that holds a SQL string (query) and any associated parameters.

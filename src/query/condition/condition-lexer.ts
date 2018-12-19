@@ -1,5 +1,6 @@
-import { LexerToken } from './lexer-token';
-import { ConditionError } from '../../error/condition-error';
+import { ConditionError } from '../../error/';
+
+import { LexerToken } from '../';
 
 /** 
  * Class that lexicographically parses a condition object into tokens.

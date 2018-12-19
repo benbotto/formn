@@ -1,21 +1,12 @@
-import { assert } from '../../error/assert';
+import { assert } from '../../error/';
 
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { ColumnMetadata } from '../../metadata/column/column-metadata';
+import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
+  ColumnMetadata } from '../../metadata/';
 
-import { Schema } from '../../datamapper/schema';
-import { DataMapper } from '../../datamapper/data-mapper';
+import { Schema, DataMapper } from '../../datamapper/';
 
-import { Query } from '../query';
-import { Escaper } from '../escaper/escaper';
-import { Executer } from '../executer/executer';
-import { From } from '../from/from';
-import { FromColumnMeta } from '../from/from-column-meta';
-import { OrderByType } from './order-by-type';
-import { ExecutableQuery } from '../executable-query';
+import { Query, Escaper, Executer, From, FromColumnMeta, OrderByType,
+  ExecutableQuery } from '../';
 
 /**
  * Represents a SELECT query.

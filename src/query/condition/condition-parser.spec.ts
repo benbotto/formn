@@ -1,5 +1,4 @@
-import { ConditionLexer } from './condition-lexer';
-import { ConditionParser } from './condition-parser';
+import { ConditionLexer, ConditionParser } from '../';
 
 describe('ConditionParser()', function() {
   const lexer  = new ConditionLexer();

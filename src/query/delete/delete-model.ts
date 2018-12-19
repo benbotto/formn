@@ -1,15 +1,9 @@
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { EntityType } from '../../metadata/table/entity-type';
+import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
+  EntityType } from '../../metadata/';
 
-import { From } from '../from/from';
-import { MutateModel } from '../mutate-model';
-import { Escaper } from '../escaper/escaper';
-import { Executer } from '../executer/executer';
-import { Delete } from './delete';
-import { assert } from '../../error/assert';
+import { assert } from '../../error/';
+
+import { From, MutateModel, Escaper, Executer, Delete } from '../';
 
 /**
  * A class for deleting models by ID.

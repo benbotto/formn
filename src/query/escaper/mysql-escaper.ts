@@ -1,4 +1,4 @@
-import { Escaper } from './escaper';
+import { Escaper } from '../';
 
 /**
  * Helper class for escaping parts of a query under MySQL.

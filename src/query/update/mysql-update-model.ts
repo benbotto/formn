@@ -1,15 +1,8 @@
-import { ColumnStore } from '../../metadata/column/column-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { EntityType } from '../../metadata/table/entity-type';
+import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
+  EntityType } from '../../metadata/';
 
-import { From } from '../from/from';
-import { UpdateType } from './update-type';
-import { UpdateModel } from './update-model';
-import { MySQLUpdate } from './mysql-update';
-import { MySQLEscaper } from '../escaper/mysql-escaper';
-import { MySQLExecuter } from '../executer/mysql-executer';
+import { From, UpdateType, UpdateModel, MySQLUpdate, MySQLEscaper,
+  MySQLExecuter } from '../';
 
 /**
  * An [[UpdateModel]] class for MySQL.

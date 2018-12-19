@@ -1,26 +1,12 @@
 import { Connection } from 'mysql2/promise';
 
-import metaFactory from '../../metadata/metadata-factory';
+import { metaFactory, RelationshipStore, TableStore, ColumnStore,
+  PropertyMapStore, TableType } from '../../metadata/';
 
-import { initDB } from '../../test/entity/database';
+import { initDB, User, PhoneNumber, UserXProduct, Product, Photo, toPlain }
+  from '../../test/';
 
-import { RelationshipStore } from '../../metadata/relationship/relationship-store';
-import { TableStore } from '../../metadata/table/table-store';
-import { ColumnStore } from '../../metadata/column/column-store';
-import { PropertyMapStore } from '../../metadata/property/property-map-store';
-import { MySQLEscaper } from '../escaper/mysql-escaper';
-import { MySQLExecuter } from '../executer/mysql-executer';
-import { TableType } from '../../metadata/table/table-type';
-
-import { From } from '../from/from';
-import { Select } from './select';
-
-import { User } from '../../test/entity/user.entity';
-import { PhoneNumber } from '../../test/entity/phone-number.entity';
-import { UserXProduct } from '../../test/entity/user-x-product.entity';
-import { Product } from '../../test/entity/product.entity';
-import { Photo } from '../../test/entity/photo.entity';
-import { toPlain } from '../../test/util/to-plain';
+import { MySQLEscaper, MySQLExecuter, From, Select } from '../';
 
 describe('Select()', function() {
   let relStore: RelationshipStore;

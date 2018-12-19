@@ -1,4 +1,4 @@
-import { ParameterList } from './parameter-list';
+import { ParameterList } from '../';
 
 describe('ParameterList()', function() {
   describe('.constructor()', function() {

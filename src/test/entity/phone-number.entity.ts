@@ -1,7 +1,6 @@
-import { Table } from '../../metadata/table/table.decorator';
-import { Column } from '../../metadata/column/column.decorator';
-import { ManyToOne } from '../../metadata/relationship/many-to-one.decorator';
-import { User } from './user.entity';
+import { Table, Column, ManyToOne } from '../../metadata/';
+
+import { User } from '../';
 
 @Table({name: 'phone_numbers'})
 export class PhoneNumber {

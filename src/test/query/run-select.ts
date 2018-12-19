@@ -1,7 +1,6 @@
 import { createConnection, Connection } from 'mysql2/promise';
-import { MySQLExecuter } from '../../query/executer/mysql-executer';
-import { ParameterType } from '../../query/condition/parameter-type';
-import { SelectResultType } from '../../query/executer/select-result-type';
+
+import { MySQLExecuter, ParameterType, SelectResultType } from '../../query/';
 
 const connOpts = {
   host: 'formn-db',

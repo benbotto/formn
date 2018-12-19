@@ -1,8 +1,6 @@
-import { Table } from '../../metadata/table/table.decorator';
-import { Column } from '../../metadata/column/column.decorator';
-import { ManyToOne } from '../../metadata/relationship/many-to-one.decorator';
-import { OneToOne } from '../../metadata/relationship/one-to-one.decorator';
-import { Product } from './product.entity';
+import { Table, Column, ManyToOne, OneToOne } from '../../metadata/';
+
+import { Product } from '../';
 
 @Table({name: 'photos'})
 export class Photo {

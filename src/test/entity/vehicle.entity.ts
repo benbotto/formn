@@ -1,7 +1,6 @@
-import { Table } from '../../metadata/table/table.decorator';
-import { Column } from '../../metadata/column/column.decorator';
-import { OneToMany } from '../../metadata/relationship/one-to-many.decorator';
-import { VehiclePackage } from './vehicle-packages.entity';
+import { Table, Column, OneToMany } from '../../metadata/';
+
+import { VehiclePackage } from '../';
 
 @Table({name: 'vehicles'})
 export class Vehicle {

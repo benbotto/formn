@@ -1,4 +1,4 @@
-import { Converter } from '../../converter/converter';
+import { Converter } from '../../converter/';
 
 /**
  * Helper class used when testing.  Converts a value to uppercase on save and

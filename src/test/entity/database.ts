@@ -1,18 +1,6 @@
-import { User } from './user.entity';
-import { PhoneNumber } from './phone-number.entity';
-import { Photo } from './photo.entity';
-import { Product } from './product.entity';
-import { UserXProduct } from './user-x-product.entity';
+import { User, PhoneNumber, Photo, Product, UserXProduct, Vehicle, VehiclePackage } from '../';
 
-import { Column } from '../../metadata/column/column.decorator';
-import { Table } from '../../metadata/table/table.decorator';
-import { ManyToOne } from '../../metadata/relationship/many-to-one.decorator';
-import { OneToMany } from '../../metadata/relationship/one-to-many.decorator';
-import { OneToOne } from '../../metadata/relationship/one-to-one.decorator';
-
-import metaFactory from '../../metadata/metadata-factory';
-import { Vehicle } from './vehicle.entity';
-import { VehiclePackage } from './vehicle-packages.entity';
+import { Column, Table, ManyToOne, OneToMany, OneToOne, metaFactory } from '../../metadata/';
 
 // This file clears all the metadata cache and manually decorates each class
 // when testing.

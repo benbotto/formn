@@ -1,24 +1,13 @@
-import { initDB } from '../test/entity/database';
-import metaFactory from '../metadata/metadata-factory';
-import { TableStore } from '../metadata/table/table-store';
-import { ColumnStore } from '../metadata/column/column-store';
-import { RelationshipStore } from '../metadata/relationship/relationship-store';
-import { RelationshipMetadata } from '../metadata/relationship/relationship-metadata';
+import { initDB, User, PhoneNumber, UserXProduct, Product, Photo, toPlain,
+  UCConverter } from '../test/';
 
-import { Schema } from './schema';
-import { DataMapper } from './data-mapper';
+import { metaFactory, TableStore, ColumnStore, RelationshipStore, RelationshipMetadata } from '../metadata/';
 
-import { Converter } from '../converter/converter';
-import { UCConverter } from '../test/converter/uc-converter';
+import { Converter } from '../converter/';
 
-import { User } from '../test/entity/user.entity';
-import { PhoneNumber } from '../test/entity/phone-number.entity';
-import { UserXProduct } from '../test/entity/user-x-product.entity';
-import { Product } from '../test/entity/product.entity';
-import { Photo } from '../test/entity/photo.entity';
-import { toPlain } from '../test/util/to-plain';
+import { Schema, DataMapper } from './';
 
-describe('DataMapper()', function() {
+describe('DataMapper()', () => {
   let tblStore: TableStore;
   let colStore: ColumnStore;
   let relStore: RelationshipStore;
@@ -69,8 +58,8 @@ describe('DataMapper()', function() {
     dm = new DataMapper();
   });
 
-  describe('.serialize()', function() {
-    it('serializes a single table.', function() {
+  describe('.serialize()', () => {
+    it('serializes a single table.', () => {
       const query = [
         {userID: 1, firstName: 'Jack', lastName: 'Black'},
         {userID: 2, firstName: 'Dave', lastName: 'Zander'}
@@ -84,7 +73,7 @@ describe('DataMapper()', function() {
       ]);
     });
 
-    it('serializes multiple tables.', function() {
+    it('serializes multiple tables.', () => {
       const query = [
         {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 1,    phoneNumber: '999-888-7777'},
         {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 2,    phoneNumber: '666-555-4444'},
@@ -116,7 +105,7 @@ describe('DataMapper()', function() {
       ]);
     });
 
-    it('serializes many-to-one relationships.', function() {
+    it('serializes many-to-one relationships.', () => {
       const query = [
         {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 1, phoneNumber: '999-888-7777'},
         {userID: 1, firstName: 'Jack', lastName: 'Black',  phoneNumberID: 2, phoneNumber: '666-555-4444'},
@@ -161,7 +150,7 @@ describe('DataMapper()', function() {
       ]);
     });
 
-    it('uses converters when serializing.', function() {
+    it('uses converters when serializing.', () => {
       class IDConverter extends Converter {
         onRetrieve(id: number): number {
           return id + 10;
@@ -240,7 +229,7 @@ describe('DataMapper()', function() {
       ]);
     });
 
-    it('serializes complex queries recursively.', function() {
+    it('serializes complex queries recursively.', () => {
       const query = require('../test/query/users-with-phone-numbers-products-and-photos.json');
 
       userSchema

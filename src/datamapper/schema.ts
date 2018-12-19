@@ -1,9 +1,8 @@
-import { ColumnMetadata } from '../metadata/column/column-metadata';
-import { TableMetadata } from '../metadata/table/table-metadata';
-import { SubSchema } from './sub-schema';
-import { SchemaColumn } from './schema-column';
-import { assert } from '../error/assert';
-import { RelationshipMetadata } from '../metadata/relationship/relationship-metadata';
+import { assert } from '../error/';
+
+import { ColumnMetadata, TableMetadata, RelationshipMetadata } from '../metadata/';
+
+import { SubSchema, SchemaColumn } from './';
 
 /**
  * A Schema is a representation of a serializable database table, consisting of

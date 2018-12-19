@@ -1,4 +1,4 @@
-import { ColumnMetadata } from '../metadata/column/column-metadata';
+import { ColumnMetadata } from '../metadata/';
 
 /**
  * This class is used to store column name-[[ColumnMetadata]] associations in a

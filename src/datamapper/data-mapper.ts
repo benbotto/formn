@@ -1,4 +1,4 @@
-import { Schema } from './schema';
+import { Schema } from './';
 
 type LookupType = {[key: string]: any};
 type QueryRowType = LookupType;

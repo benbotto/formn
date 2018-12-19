@@ -1,14 +1,9 @@
-import { initDB } from '../test/entity/database';
-import metaFactory from '../metadata/metadata-factory';
-import { TableStore } from '../metadata/table/table-store';
-import { ColumnStore } from '../metadata/column/column-store';
-import { RelationshipStore } from '../metadata/relationship/relationship-store';
-import { RelationshipMetadata } from '../metadata/relationship/relationship-metadata';
+import { initDB, User, PhoneNumber, UserXProduct } from '../test/';
 
-import { Schema } from './schema';
-import { User } from '../test/entity/user.entity';
-import { PhoneNumber } from '../test/entity/phone-number.entity';
-import { UserXProduct } from '../test/entity/user-x-product.entity';
+import { metaFactory, TableStore, ColumnStore, RelationshipStore,
+  RelationshipMetadata } from '../metadata/';
+
+import { Schema } from './';
 
 describe('Schema()', function() {
   let tblStore: TableStore;

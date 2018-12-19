@@ -1,5 +1,6 @@
-import { Schema } from './schema';
-import { RelationshipMetadata } from '../metadata/relationship/relationship-metadata';
+import { RelationshipMetadata } from '../metadata/';
+
+import { Schema } from './';
 
 /**
  * This class is used within [[Schema]] to represent a sub schema, which is a

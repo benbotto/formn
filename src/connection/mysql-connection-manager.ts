@@ -2,9 +2,7 @@ import { createPool, Pool, PoolConnection } from 'mysql2/promise';
 
 import { assert } from '../error/assert';
 
-import { ConnectionManager} from './connection-manager';
-import { ConnectionOptions } from './connection-options';
-import { ConnectionStateType } from './connection-state-type';
+import { ConnectionManager, ConnectionOptions, ConnectionStateType } from './';
 
 /**
  * A [[ConnectionManager]] class specialized for MySQL.

@@ -1,7 +1,6 @@
 import * as mysql2 from 'mysql2/promise';
 
-import { MySQLConnectionManager } from './mysql-connection-manager';
-import { ConnectionOptions } from './connection-options';
+import { ConnectionOptions, MySQLConnectionManager } from './';
 
 describe('MySQLConnectionManager()', () => {
   let createPoolSpy: jasmine.Spy;

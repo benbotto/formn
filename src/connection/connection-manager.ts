@@ -1,5 +1,4 @@
-import { ConnectionOptions } from './connection-options';
-import { ConnectionStateType } from './connection-state-type';
+import { ConnectionOptions, ConnectionStateType } from './';
 
 /**
  * Manages database connections.

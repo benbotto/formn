@@ -1,4 +1,4 @@
-import { ColumnLookup } from './column-lookup';
+import { ColumnLookup } from '../';
 
 describe('ColumnLookup()', () => {
   describe('.getColumn()', () => {

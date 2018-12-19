@@ -1,4 +1,4 @@
-import { Converter } from '../../converter/converter';
+import { Converter } from '../../converter/';
 
 /**
  * Options for the [[Column]] decorator.

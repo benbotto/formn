@@ -1,4 +1,4 @@
-import { assert } from '../../error/assert';
+import { assert } from '../../error/';
 
 /**
  * Helper class that maps between column aliases and fully-qualified column

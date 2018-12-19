@@ -1,9 +1,6 @@
-import { PropertyMapStore } from './property-map-store';
+import { initDB, User } from '../../test/';
 
-import metaFactory from '../metadata-factory';
-import { initDB } from '../../test/entity/database';
-
-import { User } from '../../test/entity/user.entity';
+import { PropertyMapStore, metaFactory } from '../';
 
 describe('PropertyMapStore()', () => {
   let propStore: PropertyMapStore;

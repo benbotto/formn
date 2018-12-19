@@ -1,9 +1,6 @@
 import 'reflect-metadata';
 
-import { ColumnMetaOptions } from './column-meta-options';
-import { ColumnMetadata } from './column-metadata';
-
-import metaFactory from '../metadata-factory';
+import { ColumnMetaOptions, ColumnMetadata, metaFactory } from '../';
 
 /**
  * Decorator that is applied to a [[Table]]-decorated class's properties.  This

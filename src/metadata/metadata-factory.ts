@@ -1,7 +1,4 @@
-import { TableStore } from './table/table-store';
-import { ColumnStore } from './column/column-store';
-import { RelationshipStore } from './relationship/relationship-store';
-import { PropertyMapStore } from './property/property-map-store';
+import { TableStore, ColumnStore, RelationshipStore, PropertyMapStore } from './';
 
 class MetadataFactory {
   private tblStore: TableStore = new TableStore();

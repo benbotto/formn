@@ -1,8 +1,6 @@
-import { ColumnStore } from './column-store';
-import metaFactory from '../metadata-factory';
-import { initDB } from '../../test/entity/database';
+import { initDB, User } from '../../test/';
 
-import { User } from '../../test/entity/user.entity';
+import { ColumnStore, metaFactory } from '../';
 
 describe('ColumnStore()', () => {
   let colStore: ColumnStore;

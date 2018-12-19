@@ -1,6 +1,4 @@
-import { CardinalityType } from './cardinality-type';
-import { TableType } from '../table/table-type';
-import { PropertyMapType } from '../property/property-map-type';
+import { CardinalityType, TableType, PropertyMapType } from '../';
 
 /** Represents a relationship between two tables. */
 export class RelationshipMetadata {

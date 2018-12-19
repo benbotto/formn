@@ -1,8 +1,6 @@
-import { TableStore } from './table-store';
-import metaFactory from '../metadata-factory';
-import { initDB } from '../../test/entity/database';
+import { initDB, User } from '../../test/';
 
-import { User } from '../../test/entity/user.entity';
+import { TableStore, metaFactory } from '../';
 
 describe('TableStore()', () => {
   let tblStore: TableStore;

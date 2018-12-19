@@ -1,5 +1,4 @@
-import { CardinalityType } from './cardinality-type';
-import { PropertyMapType } from '../property/property-map-type';
+import { CardinalityType, PropertyMapType } from '../';
 
 /**
  * Options for the [[Relationship]] decorator.  Reads "ENT_T is related to

@@ -1,7 +1,6 @@
-import { assert } from '../../error/assert';
+import { assert } from '../../error/';
 
-import { PropertyMapType } from './property-map-type';
-import { TableType } from '../table/table-type';
+import { PropertyMapType, TableType } from '../';
 
 /**
  * Stores property maps for each [[Table]]-decorated Entity.  A property map is

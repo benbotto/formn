@@ -1,4 +1,4 @@
-import { Relationship } from './relationship.decorator';
+import { Relationship } from '../';
 
 /**
  * Wrapper for [[Relationship]] with a hard-coded cardinality.

@@ -1,6 +1,6 @@
-import { ColumnMetaOptions } from './column-meta-options';
-import { Converter } from '../../converter/converter';
-import { TableType } from '../table/table-type';
+import { Converter } from '../../converter/';
+
+import { ColumnMetaOptions, TableType } from '../';
 
 /**
  * Stores metadata about [[Column]]-decorated properties on

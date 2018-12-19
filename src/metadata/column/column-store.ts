@@ -1,7 +1,6 @@
-import { assert } from '../../error/assert';
+import { assert } from '../../error/';
 
-import { ColumnMetadata } from './column-metadata';
-import { TableType } from '../table/table-type';
+import { ColumnMetadata, TableType } from '../'
 
 /** Storage for [[ColumnMetadata]] with lookup operations. */
 export class ColumnStore {

@@ -1,5 +1,4 @@
-import { TableMetaOptions } from './table-meta-options';
-import { TableType } from './table-type';
+import { TableMetaOptions, TableType } from '../';
 
 /**
  * Stores metadata about [[Table]]-decorated classes.

@@ -1,9 +1,10 @@
 import 'jasmine';
 
-import { ColumnMetadata } from './column-metadata';
-import { Converter } from '../../converter/converter';
+import { Converter } from '../../converter/';
 
-import { User } from '../../test/entity/user.entity';
+import { User } from '../../test/';
+
+import { ColumnMetadata } from '../';
 
 describe('Column()', () => {
   describe('.constructor()', () => {

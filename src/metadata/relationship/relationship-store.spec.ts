@@ -1,11 +1,6 @@
-import { RelationshipStore } from './relationship-store';
-import metaFactory from '../metadata-factory';
-import { initDB } from '../../test/entity/database';
+import { initDB, PhoneNumber, Product, User, Photo } from '../../test/';
 
-import { PhoneNumber } from '../../test/entity/phone-number.entity';
-import { Product } from '../../test/entity/product.entity';
-import { User } from '../../test/entity/user.entity';
-import { Photo } from '../../test/entity/photo.entity';
+import { RelationshipStore, metaFactory } from '../';
 
 describe('RelationshipStore()', function() {
   let relStore: RelationshipStore;

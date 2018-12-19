@@ -1,7 +1,4 @@
-import { TableMetaOptions } from './table-meta-options';
-import { TableMetadata } from './table-metadata';
-import { TableType } from './table-type';
-import metaFactory from '../metadata-factory';
+import { TableMetaOptions, TableMetadata, TableType, metaFactory } from '../';
 
 /**
  * Decorator that is applied to a class to make it ORM capable.  That is, it

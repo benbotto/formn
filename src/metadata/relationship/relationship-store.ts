@@ -1,7 +1,6 @@
-import { assert } from '../../error/assert';
+import { assert } from '../../error/';
 
-import { RelationshipMetadata } from './relationship-metadata';
-import { TableType } from '../table/table-type';
+import { RelationshipMetadata, TableType } from '../';
 
 /** Stores relationships and provides lookup functions. */
 export class RelationshipStore {

@@ -4,3 +4,4 @@
  * on the class. E.g. {id: 'id', name: 'name'}.
  */
 export type PropertyMapType = {[key: string]: string};
+

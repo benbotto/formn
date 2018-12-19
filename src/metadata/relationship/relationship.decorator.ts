@@ -1,6 +1,4 @@
-import { RelationshipMetaOptions } from './relationship-meta-options';
-import metaFactory from '../metadata-factory';
-import { RelationshipMetadata } from './relationship-metadata';
+import { RelationshipMetaOptions, metaFactory, RelationshipMetadata } from '../';
 
 /**
  * Decorator for relationships between two [[Table]]-decorated classes.  See

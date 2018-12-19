@@ -1,6 +1,6 @@
-import { TableMetadata } from './table-metadata';
-import { assert } from '../../error/assert';
-import { TableType } from './table-type';
+import { assert } from '../../error/';
+
+import { TableMetadata, TableType } from '../';
 
 /** Provides storage and lookup operations for [[Table]]-decorated entities. */
 export class TableStore {

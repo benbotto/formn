@@ -15,15 +15,15 @@
     "clean": "rm -rf doc dist",
     "watch:test": "chokidar --initial \"src/**/*.ts\" -c \"npm run test\"",
     "watch:doc": "chokidar --initial \"src/**/*.ts\" -c \"npm run doc\"",
-    "prepublishOnly": "npm run test && npm run clean && npm run build && npm run doc"
+    "prepublishOnly": "npm run test && npm run clean && npm run build"
   },
   "devDependencies": {
     "@types/jasmine": "~3.3.0",
     "@types/mysql2": "types/mysql2",
-    "chokidar-cli": "^1.2.1",
+    "chokidar-cli": "~1.2.1",
     "jasmine": "~3.3.0",
     "jasmine-console-reporter": "~3.1.0",
-    "mysql2": "^1.6.4",
+    "mysql2": "~1.6.4",
     "ts-node": "~7.0.1",
     "typedoc": "~0.13.0"
   },

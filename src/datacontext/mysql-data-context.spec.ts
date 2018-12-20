@@ -7,7 +7,7 @@ import { ConnectionOptions } from '../connection/';
 
 import { User } from '../test/';
 
-import { MySQLDataContext } from './';
+import { MySQLDataContext, MySQLTransactionalDataContext } from './';
 
 describe('MySQLDataContext()', () => {
   let createPoolSpy: jasmine.Spy;
@@ -16,10 +16,11 @@ describe('MySQLDataContext()', () => {
   let connOpts: ConnectionOptions;
 
   beforeEach(() => {
+    mockConn = jasmine.createSpyObj('Conn', ['release', 'query']);
+    mockConn.query.and.returnValue(Promise.resolve());
+
     mockPool = jasmine.createSpyObj('Pool', ['end', 'getConnection']);
     mockPool.end.and.returnValue(Promise.resolve());
-
-    mockConn = jasmine.createSpyObj('Conn', ['release']);
     mockPool.getConnection.and.returnValue(Promise.resolve(mockConn));
 
     createPoolSpy = spyOn(mysql2, 'createPool')
@@ -136,6 +137,21 @@ describe('MySQLDataContext()', () => {
         .then(() => {
           expect(mockPool.end).toHaveBeenCalled();
           done();
+        });
+    });
+  });
+
+  describe('.beginTransaction()', () => {
+    it('produces a MySQLTransactionalDataContext instance.', (done) => {
+      new MySQLDataContext()
+        .connect(connOpts)
+        .then(dc => {
+          dc
+            .beginTransaction(tdc => {
+              expect(tdc instanceof MySQLTransactionalDataContext).toBe(true);
+              done();
+              return Promise.resolve();
+            });
         });
     });
   });

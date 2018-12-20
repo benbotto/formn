@@ -1,16 +1,14 @@
-import { assert } from '../error/assert';
+import { assert } from '../error/';
 
-import { DataContext } from './data-context';
+import { EntityType } from '../metadata/';
 
-import { EntityType } from '../metadata/table/entity-type';
+import { MySQLEscaper, MySQLExecuter, MySQLFromAdapter, MySQLUpdateModel } from '../query/';
 
-import { MySQLEscaper } from '../query/escaper/mysql-escaper';
-import { MySQLExecuter } from '../query/executer/mysql-executer';
-import { MySQLFromAdapter } from '../query/from/mysql-from-adapter';
+import { ConnectionOptions, MySQLConnectionManager } from '../connection/';
 
-import { ConnectionOptions } from '../connection/connection-options';
-import { MySQLConnectionManager } from '../connection/mysql-connection-manager';
-import { MySQLUpdateModel } from '../query/update/mysql-update-model';
+import { MySQLTransactionManager } from '../transaction/';
+
+import { DataContext, MySQLTransactionalDataContext } from './';
 
 /**
  * A [[DataContext]] class specialized for MySQL.
@@ -114,6 +112,25 @@ export class MySQLDataContext extends DataContext {
   end(): Promise<void> {
     return this.connMan
       .end();
+  }
+
+  /**
+   * Begin a transaction.
+   * @param transFunc - A user-supplied function that will be called with a
+   * [[MySQLTransactionalDataContext]] instance.  All queries executed against
+   * the [[MySQLTransactionalDataContext]] will be part of the transaction.
+   * The user-supplied function should return a promise.  If that promise is
+   * resolved then the transaction will be committed, otherwise it will be
+   * rolled back.
+   * @return A promise that will be rejected if there is an error when
+   * beginning the transaction.
+   */
+  beginTransaction(transFunc: (dc: MySQLTransactionalDataContext) => Promise<any>): Promise<void> {
+    const transMgr = new MySQLTransactionManager(this.connMan);
+    const transDC  = new MySQLTransactionalDataContext(transMgr);
+
+    return transDC
+      .beginTransaction(transFunc);
   }
 }
 

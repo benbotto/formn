@@ -5,7 +5,7 @@
  * falsy.
  */
 export function assert(condition:any, message: string): void {
-	if (!condition)
-		throw new Error(message);
+  if (!condition)
+    throw new Error(message);
 }
 

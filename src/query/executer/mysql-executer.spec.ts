@@ -2,24 +2,24 @@ import { Connection } from 'mysql2/promise';
 
 import { MySQLExecuter, Executer } from '../';
 
-describe('MySQLExecuter()', function() {
+describe('MySQLExecuter()', () => {
   let con: jasmine.SpyObj<Connection>;
   let qe: MySQLExecuter;
 
-  beforeEach(function() {
+  beforeEach(() => {
     // Mocked node-mysql connection.
     con = jasmine.createSpyObj('con', ['query']);
     qe  = new MySQLExecuter(con);
   });
 
-  describe('.constructor()', function() {
-    it('exposes a "pool" object.', function() {
+  describe('.constructor()', () => {
+    it('exposes a "pool" object.', () => {
       expect(qe.pool).toBe(con);
     });
   });
 
-  describe('.select()', function() {
-    it('uses pool.query() to execute the select statements.', function(done) {
+  describe('.select()', () => {
+    it('uses pool.query() to execute the select statements.', (done) => {
       const params   = {};
       const query    = 'SELECT userID FROM users';
 
@@ -36,8 +36,8 @@ describe('MySQLExecuter()', function() {
     });
   });
 
-  describe('.insert()', function() {
-    it('uses pool.query() to execute insert statements.', function(done) {
+  describe('.insert()', () => {
+    it('uses pool.query() to execute insert statements.', (done) => {
       const params   = {};
       const query    = 'INSERT INTO users (firstName) VALUES (:firstName)';
 
@@ -54,8 +54,8 @@ describe('MySQLExecuter()', function() {
     });
   });
 
-  describe('.delete()', function() {
-    it('uses pool.query() to execute delete statements.', function(done) {
+  describe('.delete()', () => {
+    it('uses pool.query() to execute delete statements.', (done) => {
       const params   = {};
       const query    = 'DELETE FROM users WHERE userID = 1';
 
@@ -71,8 +71,8 @@ describe('MySQLExecuter()', function() {
     });
   });
 
-  describe('.update()', function() {
-    it('uses pool.query() to execute update statements.', function(done) {
+  describe('.update()', () => {
+    it('uses pool.query() to execute update statements.', (done) => {
       const callback = {};
       const params   = {};
       const query    = "UPDATE users SET firstName = 'Joe' WHERE userID = 2";
@@ -84,6 +84,21 @@ describe('MySQLExecuter()', function() {
           expect(result.affectedRows).toBe(1);
           done();
         });
+
+      expect(con.query.calls.argsFor(0)).toEqual([query, params]);
+    });
+  });
+
+  describe('.query()', () => {
+    it('uses pool.query() to execute the query.', (done) => {
+      const callback = {};
+      const params   = {};
+      const query    = 'SELECT 1+1';
+
+      con.query.and.returnValue(Promise.resolve());
+      qe
+        .query(query, params)
+        .then(() => done())
 
       expect(con.query.calls.argsFor(0)).toEqual([query, params]);
     });

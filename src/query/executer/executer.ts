@@ -44,5 +44,15 @@ export interface Executer {
    * of rows affected (changed) by the query.
    */
   delete(query: string, params: ParameterType): Promise<MutateResultType>;
+
+  /**
+   * Execute a raw query.
+   * @param query - The SQL to execute.
+   * @param params - An object containing query parameters for the query.  Each
+   * parameter will be preceded with a colon in query.
+   * @return A promise that shall be resolved if the query succeeds, or
+   * rejected otherwise.
+   */
+  query(query: string, params: ParameterType): Promise<any>;
 }
 

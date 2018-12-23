@@ -70,5 +70,18 @@ export class MySQLExecuter implements Executer {
       .query(query, params)
       .then(([result]) => result as MutateResultType);
   }
+
+  /**
+   * Execute a raw query.
+   * @param query - The SQL to execute.
+   * @param params - An object containing query parameters for the query.  Each
+   * parameter will be preceded with a colon in query.
+   * @return A promise that shall be resolved if the query succeeds, or
+   * rejected otherwise.
+   */
+  query(query: string, params: ParameterType): Promise<any> {
+    return this.pool
+      .query(query, params);
+  }
 }
 

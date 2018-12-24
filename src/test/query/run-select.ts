@@ -1,32 +1,38 @@
-import { createConnection, Connection } from 'mysql2/promise';
-
 import { MySQLExecuter, ParameterType, SelectResultType } from '../../query/';
 
-const connOpts = {
-  host: 'formn-db',
-  user: 'formn-user',
-  password: 'formn-password',
-  database: 'formn_test_db',
-};
+import { MySQLConnectionManager, ConnectionOptions } from '../../connection/';
 
-export function runSelect(query: string, params: ParameterType): Promise<SelectResultType> {
-  let conn: Connection;
+export function runSelect(
+  query: string,
+  params: ParameterType,
+  connOpts?: ConnectionOptions): Promise<SelectResultType> {
 
-  return createConnection(connOpts)
-    .then(c => {
-      conn = c;
+  if (!connOpts) {
+    connOpts = {
+      host: 'formn-db',
+      user: 'formn-user',
+      password: 'formn-password',
+      database: 'formn_test_db',
+      poolSize: 1,
+    };
+  }
 
-      return new MySQLExecuter(conn)
+  const connMan = new MySQLConnectionManager();
+
+  return connMan
+    .connect(connOpts)
+    .then(() => {
+      return new MySQLExecuter(connMan.getPool())
         .select(query, params);
     })
     .then(results => {
-      conn.end();
+      connMan.end();
       console.log(JSON.stringify(results, null, 2));
       return results;
     })
     .catch(err => {
       console.error(err);
-      conn.end();
+      connMan.end();
       return Promise.reject(err);
     });
 }

@@ -2,6 +2,15 @@ import { User, PhoneNumber, Photo, Product, UserXProduct, Vehicle, VehiclePackag
 
 import { Column, Table, ManyToOne, OneToMany, OneToOne, metaFactory } from '../../metadata/';
 
+import {
+  Table as MySQLTable,
+  Column as MySQLColumn,
+  KeyColumnUsage as MySQLKeyColumnUsage,
+  IsGeneratedConverter as MySQLIsGeneratedConverter,
+  IsPrimaryConverter as MySQLIsPrimaryConverter,
+  YesNoConverter
+} from '../../modelgenerator/';
+
 // This file clears all the metadata cache and manually decorates each class
 // when testing.
 export function initDB() {
@@ -159,5 +168,88 @@ export function initDB() {
 
   tblDec = Table({name: 'vehicle_packages'});
   tblDec(VehiclePackage);
+
+  // MySQLTable.
+  colDec = Column({name: 'TABLE_NAME', isPrimary: true});
+  colDec(MySQLTable.prototype, 'name');
+
+  colDec = Column({name: 'TABLE_SCHEMA', isPrimary: true});
+  colDec(MySQLTable.prototype, 'schema');
+
+  colDec = Column({name: 'TABLE_TYPE'});
+  colDec(MySQLTable.prototype, 'type');
+
+  relDec = OneToMany<MySQLTable, MySQLColumn>(
+    () => MySQLColumn,
+    (t, c) => [[t.name, c.tableName], [t.schema, c.schema]]);
+  relDec(MySQLTable.prototype, 'columns');
+
+  tblDec = Table({name: 'TABLES'});
+  tblDec(MySQLTable);
+
+  // MySQLColumn.
+  colDec = Column({name: 'COLUMN_NAME', isPrimary: true});
+  colDec(MySQLColumn.prototype, 'name');
+
+  colDec = Column({name: 'TABLE_NAME', isPrimary: true});
+  colDec(MySQLColumn.prototype, 'tableName');
+
+  colDec = Column({name: 'TABLE_SCHEMA', isPrimary: true});
+  colDec(MySQLColumn.prototype, 'schema');
+
+  colDec = Column({name: 'DATA_TYPE'});
+  colDec(MySQLColumn.prototype, 'dataType');
+
+  colDec = Column({name: 'COLUMN_TYPE'});
+  colDec(MySQLColumn.prototype, 'columnType');
+
+  colDec = Column({name: 'IS_NULLABLE', converter: new YesNoConverter()});
+  colDec(MySQLColumn.prototype, 'isNullable');
+
+  colDec = Column({name: 'CHARACTER_MAXIMUM_LENGTH'});
+  colDec(MySQLColumn.prototype, 'maxLength');
+
+  colDec = Column({name: 'COLUMN_KEY', converter: new MySQLIsPrimaryConverter()});
+  colDec(MySQLColumn.prototype, 'isPrimary');
+
+  colDec = Column({name: 'COLUMN_DEFAULT'});
+  colDec(MySQLColumn.prototype, 'default');
+
+  colDec = Column({name: 'EXTRA', converter: new MySQLIsGeneratedConverter()});
+  colDec(MySQLColumn.prototype, 'isGenerated');
+  
+  relDec = OneToMany<MySQLColumn, MySQLKeyColumnUsage>(
+    () => MySQLKeyColumnUsage,
+    (c, fk) => [
+      [c.tableName, fk.tableName],
+      [c.schema, fk.schema],
+      [c.name, fk.columnName]
+    ]);
+  relDec(MySQLColumn.prototype, 'keyColumnUsage');
+
+  tblDec = Table({name: 'COLUMNS'});
+  tblDec(MySQLColumn);
+
+  // MySQLKeyColumnUsage.
+  colDec = Column({name: 'CONSTRAINT_NAME', isPrimary: true});
+  colDec(MySQLKeyColumnUsage.prototype, 'constraintName');
+
+  colDec = Column({name: 'COLUMN_NAME', isPrimary: true});
+  colDec(MySQLKeyColumnUsage.prototype, 'columnName');
+
+  colDec = Column({name: 'TABLE_NAME', isPrimary: true});
+  colDec(MySQLKeyColumnUsage.prototype, 'tableName');
+
+  colDec = Column({name: 'TABLE_SCHEMA', isPrimary: true});
+  colDec(MySQLKeyColumnUsage.prototype, 'schema');
+
+  colDec = Column({name: 'REFERENCED_TABLE_NAME'});
+  colDec(MySQLKeyColumnUsage.prototype, 'referencedTableName');
+
+  colDec = Column({name: 'REFERENCED_COLUMN_NAME'});
+  colDec(MySQLKeyColumnUsage.prototype, 'referencedColumnName');
+
+  tblDec = Table({name: 'KEY_COLUMN_USAGE'});
+  tblDec(MySQLKeyColumnUsage);
 }
 

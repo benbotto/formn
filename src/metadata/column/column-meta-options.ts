@@ -20,9 +20,9 @@ export class ColumnMetaOptions {
   isGenerated?: boolean;
   
   /**
-   * The column's default value (quoted).
+   * Whether or not the column has a default value.
    */
-  defaultValue?: string;
+  hasDefault?: boolean;
 
   /**
    * Whether or not the column is nullable.

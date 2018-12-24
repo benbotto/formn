@@ -50,6 +50,11 @@ describe('Column()', () => {
       expect(col.dataType).toBe('string');
     });
 
+    it('stores the hasDefault property.', () => {
+      const col = new ColumnMetadata(User, 'first', 'string', {hasDefault: true});
+      expect(col.hasDefault).toBe(true);
+    });
+
     it('stores the maxLength property.', () => {
       const col = new ColumnMetadata(User, 'first', 'string', {name: 'firstName', maxLength: 100});
       expect(col.maxLength).toBe(100);

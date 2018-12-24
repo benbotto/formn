@@ -12,7 +12,7 @@ export class ColumnMetadata {
   name: string;
   isPrimary: boolean;
   isGenerated:boolean;
-  defaultValue: string;
+  hasDefault: boolean;
   isNullable: boolean;
   dataType: string;
   maxLength?: number;
@@ -41,7 +41,7 @@ export class ColumnMetadata {
     this.name         = options.name;
     this.isPrimary    = options.isPrimary || false;
     this.isGenerated  = options.isGenerated || false;
-    this.defaultValue = options.defaultValue || null;
+    this.hasDefault   = options.hasDefault || false;
     this.maxLength    = options.maxLength;
     this.isNullable   = options.isNullable === undefined ? true : options.isNullable;
     this.converter    = options.converter;

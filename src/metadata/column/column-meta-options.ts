@@ -30,11 +30,6 @@ export class ColumnMetaOptions {
   isNullable?: boolean;
 
   /**
-   * Data type for the column.
-   */
-  dataType?: string;
-
-  /**
    * Max length for varchar-type fields.
    */
   maxLength?: number;

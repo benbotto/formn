@@ -20,26 +20,28 @@ export class ColumnMetadata {
 
   /**
    * Initialize the metadata for a column.
-   * @param Entity The constructor for the [[Table]]-decorated class to which this
+   * @param Entity - The constructor for the [[Table]]-decorated class to which this
    * column belongs.
-   * @param mapTo The name of the property in the class to which this
+   * @param mapTo - The name of the property in the class to which this
    * column will be mapped.
-   * @param options Configuration options for this column with
+   * @param dataType - The JavaScript datatype of the property.
+   * @param options - Configuration options for this column with
    * metadata like dataType, column name, etc.
    */
   constructor(
     Entity: TableType,
     mapTo: string,
+    dataType: string,
     options: ColumnMetaOptions) {
 
     this.Entity       = Entity;
     this.mapTo        = mapTo;
+    this.dataType     = dataType;
 
     this.name         = options.name;
     this.isPrimary    = options.isPrimary || false;
     this.isGenerated  = options.isGenerated || false;
     this.defaultValue = options.defaultValue || null;
-    this.dataType     = options.dataType;
     this.maxLength    = options.maxLength;
     this.isNullable   = options.isNullable === undefined ? true : options.isNullable;
     this.converter    = options.converter;

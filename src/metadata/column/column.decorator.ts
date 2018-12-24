@@ -12,30 +12,11 @@ export function Column(options: ColumnMetaOptions = new ColumnMetaOptions()) {
     if (!options.name)
       options.name = propName;
 
-    // TODO: This isn't going to work with relational types (e.g. a related
-    // entity).
-    if (!options.dataType) {
-      const type = Reflect.getMetadata('design:type', target, propName);
-
-      switch (type.name) {
-        case 'Number':
-          options.dataType = 'INT';
-          break;
-        case 'Date':
-          options.dataType = 'DATETIME';
-          break;
-        case 'String':
-          options.dataType = 'VARCHAR';
-          break;
-        default:
-          options.dataType = type.name;
-          break;
-      }
-    }
+    const dataType = Reflect.getMetadata('design:type', target, propName);
 
     metaFactory
       .getColumnStore()
-      .addColumnMetadata(new ColumnMetadata(target.constructor, propName, options));
+      .addColumnMetadata(new ColumnMetadata(target.constructor, propName, dataType, options));
 
     metaFactory
       .getPropertyMapStore()

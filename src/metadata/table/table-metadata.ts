@@ -8,13 +8,11 @@ export class TableMetadata {
    * Initialize the Table's metadata.
    * @param Entity - The constructor for the @[[Table]]-decorated class.
    * @param name - The name of the database table.
-   * @param database - The database to which this table belongs.
    * @param schema - The database schema, if any.
    */
   constructor(
     public Entity: TableType,
     public name: string,
-    public database: string,
     public schema?: string) {
   }
 

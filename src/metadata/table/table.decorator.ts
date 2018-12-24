@@ -11,12 +11,9 @@ export function Table(options: TableMetaOptions = new TableMetaOptions()) {
     if (!options.name)
       options.name = ctor.name;
 
-    if (!options.database)
-      options.database = 'default';
-
     metaFactory
       .getTableStore()
-      .addTableMetadata(new TableMetadata(ctor, options.name, options.database, options.schema));
+      .addTableMetadata(new TableMetadata(ctor, options.name, options.schema));
   }
 }
 

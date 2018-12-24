@@ -17,7 +17,7 @@ export class ColumnMetaOptions {
   /**
    * Whether or not this column is auto-generated.
    */
-  isGenerated?:boolean;
+  isGenerated?: boolean;
   
   /**
    * The column's default value (quoted).

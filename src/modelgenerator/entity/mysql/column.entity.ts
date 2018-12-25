@@ -1,7 +1,7 @@
 import { Table, Column as FColumn, OneToMany } from '../../../metadata/';
 
 import { YesNoConverter, IsPrimaryConverter, IsGeneratedConverter,
-  KeyColumnUsage } from '../../';
+  HasDefaultConverter, KeyColumnUsage } from '../../';
 
 @Table({name: 'COLUMNS'})
 export class Column {
@@ -29,8 +29,8 @@ export class Column {
   @FColumn({name: 'COLUMN_KEY', converter: new IsPrimaryConverter()})
   isPrimary: boolean;
 
-  @FColumn({name: 'COLUMN_DEFAULT'})
-  default: string;
+  @FColumn({name: 'COLUMN_DEFAULT', converter: new HasDefaultConverter()})
+  hasDefault: string;
 
   @FColumn({name: 'EXTRA', converter: new IsGeneratedConverter()})
   isGenerated: boolean;

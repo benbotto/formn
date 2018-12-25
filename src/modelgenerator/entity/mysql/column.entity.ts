@@ -30,7 +30,7 @@ export class Column {
   isPrimary: boolean;
 
   @FColumn({name: 'COLUMN_DEFAULT', converter: new HasDefaultConverter()})
-  hasDefault: string;
+  hasDefault: boolean;
 
   @FColumn({name: 'EXTRA', converter: new IsGeneratedConverter()})
   isGenerated: boolean;

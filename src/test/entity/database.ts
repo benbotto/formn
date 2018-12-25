@@ -8,7 +8,8 @@ import {
   KeyColumnUsage as MySQLKeyColumnUsage,
   IsGeneratedConverter as MySQLIsGeneratedConverter,
   IsPrimaryConverter as MySQLIsPrimaryConverter,
-  YesNoConverter
+  YesNoConverter,
+  HasDefaultConverter
 } from '../../modelgenerator/';
 
 // This file clears all the metadata cache and manually decorates each class
@@ -212,8 +213,8 @@ export function initDB() {
   colDec = Column({name: 'COLUMN_KEY', converter: new MySQLIsPrimaryConverter()});
   colDec(MySQLColumn.prototype, 'isPrimary');
 
-  colDec = Column({name: 'COLUMN_DEFAULT'});
-  colDec(MySQLColumn.prototype, 'default');
+  colDec = Column({name: 'COLUMN_DEFAULT', converter: new HasDefaultConverter()});
+  colDec(MySQLColumn.prototype, 'hasDefault');
 
   colDec = Column({name: 'EXTRA', converter: new MySQLIsGeneratedConverter()});
   colDec(MySQLColumn.prototype, 'isGenerated');

@@ -6,4 +6,5 @@ export * from './datamapper/';
 export * from './query/';
 export * from './transaction/';
 export * from './datacontext/';
+export * from './modelgenerator/';
 

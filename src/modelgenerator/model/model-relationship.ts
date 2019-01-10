@@ -1,60 +1,73 @@
-import { plural } from 'pluralize';
-import { camelCase } from 'change-case';
-
 import { CardinalityType } from '../../metadata/';
 
 import { assert } from '../../error/';
 
-import { ModelTable, ModelColumn } from '../';
+import { ModelTable, ModelColumn, RelationshipFormatter } from '../';
 
 /**
  * Helper class that store relationship data for the model generator.
  */
 export class ModelRelationship {
-  private table: ModelTable;
+  private localTable: ModelTable;
   private referencedTable: ModelTable;
-  private columns: ModelColumn[] = [];
-  private referencedColumns: ModelColumn[] = [];
+  private columns: ModelColumn[][] = [];
   private cardinality: CardinalityType;
 
   /**
+   * Initialize the relationship.
+   * @param relFormatter - A [[RelationshipFormatter]] instances that is used
+   * to format relationship property names.
+   */
+  constructor(
+    private relFormatter: RelationshipFormatter) {
+  }
+
+  /**
    * Set the local and referenced tables.
-   * @param name - The local table name.
-   * @param refName - The referenced table name.
+   * @param localTable - The [[ModelTable]] to which this relationship belongs.
+   * @param referencedTable - The [[ModelTable]] that the relationship references.
    * @param cardinality - How the two tables relate.
    */
-  setTables(name: string, refName: string, cardinality: CardinalityType): void {
-    this.table = new ModelTable();
-    this.table.setName(name);
+  setTables(
+    localTable: ModelTable,
+    referencedTable: ModelTable,
+    cardinality: CardinalityType): this {
 
-    this.referencedTable = new ModelTable();
-    this.referencedTable.setName(refName);
+    this.localTable      = localTable;
+    this.referencedTable = referencedTable;
+    this.cardinality     = cardinality;
 
-    this.cardinality = cardinality;
+    return this;
   }
 
   /**
    * Add a set of columns to join on.
-   * @param name - The local column name.
-   * @param refName - The referenced column name.
+   * @param localColumn - The [[ModelColumn]] used in this relationship that is
+   * owned by the local [[ModelTable]].
+   * @param referencedColumn - The [[ModelColumn]] that is referenced in the
+   * foreign [[ModelTable]].
    */
-  addColumns(name: string, refName: string): void {
-    const column = new ModelColumn();
-    column.setName(name);
-    this.columns.push(column);
+  addColumns(localColumn: ModelColumn, referencedColumn: ModelColumn): this {
+    this.columns.push([localColumn, referencedColumn]);
 
-    const refColumn = new ModelColumn();
-    refColumn.setName(refName);
-    this.referencedColumns.push(refColumn);
+    return this;
+  }
+
+  /**
+   * Get the array of columns.  Each entry in the array has two [[ModelColumn]]
+   * instances: one for the local column, one for the remote column.
+   */
+  getColumns(): ModelColumn[][] {
+    return this.columns;
   }
 
   /**
    * Get the local table.
    */
   getLocalTable(): ModelTable {
-    assert(this.table, 'ModelRelationship instance has no tables.')
+    assert(this.localTable, 'ModelRelationship instance has no tables.');
 
-    return this.table;
+    return this.localTable;
   }
 
   /**
@@ -67,9 +80,9 @@ export class ModelRelationship {
   }
 
   /**
-   * Get the local table name.
+   * Get the local table's class name.
    */
-  getLocalTableName(): string {
+  getLocalClassName(): string {
     return this.getLocalTable().getClassName();
   }
 
@@ -86,14 +99,13 @@ export class ModelRelationship {
   getOnString(): string {
     assert(this.columns.length, 'ModelRelationship instance has no columns.');
 
-    const colSets = [];
+    const colSets = this.columns
+      .map(([local, remote]) => {
+        const lProp = local.getPropertyName();
+        const rProp = remote.getPropertyName();
 
-    for (let i = 0; i < this.columns.length; ++i) {
-      const lProp = this.columns[i].getPropertyName();
-      const rProp = this.referencedColumns[i].getPropertyName();
-
-      colSets.push(`[l.${lProp}, r.${rProp}]`);
-    }
+        return `[l.${lProp}, r.${rProp}]`;
+      });
 
     if (colSets.length === 1)
       return `(l, r) => ${colSets[0]}`;
@@ -112,7 +124,7 @@ export class ModelRelationship {
    * Get the relationship decorator string.
    */
   getDecoratorString(): string {
-    const locTblName  = this.getLocalTableName();
+    const locTblName  = this.getLocalClassName();
     const refTblName  = this.getReferencedClassName();
     const onString    = this.getOnString();
     const cardinality = this.getCardinality();
@@ -126,16 +138,10 @@ export class ModelRelationship {
   getPropertyString(): string {
     const refTblName  = this.getReferencedClassName();
     const cardinality = this.getCardinality();
-    let propName, className;
-
-    if (cardinality === 'OneToMany') {
-      propName  = camelCase(plural(this.getReferencedTable().getName()));
-      className = `${this.getReferencedClassName()}[]`;
-    }
-    else {
-      propName  = camelCase(this.getReferencedClassName());
-      className = this.getReferencedClassName();
-    }
+    const propName    = this.relFormatter.formatPropertyName(this);
+    const className   = cardinality === 'OneToMany' ?
+      `${this.getReferencedClassName()}[]` :
+      this.getReferencedClassName();
 
     return `  ${propName}: ${className};`;
   }

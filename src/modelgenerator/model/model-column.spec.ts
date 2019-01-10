@@ -1,9 +1,9 @@
-import { ModelColumn } from '../';
+import { ModelColumn, DefaultColumnFormatter } from '../';
 
 describe('ModelColumn()', () => {
   let col: ModelColumn;
 
-  beforeEach(() => col = new ModelColumn());
+  beforeEach(() => col = new ModelColumn(new DefaultColumnFormatter()));
 
   describe('.getName()', () => {
     it('returns undefined by default.', () => {
@@ -17,10 +17,6 @@ describe('ModelColumn()', () => {
   });
 
   describe('.getPropertyName()', () => {
-    it('returns undefined if there is no name.', () => {
-      expect(col.getPropertyName()).not.toBeDefined();
-    });
-
     it('returns the camel case version of the name.', () => {
       col.setName('likes_to_eat_cake');
       expect(col.getPropertyName()).toBe('likesToEatCake');
@@ -70,7 +66,7 @@ describe('ModelColumn()', () => {
 
   describe('.getPropertyString()', () => {
     it('throws an error if there is no name.', () => {
-      expect(() => col.getPropertyString()).toThrowError('ModelColumn instance has no property name.');
+      expect(() => col.getPropertyString()).toThrowError('ModelColumn instance has no name.');
     });
 
     it('throws an error if there is no datatype.', () => {

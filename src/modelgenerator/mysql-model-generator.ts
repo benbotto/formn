@@ -10,7 +10,8 @@ import {
 } from './';
 
 /**
- * Model generator for MySQL.
+ * A model generator for MySQL that uses database metadata stored in the
+ * INFORMATION_SCHEMA tables to generate [[Table]]-decorated entities.
  */
 export class MySQLModelGenerator {
   /**
@@ -18,7 +19,7 @@ export class MySQLModelGenerator {
    * @param dataContext - A [[MySQLDataContext]] instance that is connected to
    * the INFORMATION_SCHEMA database.  It's used to select metadata about
    * tables, columns, and constraints.
-   * @param tableFormatter - A [[TableFormatter] instance that is used to
+   * @param tableFormatter - A [[TableFormatter]] instance that is used to
    * format the names of generated class entities.
    * @param columnFormatter - A [[ColumnFormatter]] instance that is used for
    * formatting property names in the generated class entities.
@@ -33,13 +34,12 @@ export class MySQLModelGenerator {
   }
 
   /**
-   * Generate models for the provided database and write each to a file.
-   * @param modelDirPath - The path to an entity folder to which entities
-   * should be written.
+   * Generate models for the provided database.  The models are returned as an
+   * array of strings.
    * @param dbName - A database name.  A model will be generated for each table
    * in the database.
    */
-  async generateModels(modelDirPath: string, dbName: string): Promise<string[]> {
+  async generateModels(dbName: string): Promise<string[]> {
     // Map of table name to ModelTable.
     const modelTables: Map<string, ModelTable> = new Map();
 

@@ -58,7 +58,7 @@ describe('MySQLModelGenerator()', () => {
       mockPool.query.and.returnValue(Promise.resolve([[]]));
 
       generator
-        .generateModels('/tmp/', 'formn_test_db')
+        .generateModels('formn_test_db')
         .then(() => {
           const sql = mockPool.query.calls.argsFor(0)[0];
 
@@ -76,7 +76,7 @@ describe('MySQLModelGenerator()', () => {
       mockPool.query.and.returnValue(Promise.resolve([[...usersSchema, ...phoneNumbersSchema]]));
 
       generator
-        .generateModels('/tmp/', 'formn_test_db')
+        .generateModels('formn_test_db')
         .then(models => {
           expect(models[0]).toBe(
 `import { Table, Column, OneToMany } from 'formn';

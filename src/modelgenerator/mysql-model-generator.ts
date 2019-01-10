@@ -3,10 +3,10 @@ import { MySQLDataContext } from '../datacontext/';
 import { ParameterType } from '../query/';
 
 import {
-  TableFormatter, DefaultTableFormatter, Table, Column, KeyColumnUsage,
-  ModelTable, ModelColumn, ModelRelationship, MySQLDataTypeMapper,
-  ColumnFormatter, DefaultColumnFormatter, RelationshipFormatter,
-  DefaultRelationshipFormatter
+  TableFormatter, DefaultTableFormatter, MySQLTable, MySQLColumn,
+  MySQLKeyColumnUsage, ModelTable, ModelColumn, ModelRelationship,
+  MySQLDataTypeMapper, ColumnFormatter, DefaultColumnFormatter,
+  RelationshipFormatter, DefaultRelationshipFormatter
 } from './';
 
 /**
@@ -44,9 +44,9 @@ export class MySQLModelGenerator {
     const modelTables: Map<string, ModelTable> = new Map();
 
     const tables = await this.dataContext
-      .from(Table, 't')
-      .innerJoin(Column, 'c', 't.columns')
-      .leftOuterJoin(KeyColumnUsage, 'k', 'c.keyColumnUsage')
+      .from(MySQLTable, 't')
+      .innerJoin(MySQLColumn, 'c', 't.columns')
+      .leftOuterJoin(MySQLKeyColumnUsage, 'k', 'c.keyColumnUsage')
       .where({$eq: {'t.schema': ':db'}}, {db: dbName})
       .select()
       .orderBy('t.name', 'c.name', 'k.constraintName')
@@ -79,11 +79,11 @@ export class MySQLModelGenerator {
 
     // Keys are nested under table->column.
     // Foreign keys have a referenced table name.
-    const fks: KeyColumnUsage[] = tables
-      .reduce((cols: Column[], table: Table) => cols.concat(table.columns), [])
-      .reduce((keys: KeyColumnUsage[], col: Column) =>
+    const fks: MySQLKeyColumnUsage[] = tables
+      .reduce((cols: MySQLColumn[], table: MySQLTable) => cols.concat(table.columns), [])
+      .reduce((keys: MySQLKeyColumnUsage[], col: MySQLColumn) =>
         keys.concat(col.keyColumnUsage), [])
-      .filter((key: KeyColumnUsage) => key.referencedTableName);
+      .filter((key: MySQLKeyColumnUsage) => key.referencedTableName);
 
     for (let locTable of modelTables.values()) {
       // A relationship constraint may span multiple columns.  Also,

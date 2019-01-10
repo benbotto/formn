@@ -1,7 +1,7 @@
 import { Table, Column } from '../../../metadata/';
 
 @Table({name: 'KEY_COLUMN_USAGE'})
-export class KeyColumnUsage {
+export class MySQLKeyColumnUsage {
   @Column({name: 'CONSTRAINT_NAME', isPrimary: true})
   constraintName: string;
 

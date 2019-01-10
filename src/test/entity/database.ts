@@ -3,9 +3,9 @@ import { User, PhoneNumber, Photo, Product, UserXProduct, Vehicle, VehiclePackag
 import { Column, Table, ManyToOne, OneToMany, OneToOne, metaFactory } from '../../metadata/';
 
 import {
-  Table as MySQLTable,
-  Column as MySQLColumn,
-  KeyColumnUsage as MySQLKeyColumnUsage,
+  MySQLTable,
+  MySQLColumn,
+  MySQLKeyColumnUsage,
   IsGeneratedConverter as MySQLIsGeneratedConverter,
   IsPrimaryConverter as MySQLIsPrimaryConverter,
   YesNoConverter,

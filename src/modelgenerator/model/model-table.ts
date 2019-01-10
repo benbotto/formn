@@ -18,7 +18,7 @@ export class ModelTable {
 
   /**
    * Initialize the ModelTable.
-   * @param tableFormatter - A [[TableFormatter] instance that is used to
+   * @param tableFormatter - A [[TableFormatter]] instance that is used to
    * format the names of generated class entities.
    */
   constructor(
@@ -65,7 +65,7 @@ export class ModelTable {
   }
 
   /**
-   * The table schema for databases that have schemas.
+   * Get the table schema for databases that have schemas.
    */
   getSchema(): string {
     return this.metaOptions.schema;

@@ -5,7 +5,7 @@ import { assert } from '../../error/';
 import { ModelTable, ModelColumn, RelationshipFormatter } from '../';
 
 /**
- * Helper class that store relationship data for the model generator.
+ * Helper class that stores relationship data for the model generator.
  */
 export class ModelRelationship {
   private localTable: ModelTable;
@@ -55,7 +55,7 @@ export class ModelRelationship {
 
   /**
    * Get the array of columns.  Each entry in the array has two [[ModelColumn]]
-   * instances: one for the local column, one for the remote column.
+   * instances: one for the local column; one for the remote column.
    */
   getColumns(): ModelColumn[][] {
     return this.columns;
@@ -116,7 +116,7 @@ export class ModelRelationship {
   /**
    * Get the cardinality, which is the name of the decorator.
    */
-  getCardinality(): string {
+  getCardinality(): CardinalityType {
     return this.cardinality;
   }
 

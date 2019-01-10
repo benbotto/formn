@@ -1,8 +1,8 @@
-import { camelCase } from 'change-case';
-
 import { assert } from '../../error/';
 
 import { ColumnMetaOptions } from '../../metadata/';
+
+import { ColumnFormatter } from '../';
 
 /**
  * Helper class for model generation that stores column metadata.
@@ -10,6 +10,78 @@ import { ColumnMetaOptions } from '../../metadata/';
 export class ModelColumn {
   private metaOptions: ColumnMetaOptions = new ColumnMetaOptions();
   private dataType: string;
+
+  /**
+   * Initialize the ModelColumn instance.
+   * @param columnFormatter - A [[ColumnFormatter]] instance that is used for
+   * formatting property names.
+   */
+  constructor(
+    private columnFormatter: ColumnFormatter) {
+  }
+
+  /**
+   * Set the name of the column.
+   */
+  setName(name: string): this {
+    this.metaOptions.name = name;
+
+    return this;
+  }
+
+  /**
+   * Whether or not this column is the (or part of the) primary key.
+   */
+  setIsPrimary(isPrimary: boolean): this {
+    this.metaOptions.isPrimary = isPrimary;
+
+    return this;
+  }
+
+  /**
+   * Whether or not this column is auto-generated.
+   */
+  setIsGenerated(isGenerated: boolean): this {
+    this.metaOptions.isGenerated = isGenerated;
+
+    return this;
+  }
+
+  /**
+   * Whether or not the column has a default value.
+   */
+  setHasDefault(hasDefault: boolean): this {
+    this.metaOptions.hasDefault = hasDefault;
+
+    return this;
+  }
+
+  /**
+   * Whether or not the column is nullable.
+   */
+  setIsNullable(isNullable: boolean): this {
+    this.metaOptions.isNullable = isNullable;
+
+    return this;
+  }
+
+  /**
+   * Max length for varchar-type fields.
+   */
+  setMaxLength(maxLength: number): this {
+    this.metaOptions.maxLength = maxLength;
+
+    return this;
+  }
+
+  /**
+   * Data type for the column.
+   */
+  setDataType(dataType: string): this {
+    this.dataType = dataType;
+
+    return this;
+  }
 
   /**
    * Get the name of the column.
@@ -22,71 +94,62 @@ export class ModelColumn {
    * Get the formatted name of the column, which is camel case.
    */
   getPropertyName(): string {
-    if (this.getName())
-      return camelCase(this.metaOptions.name);
-    return undefined;
-  }
-
-  /**
-   * Set the name of the column.
-   */
-  setName(name: string): void {
-    this.metaOptions.name = name;
+    return this.columnFormatter.formatPropertyName(this);
   }
 
   /**
    * Whether or not this column is the (or part of the) primary key.
    */
-  setIsPrimary(isPrimary: boolean): void {
-    this.metaOptions.isPrimary = isPrimary;
+  getIsPrimary(): boolean {
+    return this.metaOptions.isPrimary;
   }
 
   /**
    * Whether or not this column is auto-generated.
    */
-  setIsGenerated(isGenerated: boolean): void {
-    this.metaOptions.isGenerated = isGenerated;
+  getIsGenerated(): boolean {
+    return this.metaOptions.isGenerated;
   }
-  
+
   /**
    * Whether or not the column has a default value.
    */
-  setHasDefault(hasDefault: boolean): void {
-    this.metaOptions.hasDefault = hasDefault;
+  getHasDefault(): boolean {
+    return this.metaOptions.hasDefault;
   }
 
   /**
    * Whether or not the column is nullable.
    */
-  setIsNullable(isNullable: boolean): void {
-    this.metaOptions.isNullable = isNullable;
+  getIsNullable(): boolean {
+    return this.metaOptions.isNullable;
   }
 
   /**
    * Max length for varchar-type fields.
    */
-  setMaxLength(maxLength: number): void {
-    this.metaOptions.maxLength = maxLength;
+  getMaxLength(): number {
+    return this.metaOptions.maxLength;
   }
 
   /**
    * Data type for the column.
    */
-  setDataType(dataType: string): void {
-    this.dataType = dataType;
+  getDataType(): string {
+    return this.dataType;
   }
 
   /**
    * Get the metadata as a [[Column]] decorator string.
    */
   getDecoratorString(): string {
-    const name        = this.metaOptions.name;
+    const name        = this.getName();
     const propName    = this.getPropertyName();
-    const isPrimary   = this.metaOptions.isPrimary;
-    const isGenerated = this.metaOptions.isGenerated;
-    const hasDefault  = this.metaOptions.hasDefault;
-    const isNullable  = this.metaOptions.isNullable;
-    const maxLength   = this.metaOptions.maxLength;
+    const isPrimary   = this.getIsPrimary();
+    const isGenerated = this.getIsGenerated();
+    const hasDefault  = this.getHasDefault();
+    const isNullable  = this.getIsNullable();
+    const maxLength   = this.getMaxLength();
     const opts        = [];
 
     if (name && name !== propName)
@@ -117,12 +180,12 @@ export class ModelColumn {
    * Get the property declaration as a string.
    */
   getPropertyString(): string {
+    assert(this.getName(), 'ModelColumn instance has no name.');
+    assert(this.getDataType(), 'ModelColumn instance has no data type.');
+
     const propName = this.getPropertyName();
 
-    assert(propName, 'ModelColumn instance has no property name.');
-    assert(this.dataType, 'ModelColumn instance has no data type.');
-
-    return `  ${propName}: ${this.dataType}`; 
+    return `  ${propName}: ${this.getDataType()}`; 
   }
 
   /**

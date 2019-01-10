@@ -1,6 +1,8 @@
 import { Table, Column, OneToMany } from '../../../metadata/';
 
-import { YesNoConverter, IsPrimaryConverter, IsGeneratedConverter,
+import { YesNoConverter } from '../../../converter/';
+
+import { IsPrimaryConverter, IsGeneratedConverter,
   HasDefaultConverter, MySQLKeyColumnUsage } from '../../';
 
 @Table({name: 'COLUMNS'})

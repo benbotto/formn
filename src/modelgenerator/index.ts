@@ -4,7 +4,6 @@ export * from './formatter/column-formatter';
 export * from './formatter/default-column-formatter';
 export * from './formatter/relationship-formatter';
 export * from './formatter/default-relationship-formatter';
-export * from './entity/mysql/yes-no.converter';
 export * from './entity/mysql/is-generated.converter';
 export * from './entity/mysql/is-primary.converter';
 export * from './entity/mysql/has-default.converter';

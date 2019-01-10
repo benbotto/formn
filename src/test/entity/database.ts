@@ -2,13 +2,14 @@ import { User, PhoneNumber, Photo, Product, UserXProduct, Vehicle, VehiclePackag
 
 import { Column, Table, ManyToOne, OneToMany, OneToOne, metaFactory } from '../../metadata/';
 
+import { YesNoConverter } from '../../converter/';
+
 import {
   MySQLTable,
   MySQLColumn,
   MySQLKeyColumnUsage,
   IsGeneratedConverter as MySQLIsGeneratedConverter,
   IsPrimaryConverter as MySQLIsPrimaryConverter,
-  YesNoConverter,
   HasDefaultConverter
 } from '../../modelgenerator/';
 

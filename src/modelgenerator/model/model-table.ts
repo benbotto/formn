@@ -1,11 +1,10 @@
-import { singular } from 'pluralize';
-import { pascalCase, paramCase as kebabCase } from 'change-case';
-
 import { assert } from '../../error/';
 
 import { TableMetaOptions } from '../../metadata/';
 
-import { ModelColumn, ModelRelationship } from '../';
+import {
+  ModelColumn, ModelRelationship, TableFormatter
+} from '../';
 
 /**
  * Helper class for model generation that has metadata about a model.
@@ -14,7 +13,17 @@ export class ModelTable {
   private metaOptions: TableMetaOptions = new TableMetaOptions();
   private formnImports: Set<string> = new Set(['Table', 'Column']);
   private columns: ModelColumn[] = [];
+  private columnLookup: Map<string, ModelColumn> = new Map();
   private relationships: ModelRelationship[] = [];
+
+  /**
+   * Initialize the ModelTable.
+   * @param tableFormatter - A [[TableFormatter] instance that is used to
+   * format the names of generated class entities.
+   */
+  constructor(
+    private tableFormatter: TableFormatter) {
+  }
 
   /**
    * Get the name of the table.
@@ -26,17 +35,17 @@ export class ModelTable {
   }
 
   /**
-   * Get the formatted name of the table, which is pascal case and singular.
+   * Get the formatted name of the class.
    */
   getClassName(): string {
-    return pascalCase(singular(this.getName()));
+    return this.tableFormatter.formatClassName(this);
   }
 
   /**
    * Get the import name of this class.
    */
   getImportName(): string {
-    return kebabCase(singular(this.getName())) + '.entity';
+    return this.tableFormatter.formatImportName(this);
   }
 
   /**
@@ -49,8 +58,10 @@ export class ModelTable {
   /**
    * Set the name of the table.
    */
-  setName(name: string): void {
+  setName(name: string): this {
     this.metaOptions.name = name;
+
+    return this;
   }
 
   /**
@@ -63,8 +74,10 @@ export class ModelTable {
   /**
    * Set the schema.
    */
-  setSchema(schema: string): void {
+  setSchema(schema: string): this {
     this.metaOptions.schema = schema;
+
+    return this;
   }
 
   /**
@@ -72,8 +85,18 @@ export class ModelTable {
    */
   addColumn(col: ModelColumn): this {
     this.columns.push(col);
+    this.columnLookup.set(col.getName(), col);
 
     return this;
+  }
+
+  /**
+   * Get a [[ModelColumn]] by name.
+   */
+  getColumnByName(colName: string): ModelColumn {
+    assert(this.columnLookup.has(colName), `Column "${colName}" not found.`);
+
+    return this.columnLookup.get(colName);
   }
 
   /**

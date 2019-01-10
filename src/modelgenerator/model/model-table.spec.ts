@@ -1,79 +1,100 @@
-import { ModelTable, ModelRelationship, ModelColumn } from '../';
+import {
+  ModelTable, ModelRelationship, ModelColumn, DefaultTableFormatter,
+  DefaultColumnFormatter, DefaultRelationshipFormatter
+} from '../';
+
+import {
+  getPeopleModelTable, getPhoneNumbersModelTable, getVehiclesModelTable,
+  getVehiclePackagesModelTable
+} from '../../test/';
 
 describe('ModelTable()', () => {
-  let tbl: ModelTable;
+  let people: ModelTable;
+  let phoneNumbers: ModelTable;
+  let vehicles: ModelTable;
+  let vehiclePackages: ModelTable;
 
-  beforeEach(() => tbl = new ModelTable());
+  beforeEach(() => {
+    people          = getPeopleModelTable();
+    phoneNumbers    = getPhoneNumbersModelTable();
+    vehicles        = getVehiclesModelTable();
+    vehiclePackages = getVehiclePackagesModelTable();
+  });
 
   describe('.getName()', () => {
     it('throws an error if no name is set.', () => {
+      const tbl = new ModelTable(new DefaultTableFormatter());
+
       expect(() => tbl.getName()).toThrowError('ModelTable instance has no name.');
     });
 
     it('returns the table name.', () => {
-      tbl.setName('people');
-      expect(tbl.getName()).toBe('people');
+      expect(people.getName()).toBe('people');
     });
   });
 
   describe('.getClassName()', () => {
-    it('returns the singular version of the table name.', () => {
-      tbl.setName('people');
-      expect(tbl.getClassName()).toBe('Person');
-    });
-
-    it('returns the pascal version of the table name.', () => {
-      tbl.setName('vehicle_packages');
-      expect(tbl.getClassName()).toBe('VehiclePackage');
+    it('returns the singular pascal version of the table name.', () => {
+      expect(vehiclePackages.getClassName()).toBe('VehiclePackage');
     });
   });
 
   describe('.getImportName()', () => {
     it('returns the singular version of the table name in kebab case.', () => {
-      tbl.setName('vehicle_packages');
-      expect(tbl.getImportName()).toBe('vehicle-package.entity');
+      expect(vehiclePackages.getImportName()).toBe('vehicle-package.entity');
     });
   });
 
   describe('.getImportFileName()', () => {
     it('returns the singular version of the table name in kebab case.', () => {
-      tbl.setName('vehicle_packages');
-      expect(tbl.getImportFileName()).toBe('vehicle-package.entity.ts');
+      expect(vehiclePackages.getImportFileName()).toBe('vehicle-package.entity.ts');
     });
   });
 
   describe('.getSchema()', () => {
     it('returns undefined by default.', () => {
-      expect(tbl.getSchema()).not.toBeDefined();
+      expect(vehiclePackages.getSchema()).not.toBeDefined();
     });
 
     it('returns the sechema.', () => {
-      tbl.setSchema('dbo');
-      expect(tbl.getSchema()).toBe('dbo');
+      vehiclePackages.setSchema('dbo');
+      expect(vehiclePackages.getSchema()).toBe('dbo');
+    });
+  });
+
+  describe('.getColumnByName()', () => {
+    it('throws an error if the column is not found.', () => {
+      expect(() => people.getColumnByName('foo')).toThrowError('Column "foo" not found.');
+    });
+
+    it('returns the column.', () => {
+      expect(people.getColumnByName('personID').getName()).toBe('personID');
     });
   });
 
   describe('.getDecoratorString()', () => {
     it('returns a decorator string with the table name.', () => {
-      tbl.setName('people');
-      expect(tbl.getDecoratorString()).toBe("@Table({name: 'people'})");
+      expect(people.getDecoratorString()).toBe("@Table({name: 'people'})");
     });
 
     it('does not include the table name if the table name matches the class name.', () => {
-      tbl.setName('Person');
+      const tbl = new ModelTable(new DefaultTableFormatter())
+        .setName('Person');
       expect(tbl.getDecoratorString()).toBe('@Table()');
     });
 
     it('returns a decorator string with the schema.', () => {
-      tbl.setName('Person');
-      tbl.setSchema('dbo');
+      const tbl = new ModelTable(new DefaultTableFormatter())
+        .setName('Person')
+        .setSchema('dbo');
 
       expect(tbl.getDecoratorString()).toBe("@Table({schema: 'dbo'})");
     });
 
     it('returns a decorator string with the table and schema.', () => {
-      tbl.setName('people');
-      tbl.setSchema('dbo');
+      const tbl = new ModelTable(new DefaultTableFormatter())
+        .setName('people')
+        .setSchema('dbo');
 
       expect(tbl.getDecoratorString()).toBe("@Table({name: 'people', schema: 'dbo'})");
     });
@@ -81,84 +102,59 @@ describe('ModelTable()', () => {
 
   describe('.getClassString()', () => {
     it('returns the class definition string.', () => {
-      tbl.setName('person');
-      expect(tbl.getClassString()).toBe('export class Person');
+      expect(people.getClassString()).toBe('export class Person');
     });
   });
 
   describe('.getFormnImportsString()', () => {
     it('returns the formn imports string.', () => {
-      expect(tbl.getFormnImportsString()).toBe("import { Table, Column } from 'formn';");
+      expect(people.getFormnImportsString()).toBe("import { Table, Column } from 'formn';");
     });
 
     it('includes decorator imports.', () => {
-      const rel = new ModelRelationship();
-      rel.setTables('people', 'phone_numbers', 'OneToMany');
-      rel.addColumns('id', 'userID');
+      const rel = new ModelRelationship(new DefaultRelationshipFormatter())
+        .setTables(people, phoneNumbers, 'OneToMany')
+        .addColumns(
+          people.getColumnByName('personID'),
+          phoneNumbers.getColumnByName('personID'));
 
-      tbl.setName('people');
-      tbl.addRelationship(rel);
+      people.addRelationship(rel);
 
-      expect(tbl.getFormnImportsString())
+      expect(people.getFormnImportsString())
         .toBe("import { Table, Column, OneToMany } from 'formn';");
     });
   });
 
   describe('getModelImportsString()', () => {
     it('returns an empty string if there are no relationships.', () => {
-      expect(tbl.getModelImportsString()).toBe('');
+      expect(people.getModelImportsString()).toBe('');
     });
 
     it('returns an import for each referenced model.', () => {
-      const rel = new ModelRelationship();
-      rel.setTables('people', 'phone_numbers', 'OneToMany');
-      rel.addColumns('id', 'userID');
+      const rel = new ModelRelationship(new DefaultRelationshipFormatter())
+        .setTables(people, phoneNumbers, 'OneToMany')
+        .addColumns(
+          people.getColumnByName('personID'),
+          phoneNumbers.getColumnByName('personID'));
 
-      const rel2 = new ModelRelationship();
-      rel2.setTables('people', 'products', 'OneToMany');
-      rel2.addColumns('id', 'userID');
+      people.addRelationship(rel);
 
-      tbl.addRelationship(rel);
-      tbl.addRelationship(rel2);
-
-      expect(tbl.getModelImportsString())
-        .toBe("import { PhoneNumber } from './phone-number.entity';\n" +
-              "import { Product } from './product.entity';");
+      expect(people.getModelImportsString())
+        .toBe("import { PhoneNumber } from './phone-number.entity';");
     });
   });
 
   describe('.toString()', () => {
     it('returns a string representation of the model.', () => {
-      tbl.setName('people');
+      const rel = new ModelRelationship(new DefaultRelationshipFormatter())
+        .setTables(people, phoneNumbers, 'OneToMany')
+        .addColumns(
+          people.getColumnByName('personID'),
+          phoneNumbers.getColumnByName('personID'));
 
-      let col = new ModelColumn();
-      col.setName('id');
-      col.setDataType('number');
-      col.setIsPrimary(true);
-      col.setIsGenerated(true);
-      col.setIsNullable(false);
-      tbl.addColumn(col);
+      people.addRelationship(rel);
 
-      col = new ModelColumn();
-      col.setName('firstName');
-      col.setDataType('string');
-      col.setMaxLength(255);
-      col.setIsNullable(false);
-      tbl.addColumn(col);
-
-      col = new ModelColumn();
-      col.setName('isActive');
-      col.setDataType('boolean');
-      col.setIsNullable(false);
-      col.setHasDefault(true);
-      tbl.addColumn(col);
-
-      const rel = new ModelRelationship();
-      rel.setTables('people', 'phone_numbers', 'OneToMany');
-      rel.addColumns('id', 'userID');
-      tbl.addRelationship(rel);
-
-      const modelStr = tbl.toString();
+      const modelStr = people.toString();
 
       expect(modelStr)
         .toBe(
@@ -168,16 +164,13 @@ import { PhoneNumber } from './phone-number.entity';
 
 @Table({name: 'people'})
 export class Person {
-  @Column({isPrimary: true, isGenerated: true, isNullable: false})
+  @Column({name: 'personID', isPrimary: true, isGenerated: true})
   id: number;
 
   @Column({isNullable: false, maxLength: 255})
-  firstName: string;
+  name: string;
 
-  @Column({hasDefault: true, isNullable: false})
-  isActive: boolean;
-
-  @OneToMany<Person, PhoneNumber>(() => PhoneNumber, (l, r) => [l.id, r.userId])
+  @OneToMany<Person, PhoneNumber>(() => PhoneNumber, (l, r) => [l.id, r.personId])
   phoneNumbers: PhoneNumber[];
 }
 `);

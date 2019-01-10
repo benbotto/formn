@@ -2,8 +2,12 @@ import { MySQLDataContext } from '../datacontext/';
 
 import { ParameterType } from '../query/';
 
-import { Table, Column, KeyColumnUsage, ModelTable, ModelColumn, 
-  ModelRelationship, MySQLDataTypeMapper } from './';
+import {
+  TableFormatter, DefaultTableFormatter, Table, Column, KeyColumnUsage,
+  ModelTable, ModelColumn, ModelRelationship, MySQLDataTypeMapper,
+  ColumnFormatter, DefaultColumnFormatter, RelationshipFormatter,
+  DefaultRelationshipFormatter
+} from './';
 
 /**
  * Model generator for MySQL.
@@ -14,9 +18,18 @@ export class MySQLModelGenerator {
    * @param dataContext - A [[MySQLDataContext]] instance that is connected to
    * the INFORMATION_SCHEMA database.  It's used to select metadata about
    * tables, columns, and constraints.
+   * @param tableFormatter - A [[TableFormatter] instance that is used to
+   * format the names of generated class entities.
+   * @param columnFormatter - A [[ColumnFormatter]] instance that is used for
+   * formatting property names in the generated class entities.
+   * @param relFormatter - A [[RelationshipFormatter]] instances that is used
+   * to format relationship property names.
    */
   constructor(
-    private dataContext: MySQLDataContext) {
+    private dataContext: MySQLDataContext,
+    private tableFormatter: TableFormatter = new DefaultTableFormatter(),
+    private columnFormatter: ColumnFormatter = new DefaultColumnFormatter(),
+    private relFormatter: RelationshipFormatter = new DefaultRelationshipFormatter()) {
   }
 
   /**
@@ -28,7 +41,7 @@ export class MySQLModelGenerator {
    */
   async generateModels(modelDirPath: string, dbName: string): Promise<string[]> {
     // Map of table name to ModelTable.
-    const modelTables: ModelTable[] = [];
+    const modelTables: Map<string, ModelTable> = new Map();
 
     const tables = await this.dataContext
       .from(Table, 't')
@@ -39,24 +52,16 @@ export class MySQLModelGenerator {
       .orderBy('t.name', 'c.name', 'k.constraintName')
       .execute();
 
-    // Keys are nested under table->column.
-    // Foreign keys have a referenced table name.
-    const fks: KeyColumnUsage[] = tables
-      .reduce((cols: Column[], table: Table) => cols.concat(table.columns), [])
-      .reduce((keys: KeyColumnUsage[], col: Column) =>
-        keys.concat(col.keyColumnUsage), [])
-      .filter((key: KeyColumnUsage) => key.referencedTableName);
-
     for (let table of tables) {
       // Create a model for each table.
-      const modelTable = new ModelTable();
+      const modelTable = new ModelTable(this.tableFormatter);
 
       modelTable.setName(table.name);
-      modelTables.push(modelTable);
+      modelTables.set(table.name, modelTable);
 
       // Add each column to the table.
       for (let column of table.columns) {
-        const modelCol = new ModelColumn();
+        const modelCol = new ModelColumn(this.columnFormatter);
 
         modelCol
           .setDataType(MySQLDataTypeMapper
@@ -70,53 +75,73 @@ export class MySQLModelGenerator {
 
         modelTable.addColumn(modelCol);
       }
+    }
 
-      // A constraint may span multiple columns.  When looping over keys and
-      // adding relationships, this set is used to skip already-seen constraints.
+    // Keys are nested under table->column.
+    // Foreign keys have a referenced table name.
+    const fks: KeyColumnUsage[] = tables
+      .reduce((cols: Column[], table: Table) => cols.concat(table.columns), [])
+      .reduce((keys: KeyColumnUsage[], col: Column) =>
+        keys.concat(col.keyColumnUsage), [])
+      .filter((key: KeyColumnUsage) => key.referencedTableName);
+
+    for (let locTable of modelTables.values()) {
+      // A relationship constraint may span multiple columns.  Also,
+      // relationships may be self-referencing, in which case the local and
+      // referenced tables are the same.  When looping over keys and adding
+      // relationships, this set is used to skip already-seen constraints.
       const constraints: Set<string> = new Set();
 
       // These are the relationships that this table owns.
       const ownRelations = fks
-        .filter(key => key.tableName === table.name);
+        .filter(key => key.tableName === locTable.getName());
 
       for (let rel of ownRelations) {
         if (!constraints.has(rel.constraintName)) {
-          const modelRel = new ModelRelationship();
+          const refTable = modelTables.get(rel.referencedTableName);
+          const modelRel = new ModelRelationship(this.relFormatter);
 
-          modelRel.setTables(rel.tableName, rel.referencedTableName, 'ManyToOne');
+          modelRel.setTables(locTable, refTable, 'ManyToOne');
 
           // The constraint may use multiple columns.  Add each set.
           ownRelations
             .filter(oRel => oRel.constraintName === rel.constraintName)
-            .forEach(rel => modelRel.addColumns(rel.columnName, rel.referencedColumnName));
+            .forEach(rel => modelRel
+              .addColumns(
+                locTable.getColumnByName(rel.columnName),
+                refTable.getColumnByName(rel.referencedColumnName)));
 
           constraints.add(rel.constraintName);
-          modelTable.addRelationship(modelRel);
+          locTable.addRelationship(modelRel);
         }
       }
 
       // These are the relationships that reference this table.
       const refRelations = fks
-        .filter(key => key.referencedTableName === table.name);
+        .filter(key => key.referencedTableName === locTable.getName());
 
       for (let rel of refRelations) {
         if (!constraints.has(rel.constraintName)) {
-          const modelRel = new ModelRelationship();
+          const refTbl   = modelTables.get(rel.tableName);
+          const modelRel = new ModelRelationship(this.relFormatter);
 
-          modelRel.setTables(rel.referencedTableName, rel.tableName, 'OneToMany');
+          modelRel.setTables(locTable, refTbl, 'OneToMany');
 
           // The constraint may use multiple columns.  Add each set.
           refRelations
             .filter(oRel => oRel.constraintName === rel.constraintName)
-            .forEach(rel => modelRel.addColumns(rel.referencedColumnName, rel.columnName));
+            .forEach(rel => modelRel
+              .addColumns(
+                locTable.getColumnByName(rel.referencedColumnName),
+                refTbl.getColumnByName(rel.columnName)));
 
           constraints.add(rel.constraintName);
-          modelTable.addRelationship(modelRel);
+          locTable.addRelationship(modelRel);
         }
       }
     }
 
-    const modelStrings = modelTables
+    const modelStrings = Array.from(modelTables.values())
       .map(tbl => tbl.toString());
 
     return modelStrings;

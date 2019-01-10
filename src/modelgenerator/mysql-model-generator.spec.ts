@@ -95,9 +95,9 @@ export class User {
   lastName: string;
 
   @Column({name: 'userID', isPrimary: true, isGenerated: true, isNullable: false})
-  userId: number;
+  id: number;
 
-  @OneToMany<User, PhoneNumber>(() => PhoneNumber, (l, r) => [l.userId, r.userId])
+  @OneToMany<User, PhoneNumber>(() => PhoneNumber, (l, r) => [l.id, r.userId])
   phoneNumbers: PhoneNumber[];
 }
 `);
@@ -113,7 +113,7 @@ export class PhoneNumber {
   phoneNumber: string;
 
   @Column({name: 'phoneNumberID', isPrimary: true, isGenerated: true, isNullable: false})
-  phoneNumberId: number;
+  id: number;
 
   @Column({maxLength: 255})
   type: string;
@@ -121,7 +121,7 @@ export class PhoneNumber {
   @Column({name: 'userID', isNullable: false})
   userId: number;
 
-  @ManyToOne<PhoneNumber, User>(() => User, (l, r) => [l.userId, r.userId])
+  @ManyToOne<PhoneNumber, User>(() => User, (l, r) => [l.userId, r.id])
   user: User;
 }
 `);

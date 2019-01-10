@@ -1,6 +1,6 @@
 {
   "name": "formn",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "formn, pronounced foreman, is an object-relational mapper for Node.js.  What's the \"F\" stand for?  It depends on your mood.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

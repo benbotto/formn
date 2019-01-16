@@ -124,12 +124,23 @@ export class ModelTable {
    * Get the model imports string, which may be empty.
    */
   getModelImportsString(): string {
-    if (this.relationships.length === 0)
-      return '';
+    const unqRefSet = new Set();
+    const refs      = [];
 
-    return this.relationships
-      .map(rel => rel.getReferencedTable())
-      .map(refTbl => `import { ${refTbl.getClassName()} } from './${refTbl.getImportName()}';`)
+    for (let i = 0; i < this.relationships.length; ++i) {
+      const ref     = this.relationships[i].getReferencedTable();
+      const impName = ref.getImportName();
+
+      // Exclude self-referencing imports, and don't import the same entity
+      // multiple times.
+      if (impName !== this.getImportName() && !unqRefSet.has(impName)) {
+        unqRefSet.add(impName);
+        refs.push(ref);
+      }
+    }
+
+    return refs
+      .map(ref => `import { ${ref.getClassName()} } from './${ref.getImportName()}';`)
       .join('\n');
   }
 

@@ -22,7 +22,9 @@ export class DefaultTableFormatter implements TableFormatter {
   formatImportName(table: ModelTable): string {
     const className = this.formatClassName(table);
 
-    return kebabCase(className) + '.entity';
+    if (table.getSchema())
+      return `${kebabCase(table.getSchema())}-${kebabCase(className)}.entity`;
+    return `${kebabCase(className)}.entity`;
   }
 }
 

@@ -25,6 +25,13 @@ describe('DefaultTableFormatter()', () => {
       tbl.setName('vehicle_packages');
       expect(tbl.getImportFileName()).toBe('vehicle-package.entity.ts');
     });
+
+    it('has a schema prefix if there\'s a schema.', () => {
+      const tbl = new ModelTable(formatter);
+      tbl.setName('vehicle_packages');
+      tbl.setSchema('a_schema');
+      expect(tbl.getImportFileName()).toBe('a-schema-vehicle-package.entity.ts');
+    });
   });
 });
 

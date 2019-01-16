@@ -1,4 +1,5 @@
 import * as mysql2 from 'mysql2/promise';
+import * as fs from 'fs';
 
 import { initDB } from '../test/';
 
@@ -78,7 +79,9 @@ describe('MySQLModelGenerator()', () => {
       generator
         .generateModels('formn_test_db')
         .then(models => {
-          expect(models[0]).toBe(
+          const modelStrings = models.map(model => model.toString());
+
+          expect(modelStrings[0]).toBe(
 `import { Table, Column, OneToMany } from 'formn';
 
 import { PhoneNumber } from './phone-number.entity';
@@ -102,7 +105,7 @@ export class User {
 }
 `);
 
-          expect(models[1]).toBe(
+          expect(modelStrings[1]).toBe(
 `import { Table, Column, ManyToOne } from 'formn';
 
 import { User } from './user.entity';
@@ -125,6 +128,33 @@ export class PhoneNumber {
   user: User;
 }
 `);
+          done();
+        });
+    });
+
+    it('writes the files to disk.', (done) => {
+      const files: string[] = [];
+
+      spyOn(fs, 'writeFile').and.callFake((file: string, data: string, opts: any, callback: Function) => {
+        files.push(file);
+        callback();
+      });
+
+      spyOn(fs, 'stat').and.callFake((path: string, callback: Function) =>
+        callback(new Error('file not found...')));
+
+      spyOn(fs, 'mkdir').and.callFake((path: string, opts: object, callback: Function) =>
+        callback());
+
+      mockPool.query.and.returnValue(Promise.resolve([[...usersSchema, ...phoneNumbersSchema]]));
+
+      generator
+        .generateModels('formn_test_db', '/fake/path')
+        .then(models => {
+          expect(fs.mkdir).toHaveBeenCalled();
+          expect(files.length).toBe(2);
+          expect(files[0]).toBe('/fake/path/user.entity.ts');
+          expect(files[1]).toBe('/fake/path/phone-number.entity.ts');
           done();
         });
     });

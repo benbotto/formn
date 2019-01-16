@@ -3,8 +3,8 @@ import { MySQLDataContext } from '../datacontext/';
 import { ParameterType } from '../query/';
 
 import {
-  TableFormatter, DefaultTableFormatter, MySQLTable, MySQLColumn,
-  MySQLKeyColumnUsage, ModelTable, ModelColumn, ModelRelationship,
+  ModelGenerator, TableFormatter, DefaultTableFormatter, MySQLTable,
+  MySQLColumn, MySQLKeyColumnUsage, ModelTable, ModelColumn, ModelRelationship,
   MySQLDataTypeMapper, ColumnFormatter, DefaultColumnFormatter,
   RelationshipFormatter, DefaultRelationshipFormatter
 } from './';
@@ -13,7 +13,7 @@ import {
  * A model generator for MySQL that uses database metadata stored in the
  * INFORMATION_SCHEMA tables to generate [[Table]]-decorated entities.
  */
-export class MySQLModelGenerator {
+export class MySQLModelGenerator extends ModelGenerator {
   /**
    * Initialize the model generator.
    * @param dataContext - A [[MySQLDataContext]] instance that is connected to
@@ -28,18 +28,22 @@ export class MySQLModelGenerator {
    */
   constructor(
     private dataContext: MySQLDataContext,
-    private tableFormatter: TableFormatter = new DefaultTableFormatter(),
-    private columnFormatter: ColumnFormatter = new DefaultColumnFormatter(),
-    private relFormatter: RelationshipFormatter = new DefaultRelationshipFormatter()) {
+    protected tableFormatter: TableFormatter = new DefaultTableFormatter(),
+    protected columnFormatter: ColumnFormatter = new DefaultColumnFormatter(),
+    protected relFormatter: RelationshipFormatter = new DefaultRelationshipFormatter()) {
+
+    super(tableFormatter, columnFormatter, relFormatter);
   }
 
   /**
-   * Generate models for the provided database.  The models are returned as an
-   * array of strings.
+   * Generate models for the provided database.
    * @param dbName - A database name.  A model will be generated for each table
    * in the database.
+   * @param entDir - A path to which entity files will be saved.
+   * @return An array of [[ModelTable]].  Calling [[ModelTable.toString()]]
+   * will return the entity class definition.
    */
-  async generateModels(dbName: string): Promise<string[]> {
+  async generateModels(dbName: string, entDir: string = null): Promise<ModelTable[]> {
     // Map of table name to ModelTable.
     const modelTables: Map<string, ModelTable> = new Map();
 
@@ -141,10 +145,13 @@ export class MySQLModelGenerator {
       }
     }
 
-    const modelStrings = Array.from(modelTables.values())
-      .map(tbl => tbl.toString());
+    const modelsArr = Array.from(modelTables.values());
 
-    return modelStrings;
+    // Write the models to disk if needed.
+    if (entDir)
+      await this.writeModels(modelsArr, entDir);
+
+    return modelsArr;
   }
 }
 

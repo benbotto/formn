@@ -14,5 +14,6 @@ export * from './entity/mysql/mysql-data-type-mapper';
 export * from './model/model-table';
 export * from './model/model-column';
 export * from './model/model-relationship';
+export * from './model-generator';
 export * from './mysql-model-generator';
 

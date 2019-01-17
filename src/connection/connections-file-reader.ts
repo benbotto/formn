@@ -18,12 +18,13 @@ export class ConnectionsFileReader {
 
   /**
    * Get (and verify) the connection options in a file.  The file should
-   * contain an array of [[ConnectionOption]]s.  Each [[ConnectionOption]] key
-   * in the file may be an object in the form {ENV: "<ENV_VAR_NAME>"}, which
-   * allows for the use of environment variables.
+   * contain an array of [[ConnectionOptions]].  Alternatively,
+   * [[ConnectionOptions]] keys in the file may be objects in the form {ENV:
+   * "&lt;ENV_VAR_NAME&gt;"}, which allows for the use of environment
+   * variables.
    * @param connFile - A path to a connections.json file containing an array of
    * connection details.
-   * @return An array of [[ConnectionOption]] objects.
+   * @return An array of [[ConnectionOptions]] objects.
    */
   readConnectionOptions(connFile: string): ConnectionOptions[] {
     const connOpts  = [];

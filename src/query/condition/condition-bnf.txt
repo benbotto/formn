@@ -3,7 +3,7 @@
 <null-comparison>          ::= <null-comparison-operator> ":" "{" <column> ":" <nullable> "}"
 <in-comparison>            ::= <in-comparison-operator> ":" "{" <column> ":" "[" <value> {"," <value>} "]" "}"
 <logical-condition>        ::= <boolean-operator> ":" "[" <condition> {"," <condition>} "]"
-<comparison-operator>      ::= "$eq" | "$neq" | "$lt" | "$lte" | "$gt" | "$gte" | "$like" | "$notlike"
+<comparison-operator>      ::= "$eq" | "$neq" | "$lt" | "$lte" | "$gt" | "$gte" | "$like" | "$notLike"
 <in-comparison-operator>   ::= "$in" | "$notIn"
 <null-comparison-operator> ::= "$is" | "$isnt"
 <boolean-operator>         ::= "$and" | "$or"

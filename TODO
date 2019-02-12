@@ -9,20 +9,6 @@ A thought I had is that each from/join could add the alias to an object, so abov
 
 Here's what I'm thinking for the condition builder, set as a to-do item in ndm.
  
-const cb = new ConditionBuilder();
-
-cb.and(
-  cb.eq('u.name', 'Ben'),
-  cb.gt('u.dob', '2014-01-01')
-)
-
-Returns a 
-
-class ParameterizedCondition {
-  condition: object;
-  params: object;
-}
-
 It would be nice if empty conditions returned empty strings, but it's kind of complex to implement.  Eg {} = '', {$and: []} = '', {$in: {col: []}} = ''
 
 For MSSQL support:

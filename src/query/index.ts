@@ -5,6 +5,8 @@ export * from './condition/lexer-token';
 export * from './condition/parameter-list';
 export * from './condition/parameter-type';
 export * from './condition/parse-tree';
+export * from './condition/parameterized-condition';
+export * from './condition/condition-builder';
 
 export * from './query';
 export * from './mutate-model';

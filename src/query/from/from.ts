@@ -4,7 +4,7 @@ import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
   TableType } from '../../metadata/';
 
 import { Escaper, ParameterType, ParameterList, FromMeta, FromTableMeta,
-  JoinType } from '../';
+  JoinType, ParameterizedCondition } from '../';
 
 /**
  * Represents the FROM portion of a query, with any JOINs and optionally a
@@ -72,6 +72,23 @@ export class From {
    * @param alias - Alias of the joined-in table.
    * @param fqParentProperty - The fully-qualified property name on the parent
    * Entity to which this Entity will be mapped.
+   * @param joinCond - A [[ParameterizedCondition]] instance.  See
+   * [[ConditionBuilder]].
+   */
+  join<J>(
+    joinType: JoinType,
+    Entity: TableType,
+    alias: string,
+    fqParentProperty: string,
+    joinCond?: ParameterizedCondition): this;
+
+  /**
+   * Join in a table.
+   * @param joinType - How to join the two tables (INNER JOIN, LEFT OUTER JOIN).
+   * @param Entity - The [[Table]]-decorated Entity to join in.
+   * @param alias - Alias of the joined-in table.
+   * @param fqParentProperty - The fully-qualified property name on the parent
+   * Entity to which this Entity will be mapped.
    * @param joinCond - An optional condition that describes how to join the two
    * tables.  If not supplied then the join condition will be derived.
    * @param joinParams - An optional set of parameters that will be used to
@@ -83,6 +100,14 @@ export class From {
     alias: string,
     fqParentProperty: string,
     joinCond?: object,
+    joinParams?: ParameterType): this;
+
+  join<J>(
+    joinType: JoinType,
+    Entity: TableType,
+    alias: string,
+    fqParentProperty: string,
+    joinCond?: object | ParameterizedCondition,
     joinParams?: ParameterType): this {
 
     // Get the parent alias and property name.
@@ -124,6 +149,10 @@ export class From {
       // If there is more than one condition then they're AND'd.
       joinCond = conds.length === 1 ? conds[0] : {$and: conds};
     }
+    else if (joinCond instanceof ParameterizedCondition) {
+      joinParams = joinCond.getParams();
+      joinCond   = joinCond.getCond();
+    }
 
     // Store the metadata about the table.
     this.fromMeta
@@ -139,7 +168,20 @@ export class From {
     Entity: TableType,
     alias: string,
     fqParentProperty: string,
+    joinCond?: ParameterizedCondition): this;
+
+  innerJoin<J>(
+    Entity: TableType,
+    alias: string,
+    fqParentProperty: string,
     joinCond?: object,
+    joinParams?: ParameterType): this;
+
+  innerJoin<J>(
+    Entity: TableType,
+    alias: string,
+    fqParentProperty: string,
+    joinCond?: object | ParameterizedCondition,
     joinParams?: ParameterType): this {
 
     return this
@@ -153,7 +195,20 @@ export class From {
     Entity: TableType,
     alias: string,
     fqParentProperty: string,
+    joinCond?: ParameterizedCondition): this;
+
+  leftOuterJoin<J>(
+    Entity: TableType,
+    alias: string,
+    fqParentProperty: string,
     joinCond?: object,
+    joinParams?: ParameterType): this;
+
+  leftOuterJoin<J>(
+    Entity: TableType,
+    alias: string,
+    fqParentProperty: string,
+    joinCond?: object | ParameterizedCondition,
     joinParams?: ParameterType): this {
 
     return this
@@ -166,11 +221,26 @@ export class From {
    * @param cond - The where condition object.
    * @param params - Any parameter replacements in the condition object.
    */
-  where(cond: object, params: ParameterType): this {
+  where(cond: object, params: ParameterType): this;
+
+  /**
+   * Add a WHERE condition to the query.  This method can only be called one
+   * time (if called a second time an exception is raised).
+   * @param cond - A [[ParameterizedCondition]] instance.  See
+   * [[ConditionBuilder]].
+   */
+  where(cond: ParameterizedCondition): this;
+
+  where(cond: object | ParameterizedCondition, params?: ParameterType): this {
     const tblMeta = this.getBaseTableMeta();
 
     assert(tblMeta.cond === null,
       'where already performed on query.');
+
+    if (cond instanceof ParameterizedCondition) {
+      params = cond.getParams();
+      cond   = cond.getCond();
+    }
 
     // Noop if cond is an empty object.
     if (Object.keys(cond).length === 0 && cond.constructor === Object)

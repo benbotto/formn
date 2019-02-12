@@ -1,7 +1,7 @@
 import { metaFactory, TableStore, ColumnStore, RelationshipStore,
   PropertyMapStore, TableType } from '../../metadata/';
 
-import { MySQLEscaper } from '../';
+import { MySQLEscaper, ConditionBuilder } from '../';
 
 import { User, PhoneNumber, Photo, UserXProduct, Product, Vehicle,
   VehiclePackage, initDB } from '../../test/';
@@ -101,6 +101,17 @@ describe('From()', () => {
       expect(meta.condStr).toBe('`u`.`userID` = `pn`.`phoneNumberID`');
     });
 
+    it('lets the join condition be overridden by a ParameterizedCondition instance.', () => {
+      const cb   = new ConditionBuilder();
+      const cond = cb.eq('u.id', 'pn.id');
+      const from = getFrom(User, 'u')
+        .join('INNER JOIN', PhoneNumber, 'pn', 'u.phoneNumbers', cond);
+
+      const meta = from.getJoinMeta()[0];
+      expect(meta.cond).toEqual({$eq: {'u.id': 'pn.id'}});
+      expect(meta.condStr).toBe('`u`.`userID` = `pn`.`phoneNumberID`');
+    });
+
     it('stores the join parameters if supplied.', () => {
       const cond = {
         $and: [
@@ -160,6 +171,27 @@ describe('From()', () => {
 
       expect(() => from.where(cond, {me: 42}))
         .toThrowError('where already performed on query.');
+    });
+
+    it('accepts a ParameterizedCondition.', () => {
+      const cb   = new ConditionBuilder();
+      const cond = cb.or(
+        cb.eq('u.id', ':me', 42),
+        cb.eq('u.id', ':she', 41));
+
+      const from = getFrom(User, 'u')
+        .where(cond);
+
+      const meta = from.getBaseTableMeta();
+      expect(meta.cond).toEqual({
+        $or: [
+          {$eq: {'u.id': ':me'}},
+          {$eq: {'u.id': ':she'}},
+        ]
+      });
+      expect(meta.condStr).toBe('(`u`.`userID` = :me OR `u`.`userID` = :she)');
+      expect(from.getParameterList().getParams().me).toBe(42);
+      expect(from.getParameterList().getParams().she).toBe(41);
     });
   });
 

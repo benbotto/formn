@@ -120,5 +120,14 @@ export abstract class DataContext {
    * @typeparam P Pool type for the underlying database driver.
    */
   abstract beginTransaction<C, P>(transFunc: (dc: DataContext) => Promise<any>): Promise<void>;
+
+  /**
+   * Rollback a transaction.  This method is only implemented in concrete
+   * [[DataContext]]s that are tied to a transaction.  For example,
+   * [[MySQLTransactionalDataContext]].
+   */
+  rollbackTransaction(): Promise<void> {
+    return Promise.reject(new Error('rollbackTransaction not implemented.'));
+  }
 }
 

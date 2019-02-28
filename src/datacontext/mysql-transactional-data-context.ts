@@ -49,54 +49,54 @@ export class MySQLTransactionalDataContext extends MySQLDataContext {
   }
 
   /**
-   * Resolve with this [[MySQLTransactionalDataContext]] instance, beginning
-   * the transaction if it's not in the "STARTED" state.  For transaction
-   * states other than "READY" and "STARTED" the returned promise shall be
-   * rejected with an error.  [[MySQLTransactionManager]] for more details
-   * about transaction support.
+   * Call transFunc with this [[MySQLTransactionalDataContext]] instance,
+   * beginning the transaction if it's not in the "STARTED" state.  For
+   * transaction states other than "READY" and "STARTED" the returned promise
+   * shall be rejected with an error.  See [[MySQLTransactionManager]] for more
+   * details about transaction support.
    * @param transFunc - See [[MySQLDataContext.beginTransaction]].
+   * @typeparam R transFunc shall be resolved with type R, and this function
+   * will proxy the return when transFunc completes.
    */
-  beginTransaction(transFunc: (dc: MySQLTransactionalDataContext) => Promise<any>): Promise<void> {
-    let err: Error;
-    let beginProm: Promise<any>;
+  async beginTransaction<R>(transFunc: (dc: MySQLTransactionalDataContext) => Promise<R>): Promise<R> {
     const transState = this.transMgr.getTransactionState();
 
     if (transState === 'READY') {
-      beginProm = this.transMgr
-        .begin()
-        // Initialize the query executer using the transaction's single connection.
-        .then(() => this.executer = new MySQLExecuter(this.transMgr.getConnection()));
+      await this.transMgr.begin();
+
+      // Initialize the query executer using the transaction's single connection.
+      this.executer = new MySQLExecuter(this.transMgr.getConnection());
     }
-    else if (transState === 'STARTED') {
-      beginProm = Promise.resolve();
-    }
-    else {
-      return Promise
-        .reject(
-          new Error(`MySQLTransactionalDataContext.beginTransaction() called while transaction state is "${transState}."`));
+    else if (transState !== 'STARTED') {
+      throw new Error(
+        `MySQLTransactionalDataContext.beginTransaction() called while transaction state is "${transState}."`);
     }
 
     // Once the transaction is started, call the user-supplied method with this
-    // DataContext instance.
-    return beginProm
-      .then(() => transFunc(this))
-      .then(() => {
-        // If the user-supplied function resolves and the user did not manually
-        // roll back the transaction then commit.
-        if (this.transMgr.getTransactionState() !== 'ROLLED_BACK')
-          return this.transMgr.commit();
-      })
-      .catch(e => {
-        // Rollback the transaction on error.
-        err = e;
+    // DataContext instance.  This function (beginTransaction) shall be resolved
+    // with the return of transFunc.
+    let tfRet: R;
 
-        // The transaction may already be rolled back due to a sub-transaction.
-        if (this.transMgr.getTransactionState() !== 'ROLLED_BACK')
-          return this.transMgr.rollback();
+    try {
+      tfRet = await transFunc(this);
+    }
+    catch (err) {
+      // If an exception occurs in the user-supplied function, then rollback
+      // the transaction.  Unless, that is, the transaction was already rolled
+      // back manually or via a sub-transaction).
+      if (this.transMgr.getTransactionState() !== 'ROLLED_BACK')
+        await this.transMgr.rollback();
 
-        return Promise.reject(e);
-      })
-      .then(() => err ? Promise.reject(err) : Promise.resolve());
+      throw err;
+    }
+
+    // If the user-supplied function resolves and the user did not manually
+    // roll back the transaction then commit.
+    if (this.transMgr.getTransactionState() !== 'ROLLED_BACK')
+      await this.transMgr.commit();
+
+    // Proxy the return of the user-supplied function.
+    return tfRet;
   }
 
   /**

@@ -121,11 +121,13 @@ export class MySQLDataContext extends DataContext {
    * the [[MySQLTransactionalDataContext]] will be part of the transaction.
    * The user-supplied function should return a promise.  If that promise is
    * resolved then the transaction will be committed, otherwise it will be
-   * rolled back.
+   * rolled back.  The return of transFunc is returned from beginTransaction.
    * @return A promise that will be rejected if there is an error when
    * beginning the transaction.
+   * @typeparam R transFunc shall be resolved with type R, and this function
+   * will proxy the return when transFunc completes.
    */
-  beginTransaction(transFunc: (dc: MySQLTransactionalDataContext) => Promise<any>): Promise<void> {
+  beginTransaction<R>(transFunc: (dc: MySQLTransactionalDataContext) => Promise<R>): Promise<R> {
     const transMgr = new MySQLTransactionManager(this.connMan);
     const transDC  = new MySQLTransactionalDataContext(transMgr);
 

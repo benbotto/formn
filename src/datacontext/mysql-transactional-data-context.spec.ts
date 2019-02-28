@@ -87,7 +87,7 @@ describe('MySQLTransactionalDataContext()', () => {
 
     it('does not beging the transaction if the transaction state is "STARTED."', (done) => {
       transMgr.getTransactionState.and.returnValue('STARTED');
-      
+
       dataContext
         .beginTransaction(() => {
           expect(transMgr.begin).not.toHaveBeenCalled();
@@ -98,7 +98,7 @@ describe('MySQLTransactionalDataContext()', () => {
 
     it('throws an error if the transaction state is not "READY" or "STARTED."', (done) => {
       transMgr.getTransactionState.and.returnValue('COMMITTED');
-      
+
       dataContext
         .beginTransaction(() => Promise.resolve())
         .catch(err => {
@@ -126,7 +126,7 @@ describe('MySQLTransactionalDataContext()', () => {
           expect(transMgr.commit).not.toHaveBeenCalled();
           done();
         });
-      
+
     });
 
     it('rolls back the transaction if the user-supplied transaction function returns a rejected promise.', (done) => {
@@ -155,6 +155,17 @@ describe('MySQLTransactionalDataContext()', () => {
           done();
         });
     });
+
+    it('resolves with the return value of the user-supplied function.', (done) => {
+      const ret = {resolved: 'from user-supplied function.'};
+
+      dataContext
+        .beginTransaction(() => Promise.resolve(ret))
+        .then(val => {
+          expect(val).toBe(ret);
+          done();
+        });
+    });
   });
 
   describe('.rollbackTransaction()', () => {
@@ -165,7 +176,6 @@ describe('MySQLTransactionalDataContext()', () => {
           expect(transMgr.rollback).toHaveBeenCalled();
           done()
         });
-      
     });
   });
 });

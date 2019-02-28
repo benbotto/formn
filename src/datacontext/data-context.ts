@@ -113,13 +113,16 @@ export abstract class DataContext {
    * [[DataContext]] instance.  All queries executed against the
    * [[DataContext]] will be part of the transaction.  The user-supplied
    * function should return a promise.  If that promise is resolved then the
-   * transaction will be committed, otherwise it will be rolled back.
+   * transaction will be committed, otherwise it will be rolled back.  The
+   * return of transFunc is returned from beginTransaction.
    * @return A promise that will be rejected if there is an error when
    * beginning the transaction.
    * @typeparam C Connection type for the underlying database driver.
    * @typeparam P Pool type for the underlying database driver.
+   * @typeparam R transFunc shall be resolved with type R, and this function
+   * will proxy the return when transFunc completes.
    */
-  abstract beginTransaction<C, P>(transFunc: (dc: DataContext) => Promise<any>): Promise<void>;
+  abstract beginTransaction<C, P, R>(transFunc: (dc: DataContext) => Promise<R>): Promise<R>;
 
   /**
    * Rollback a transaction.  This method is only implemented in concrete

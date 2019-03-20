@@ -16,7 +16,7 @@ export function Column(options: ColumnMetaOptions = new ColumnMetaOptions()) {
 
     metaFactory
       .getColumnStore()
-      .addColumnMetadata(new ColumnMetadata(target.constructor, propName, dataType, options));
+      .addColumnMetadata(new ColumnMetadata(target.constructor, propName, dataType.name, options));
 
     metaFactory
       .getPropertyMapStore()

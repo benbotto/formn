@@ -16,6 +16,7 @@ export class ColumnMetadata {
   isNullable: boolean;
   dataType: string;
   maxLength?: number;
+  sqlDataType?: string;
   converter?: Converter;
 
   /**
@@ -45,6 +46,7 @@ export class ColumnMetadata {
     this.maxLength    = options.maxLength;
     this.isNullable   = options.isNullable === undefined ? true : options.isNullable;
     this.converter    = options.converter;
+    this.sqlDataType  = options.sqlDataType;
   }
 
   /**

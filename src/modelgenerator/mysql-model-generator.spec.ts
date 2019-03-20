@@ -88,16 +88,16 @@ import { PhoneNumber } from './phone-number.entity';
 
 @Table({name: 'users'})
 export class User {
-  @Column({hasDefault: true, isNullable: false})
+  @Column({hasDefault: true, isNullable: false, sqlDataType: 'timestamp'})
   createdOn: Date;
 
-  @Column({maxLength: 255})
+  @Column({maxLength: 255, sqlDataType: 'varchar'})
   firstName: string;
 
-  @Column({maxLength: 255})
+  @Column({maxLength: 255, sqlDataType: 'varchar'})
   lastName: string;
 
-  @Column({name: 'userID', isPrimary: true, isGenerated: true, isNullable: false})
+  @Column({name: 'userID', isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'})
   id: number;
 
   @OneToMany<User, PhoneNumber>(() => PhoneNumber, (l, r) => [l.id, r.userId])
@@ -112,16 +112,16 @@ import { User } from './user.entity';
 
 @Table({name: 'phone_numbers'})
 export class PhoneNumber {
-  @Column({isNullable: false, maxLength: 255})
+  @Column({isNullable: false, maxLength: 255, sqlDataType: 'varchar'})
   phoneNumber: string;
 
-  @Column({name: 'phoneNumberID', isPrimary: true, isGenerated: true, isNullable: false})
+  @Column({name: 'phoneNumberID', isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'})
   id: number;
 
-  @Column({maxLength: 255})
+  @Column({maxLength: 255, sqlDataType: 'varchar'})
   type: string;
 
-  @Column({name: 'userID', isNullable: false})
+  @Column({name: 'userID', isNullable: false, sqlDataType: 'int'})
   userId: number;
 
   @ManyToOne<PhoneNumber, User>(() => User, (l, r) => [l.userId, r.id])

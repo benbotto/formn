@@ -70,6 +70,7 @@ export class MySQLModelGenerator extends ModelGenerator {
         modelCol
           .setDataType(MySQLDataTypeMapper
             .getJSType(column.dataType, column.columnType));
+        modelCol.setSQLDataType(column.dataType);
         modelCol.setName(column.name);
         modelCol.setIsPrimary(column.isPrimary);
         modelCol.setMaxLength(column.maxLength);

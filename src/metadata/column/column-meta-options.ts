@@ -38,5 +38,10 @@ export class ColumnMetaOptions {
    * Optional Converter to be applied on save/retrieve.
    */
   converter?: Converter;
+
+  /**
+   * The datatype in the database.
+   */
+  sqlDataType?: string;
 }
 

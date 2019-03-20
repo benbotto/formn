@@ -75,6 +75,15 @@ export class ModelColumn {
   }
 
   /**
+   * The datatype in the database.
+   */
+  setSQLDataType(sqlDataType: string): this {
+    this.metaOptions.sqlDataType = sqlDataType;
+
+    return this;
+  }
+
+  /**
    * Data type for the column.
    */
   setDataType(dataType: string): this {
@@ -133,6 +142,13 @@ export class ModelColumn {
   }
 
   /**
+   * Get the database datatype.
+   */
+  getSQLDataType(): string {
+    return this.metaOptions.sqlDataType;
+  }
+
+  /**
    * Data type for the column.
    */
   getDataType(): string {
@@ -150,6 +166,7 @@ export class ModelColumn {
     const hasDefault  = this.getHasDefault();
     const isNullable  = this.getIsNullable();
     const maxLength   = this.getMaxLength();
+    const sqlDataType = this.getSQLDataType();
     const opts        = [];
 
     if (name && name !== propName)
@@ -169,6 +186,9 @@ export class ModelColumn {
 
     if (maxLength)
       opts.push(`maxLength: ${maxLength}`);
+
+    if (sqlDataType)
+      opts.push(`sqlDataType: '${sqlDataType}'`);
 
     if (opts.length)
       return `  @Column({${opts.join(', ')}})`;

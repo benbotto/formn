@@ -62,6 +62,11 @@ describe('ModelColumn()', () => {
       col.setMaxLength(255);
       expect(col.getDecoratorString()).toBe('  @Column({maxLength: 255})');
     });
+
+    it('includes the sqlDataType.', () => {
+      col.setSQLDataType('tinyint');
+      expect(col.getDecoratorString()).toBe('  @Column({sqlDataType: \'tinyint\'})');
+    });
   });
 
   describe('.getPropertyString()', () => {

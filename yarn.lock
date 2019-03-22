@@ -44,6 +44,12 @@
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
 
+"@types/moment@^2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@types/moment/-/moment-2.13.0.tgz#604ebd189bc3bc34a1548689404e61a2a4aac896"
+  dependencies:
+    moment "*"
+
 "@types/mysql2@types/mysql2":
   version "1.0.0"
   resolved "https://codeload.github.com/types/mysql2/tar.gz/e2be194d8db7a1a64612e5f645d5cad8223328ab"
@@ -188,6 +194,19 @@ braces@^2.3.0, braces@^2.3.1:
     snapdragon-node "^2.0.1"
     split-string "^3.0.2"
     to-regex "^3.0.1"
+
+bsy-error@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/bsy-error/-/bsy-error-2.0.0.tgz#193207e26734981db6dcc49316978bc87a40bce8"
+
+bsy-validation@2.x.x:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/bsy-validation/-/bsy-validation-2.2.0.tgz#ee6502565dbabd36fa4886cfa051aea6f51cc578"
+  dependencies:
+    "@types/moment" "^2.13.0"
+    bsy-error "~2.0.0"
+    moment "^2.24.0"
+    typescript "~3.3.3333"
 
 buffer-from@^1.0.0, buffer-from@^1.1.0:
   version "1.1.1"
@@ -1036,6 +1055,10 @@ mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
+moment@*, moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -1707,6 +1730,10 @@ typedoc@~0.13.0:
 typescript@3.1.x, typescript@~3.1.6:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
+
+typescript@~3.3.3333:
+  version "3.3.4000"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.4000.tgz#76b0f89cfdbf97827e1112d64f283f1151d6adf0"
 
 uglify-js@^3.1.4:
   version "3.4.9"

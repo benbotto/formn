@@ -28,6 +28,7 @@
   "dependencies": {
     "@types/mysql2": "types/mysql2",
     "@types/pluralize": "~0.0.29",
+    "bsy-validation": "2.x.x",
     "change-case": "~3.0.2",
     "mysql2": "~1.6.4",
     "pluralize": "~7.0.0",

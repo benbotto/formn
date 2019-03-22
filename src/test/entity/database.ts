@@ -21,16 +21,16 @@ export function initDB() {
   metaFactory.clear();
 
   // User.
-  colDec = Column({name: 'userID', isPrimary: true, isGenerated: true});
+  colDec = Column({name: 'userID', isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'});
   colDec(User.prototype, 'id');
 
-  colDec = Column({name: 'firstName', maxLength: 255});
+  colDec = Column({name: 'firstName', maxLength: 255, sqlDataType: 'varchar'});
   colDec(User.prototype, 'first');
 
-  colDec = Column({name: 'lastName', maxLength: 255});
+  colDec = Column({name: 'lastName', maxLength: 255, sqlDataType: 'varchar'});
   colDec(User.prototype, 'last');
 
-  colDec = Column();
+  colDec = Column({hasDefault: true, isNullable: false, sqlDataType: 'timestamp'});
   colDec(User.prototype, 'createdOn');
 
   relDec = OneToMany<User, PhoneNumber>(() => PhoneNumber, (u, pn) => [u.id, pn.userID]);
@@ -43,16 +43,16 @@ export function initDB() {
   tblDec(User);
 
   // PhoneNumber.
-  colDec = Column({name: 'phoneNumberID', isPrimary: true, isGenerated: true});
+  colDec = Column({name: 'phoneNumberID', isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'});
   colDec(PhoneNumber.prototype, 'id');
 
-  colDec = Column();
+  colDec = Column({isNullable: false, maxLength: 255, sqlDataType: 'varchar'});
   colDec(PhoneNumber.prototype, 'phoneNumber');
 
-  colDec = Column();
+  colDec = Column({maxLength: 255, sqlDataType: 'varchar'});
   colDec(PhoneNumber.prototype, 'type');
 
-  colDec = Column();
+  colDec = Column({name: 'userID', isNullable: false, sqlDataType: 'int'});
   colDec(PhoneNumber.prototype, 'userID');
 
   relDec = ManyToOne<PhoneNumber, User>(() => User, (pn, u) => [pn.userID, u.id]);
@@ -62,16 +62,16 @@ export function initDB() {
   tblDec(PhoneNumber);
 
   // Product.
-  colDec = Column({name: 'productID', isPrimary: true, isGenerated: true});
+  colDec = Column({name: 'productID', isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'});
   colDec(Product.prototype, 'id');
 
-  colDec = Column();
+  colDec = Column({isNullable: false, maxLength: 255, sqlDataType: 'varchar'});
   colDec(Product.prototype, 'description');
 
-  colDec = Column();
+  colDec = Column({hasDefault: true, isNullable: false, sqlDataType: 'tinyint'});
   colDec(Product.prototype, 'isActive');
 
-  colDec = Column();
+  colDec = Column({name: 'primaryPhotoID', sqlDataType: 'int'});
   colDec(Product.prototype, 'primaryPhotoID');
 
   relDec = OneToOne<Product, Photo>(() => Photo, (prod, photo) => [prod.primaryPhotoID, photo.id]);
@@ -87,19 +87,19 @@ export function initDB() {
   tblDec(Product);
 
   // Photo.
-  colDec = Column({isPrimary: true, isGenerated: true, name: 'photoID'});
+  colDec = Column({name: 'photoID', isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'});
   colDec(Photo.prototype, 'id');
 
-  colDec = Column();
+  colDec = Column({name: 'photoURL', isNullable: false, maxLength: 1000, sqlDataType: 'varchar'});
   colDec(Photo.prototype, 'photoURL');
 
-  colDec = Column();
+  colDec = Column({name: 'largeThumbnailID', sqlDataType: 'int'});
   colDec(Photo.prototype, 'largeThumbnailID');
 
-  colDec = Column();
+  colDec = Column({name: 'smallThumbnailID', sqlDataType: 'int'});
   colDec(Photo.prototype, 'smallThumbnailID');
 
-  colDec = Column();
+  colDec = Column({name: 'prodID', isNullable: false, sqlDataType: 'int'});
   colDec(Photo.prototype, 'prodID');
 
   relDec = OneToOne<Photo, Photo>(() => Photo, (p1, p2) => [p1.largeThumbnailID, p2.id]);
@@ -115,10 +115,10 @@ export function initDB() {
   tblDec(Photo);
 
   // UserXProduct.
-  colDec = Column({isPrimary: true});
+  colDec = Column({name: 'userID', isPrimary: true, isNullable: false, sqlDataType: 'int'});
   colDec(UserXProduct.prototype, 'userID');
 
-  colDec = Column({isPrimary: true});
+  colDec = Column({name: 'productID', isPrimary: true, isNullable: false, sqlDataType: 'int'});
   colDec(UserXProduct.prototype, 'productID');
 
   relDec = ManyToOne<UserXProduct, User>(() => User, (uxp, u) => [uxp.userID, u.id]);
@@ -131,10 +131,10 @@ export function initDB() {
   tblDec(UserXProduct);
 
   // Vehicle.
-  colDec = Column({isPrimary: true});
+  colDec = Column({isPrimary: true, isNullable: false, maxLength: 255, sqlDataType: 'varchar'});
   colDec(Vehicle.prototype, 'make');
 
-  colDec = Column({isPrimary: true});
+  colDec = Column({isPrimary: true, isNullable: false, maxLength: 255, sqlDataType: 'varchar'});
   colDec(Vehicle.prototype, 'model');
 
   relDec = OneToMany<Vehicle, VehiclePackage>(() => VehiclePackage, (v, vp) => [
@@ -147,19 +147,19 @@ export function initDB() {
   tblDec(Vehicle);
 
   // VehiclePackage.
-  colDec = Column({name: 'vehiclePackageID', isPrimary: true});
+  colDec = Column({name: 'vehiclePackageID', isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'});
   colDec(VehiclePackage.prototype, 'id');
 
-  colDec = Column();
+  colDec = Column({isNullable: false, maxLength: 255, sqlDataType: 'varchar'});
   colDec(VehiclePackage.prototype, 'interior');
 
-  colDec = Column();
+  colDec = Column({isNullable: false, sqlDataType: 'tinyint'});
   colDec(VehiclePackage.prototype, 'heatedSeats');
 
-  colDec = Column();
+  colDec = Column({isNullable: false, maxLength: 255, sqlDataType: 'varchar'});
   colDec(VehiclePackage.prototype, 'make');
 
-  colDec = Column();
+  colDec = Column({isNullable: false, maxLength: 255, sqlDataType: 'varchar'});
   colDec(VehiclePackage.prototype, 'model');
 
   relDec = ManyToOne<VehiclePackage, Vehicle>(() => Vehicle, (vp, v) => [

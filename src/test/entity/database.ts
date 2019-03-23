@@ -1,4 +1,9 @@
-import { User, PhoneNumber, Photo, Product, UserXProduct, Vehicle, VehiclePackage } from '../';
+import { validationFactory, Validate, EmailValidator } from 'bsy-validation';
+
+import {
+  User, PhoneNumber, Photo, Product, UserXProduct, Vehicle, VehiclePackage,
+  TypeTest
+} from '../';
 
 import { Column, Table, ManyToOne, OneToMany, OneToOne, metaFactory } from '../../metadata/';
 
@@ -16,9 +21,10 @@ import {
 // This file clears all the metadata cache and manually decorates each class
 // when testing.
 export function initDB() {
-  let colDec, relDec, tblDec;
+  let colDec, relDec, tblDec, valDec;
 
   metaFactory.clear();
+  validationFactory.clear();
 
   // User.
   colDec = Column({name: 'userID', isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'});
@@ -170,6 +176,30 @@ export function initDB() {
 
   tblDec = Table({name: 'vehicle_packages'});
   tblDec(VehiclePackage);
+
+  // TypeTest.
+  colDec = Column({isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'});
+  colDec(TypeTest.prototype, 'int');
+
+  colDec = Column({maxLength: 10, sqlDataType: 'varchar'});
+  colDec(TypeTest.prototype, 'str');
+
+  colDec = Column({sqlDataType: 'timestamp'});
+  colDec(TypeTest.prototype, 'dte');
+
+  colDec = Column({sqlDataType: 'double'});
+  colDec(TypeTest.prototype, 'num');
+
+  colDec = Column({sqlDataType: 'tinyint'});
+  colDec(TypeTest.prototype, 'bool');
+
+  colDec = Column({maxLength: 50, sqlDataType: 'varchar'});
+  colDec(TypeTest.prototype, 'email');
+  valDec = Validate(new EmailValidator()); // Custom validation.
+  valDec(TypeTest.prototype, 'email');
+
+  tblDec = Table({name: 'type_Test'});
+  tblDec(TypeTest);
 
   // MySQLTable.
   colDec = Column({name: 'TABLE_NAME', isPrimary: true});

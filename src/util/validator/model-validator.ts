@@ -22,7 +22,7 @@ export class ModelValidator extends ObjectValidator {
 
   /**
    * Verify that each property of obj meets the requirements defined by
-   * @[[Column]] decoration, such as data type, maximum length, and
+   * [[Column]] decoration, such as data type, maximum length, and
    * nullability.  If valid, then check any user-defined validation, such as
    * email and phone number validation.  (Reference the bsy-validation package,
    * as the ObjectValidator class is used for validation.)
@@ -45,7 +45,7 @@ export class ModelValidator extends ObjectValidator {
   }
 
   /**
-   * Generate [[ValidationMetadata]] for the Entity.
+   * Generate validation metadata (see bsy-validation) for the Entity.
    */
   getValidationMetadata(Entity: {new(): any}): ValidationMetadata[] {
     const colMeta = metaFactory

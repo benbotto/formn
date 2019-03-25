@@ -17,6 +17,7 @@ export class ModelValidator extends ObjectValidator {
    */
   constructor(
     protected objectValidator: ObjectValidator = new ObjectValidator()) {
+
     super();
   }
 
@@ -41,7 +42,11 @@ export class ModelValidator extends ObjectValidator {
     // checks).
     return super
       .validate(obj, Entity)
-      .then(() => this.objectValidator.validate(obj, Entity));
+      .then(() => {
+        // objectValidator may be null (no chaining).
+        if (this.objectValidator)
+          return this.objectValidator.validate(obj, Entity);
+      });
   }
 
   /**

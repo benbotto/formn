@@ -82,6 +82,24 @@ describe('UpdateModelValidator()', () => {
             done();
           });
       });
+
+      it('rejects if the primary key is null, even if it\'s nullable.', (done) => {
+        const colDec = Column({isPrimary: true, isGenerated: true, isNullable: true, sqlDataType: 'int'});
+        colDec(TypeTest.prototype, 'int');
+
+        const tt = {
+          int: null as any
+        };
+
+        validator
+          .validate(tt, TypeTest)
+          .catch(errList => {
+            expect(errList.errors.length).toBe(1);
+            expect(errList.errors[0].field).toBe('int');
+            expect(errList.errors[0].detail).toBe('"int" must not be null.');
+            done();
+          });
+      });
     });
   });
 });

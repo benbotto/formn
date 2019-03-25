@@ -1,5 +1,6 @@
 import {
-  ObjectValidator, ValidationMetadata, Validator, DefinedValidator
+  ObjectValidator, ValidationMetadata, Validator, DefinedValidator,
+  NotNullValidator
 } from 'bsy-validation';
 
 import { metaFactory, ColumnMetadata } from '../../metadata/';
@@ -24,7 +25,6 @@ export class UpdateModelValidator extends ModelValidator {
     super(objectValidator);
   }
 
-
   /**
    * Generate validation metadata (see bsy-validation) for the Entity.
    */
@@ -37,8 +37,15 @@ export class UpdateModelValidator extends ModelValidator {
       .map((meta: ColumnMetadata) => {
         const validators: Validator[] = [];
 
+        // The PK must be defined.
         if (meta.isPrimary)
           validators.push(new DefinedValidator());
+
+        // If the PK is not nullable then the underlying ModelValidator will
+        // handle the null check.  If it is a nullable column, it's still
+        // required when updating, so add a null check.
+        if (meta.isNullable)
+          validators.push(new NotNullValidator());
 
         return new ValidationMetadata(Entity, meta.mapTo, validators);
       });

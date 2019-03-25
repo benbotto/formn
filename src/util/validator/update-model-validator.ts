@@ -8,9 +8,11 @@ import { ModelValidator } from '../';
 
 /**
  * This class validates an object against a class's validation metadata prior
- * to updating.  Reference [[ModelValidator]] and the bsy-validation package.
+ * to updating by verifying that the primary key is present, and then running
+ * the object through a [[ModelValidator]] instance.  Reference
+ * [[ModelValidator]] and the bsy-validation package.
  */
-export class UpdateValidator extends ModelValidator {
+export class UpdateModelValidator extends ModelValidator {
   /**
    * Initialize with a [[ModelValidator]] instance.  The [[ModelValidator]] is
    * used to verify that objects meet their class's column metadata (data type,

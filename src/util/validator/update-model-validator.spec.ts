@@ -1,10 +1,10 @@
 import { initDB, TypeTest } from '../../test/';
 import { Column } from '../../metadata/';
 
-import { UpdateValidator } from '../';
+import { UpdateModelValidator } from '../';
 
-describe('UpdateValidator()', () => {
-  const validator = new UpdateValidator();
+describe('UpdateModelValidator()', () => {
+  const validator = new UpdateModelValidator();
 
   beforeEach(() => initDB());
 

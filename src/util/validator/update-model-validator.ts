@@ -38,14 +38,15 @@ export class UpdateModelValidator extends ModelValidator {
         const validators: Validator[] = [];
 
         // The PK must be defined.
-        if (meta.isPrimary)
+        if (meta.isPrimary) {
           validators.push(new DefinedValidator());
 
-        // If the PK is not nullable then the underlying ModelValidator will
-        // handle the null check.  If it is a nullable column, it's still
-        // required when updating, so add a null check.
-        if (meta.isNullable)
-          validators.push(new NotNullValidator());
+          // If the PK is not nullable then the underlying ModelValidator will
+          // handle the null check.  If it is a nullable column, it's still
+          // required when updating, so add a null check.
+          if (meta.isNullable)
+            validators.push(new NotNullValidator());
+        }
 
         return new ValidationMetadata(Entity, meta.mapTo, validators);
       });

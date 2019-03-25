@@ -1,5 +1,5 @@
 import { initDB, TypeTest } from '../../test/';
-import { Column } from '../../metadata/';
+import { metaFactory } from '../../metadata/';
 
 import { UpdateModelValidator } from '../';
 
@@ -84,12 +84,15 @@ describe('UpdateModelValidator()', () => {
       });
 
       it('rejects if the primary key is null, even if it\'s nullable.', (done) => {
-        const colDec = Column({isPrimary: true, isGenerated: true, isNullable: true, sqlDataType: 'int'});
-        colDec(TypeTest.prototype, 'int');
-
         const tt = {
           int: null as any
         };
+
+        // Make "int" nullable.
+        metaFactory
+          .getColumnStore()
+          .getColumnMetadataByMapping(TypeTest, 'int')
+          .isNullable = true;
 
         validator
           .validate(tt, TypeTest)

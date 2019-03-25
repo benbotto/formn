@@ -14,7 +14,7 @@ import { ModelValidator } from '../';
  * generated fields, like auto-incrementing primary keys, must not be defined.
  * This differs from mutation (updating and deleting).
  */
-export class InsertValidator extends ModelValidator {
+export class InsertModelValidator extends ModelValidator {
   /**
    * Initialize with a [[ModelValidator]] instance.  The [[ModelValidator]]
    * handles the majority of the validation, while this class is concerned with

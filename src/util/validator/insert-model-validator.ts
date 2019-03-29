@@ -42,7 +42,7 @@ export class InsertModelValidator extends ModelValidator {
         // default or is generated.  Generated columns, like auto-incrementing
         // primary keys, cannot be set manually on insert.
         if (meta.isGenerated)
-          validators.push(new UndefinedValidator())
+          validators.push(new UndefinedValidator());
         else if (!meta.isNullable && !meta.hasDefault)
           validators.push(new DefinedValidator());
 

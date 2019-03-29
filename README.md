@@ -102,3 +102,6 @@ to normalized entities that look like this:
 * There are hooks for global conversions and transformations, like normalizing
   dates and formatting phone numbers.
 
+Check out the
+[docs](https://benbotto.github.io/doc/formn/5.x.x/)!
+

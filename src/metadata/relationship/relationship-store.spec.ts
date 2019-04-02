@@ -2,10 +2,10 @@ import { initDB, PhoneNumber, Product, User, Photo } from '../../test/';
 
 import { RelationshipStore, metaFactory } from '../';
 
-describe('RelationshipStore()', function() {
+describe('RelationshipStore()', () => {
   let relStore: RelationshipStore;
 
-  beforeAll(function() {
+  beforeAll(() => {
     // (Re)initialize the db.
     initDB();
 
@@ -16,12 +16,12 @@ describe('RelationshipStore()', function() {
   /**
    * Get relationships.
    */
-  describe('.getRelationships()', function() {
-    it('returns an empty array for tables that do not have relationships.', function() {
+  describe('.getRelationships()', () => {
+    it('returns an empty array for tables that do not have relationships.', () => {
       expect(relStore.getRelationships(Product, PhoneNumber)).toEqual([]);
     });
 
-    it('doesn\'t matter what order the tables are in.', function() {
+    it('doesn\'t matter what order the tables are in.', () => {
       const rels_up = relStore.getRelationships(User, PhoneNumber);
       expect(rels_up.length).toBe(2);
       expect(rels_up[0].Entity).toBe(User);
@@ -42,7 +42,7 @@ describe('RelationshipStore()', function() {
       expect(rels_up[1]).toEqual(rels_pu[0]);
     });
 
-    it('can restrict the returned keys to those owned by the first table.', function() {
+    it('can restrict the returned keys to those owned by the first table.', () => {
       let rels = relStore.getRelationships(Product, Photo, true);
 
       // Two relationships from Product to Photo.
@@ -70,7 +70,7 @@ describe('RelationshipStore()', function() {
       expect(rels[0].cardinality).toBe('ManyToOne');
     });
 
-    it('does not duplicate self-referencing foreign keys.', function() {
+    it('does not duplicate self-referencing foreign keys.', () => {
       const rels = relStore.getRelationships(Photo, Photo);
 
       expect(rels.length).toBe(2);

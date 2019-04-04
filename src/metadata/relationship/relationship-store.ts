@@ -16,26 +16,27 @@ export class RelationshipStore {
   }
 
   /**
-   * Get all of the relationships between two tables.
+   * Get all of the relationships between two tables, or for a single table.
    * @param Entity1 - The first Entity (constructor), i.e. the class that's
    * decorated with @[[Table]].
    * @param Entity2 - The second Entity.
-   * @param oneWay - When true, only return the relationships between Entity1
-   * and Entity2 that Entity1 owns.
+   * @param oneWay - When true, only return the relationships that Entity1
+   * owns.
    * @param mapTo - An optional property on Entity1.  If passed, return the
    * relationship for this property only (implies oneWay).
    * @return An array of RelationshipMetadata instances.
    */
   getRelationships(
     Entity1: TableType,
-    Entity2: TableType,
-    oneWay = false,
+    Entity2: TableType = null,
+    oneWay: boolean = false,
     mapTo: string = null): RelationshipMetadata[] {
 
     let t1Rels, t2Rels;
 
     t1Rels = this.relMetadata
-      .filter(rel => rel.Entity === Entity1 && rel.to() === Entity2 && (!mapTo || mapTo === rel.mapTo));
+      .filter(rel =>
+        rel.Entity === Entity1 && (!Entity2 || rel.to() === Entity2) && (!mapTo || mapTo === rel.mapTo));
 
     if (oneWay || mapTo)
       return t1Rels;
@@ -47,7 +48,7 @@ export class RelationshipStore {
       return t1Rels;
 
     t2Rels = this.relMetadata
-      .filter(rel => rel.Entity === Entity2 && rel.to() === Entity1);
+      .filter(rel => (!Entity2 || rel.Entity === Entity2) && rel.to() === Entity1);
 
     return t1Rels.concat(t2Rels);
   }

@@ -88,8 +88,8 @@ describe('RelationshipStore()', () => {
       expect(rels[1].cardinality).toBe('OneToOne');
     });
 
-    it('can restirct the returned relationship by property.', () => {
-      let rels = relStore.getRelationships(Product, Photo, true, 'primaryPhoto');
+    it('can restrict the returned relationship by property.', () => {
+      const rels = relStore.getRelationships(Product, Photo, true, 'primaryPhoto');
 
       // Two relationships from Product to Photo, but it's been restricted to
       // just primaryPhoto.
@@ -100,6 +100,27 @@ describe('RelationshipStore()', () => {
       expect(rels[0].to()).toBe(Photo);
       expect(rels[0].on({primaryPhotoID: 'primaryPhotoID'}, {id: 'id'})).toEqual(['primaryPhotoID', 'id']);
       expect(rels[0].cardinality).toBe('OneToOne');
+    });
+
+    it('returns all the relationships that Entity1 is a part of.', () => {
+      const rels = relStore.getRelationships(PhoneNumber);
+
+      expect(rels.length).toBe(2);
+      expect(rels[0].mapTo).toBe('user');
+      expect(rels[0].Entity).toBe(PhoneNumber);
+      expect(rels[0].to()).toBe(User);
+      expect(rels[1].mapTo).toBe('phoneNumbers');
+      expect(rels[1].Entity).toBe(User);
+      expect(rels[1].to()).toBe(PhoneNumber);
+    });
+
+    it('returns all the relationships that Entity1 owns.', () => {
+      const rels = relStore.getRelationships(PhoneNumber, null, true);
+
+      expect(rels.length).toBe(1);
+      expect(rels[0].mapTo).toBe('user');
+      expect(rels[0].Entity).toBe(PhoneNumber);
+      expect(rels[0].to()).toBe(User);
     });
   });
 

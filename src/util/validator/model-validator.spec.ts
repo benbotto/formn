@@ -1,4 +1,4 @@
-import { initDB, TypeTest } from '../../test/';
+import { initDB, TypeTest, PhoneNumber, User } from '../../test/';
 import { ModelValidator } from '../';
 
 describe('ModelValidator()', () => {
@@ -81,6 +81,67 @@ describe('ModelValidator()', () => {
         .catch(errList => {
           expect(errList.errors[0].field).toBe('email');
           expect(errList.errors[0].detail).toBe('"email" must be a valid email address.');
+          done();
+        });
+    });
+
+    it('rejects if a sub-resource is not an array in a OneToMany relationship.', (done) => {
+      const user = {
+        phoneNumbers: 'asdf'
+      };
+
+      validator
+        .validate(user, User)
+        .catch(errList => {
+          expect(errList.errors[0].field).toBe('phoneNumbers');
+          expect(errList.errors[0].detail).toBe('"phoneNumbers" must be a valid array.');
+          done();
+        });
+    });
+
+    it('rejects if a sub-resource is not an object in a ManyToOne relationship.', (done) => {
+      const phoneNumber = {
+        user: 'asdf'
+      };
+
+      validator
+        .validate(phoneNumber, PhoneNumber)
+        .catch(errList => {
+          expect(errList.errors[0].field).toBe('user');
+          expect(errList.errors[0].detail).toBe('"user" must be a valid object.');
+          done();
+        });
+    });
+
+    it('rejects if a sub-resource object is invalid in a ManyToOne relationship.', (done) => {
+      const phoneNumber = {
+        user: {
+          createdOn: 'asdf'
+        }
+      };
+
+      validator
+        .validate(phoneNumber, PhoneNumber)
+        .catch(errList => {
+          expect(errList.errors[0].field).toBe('createdOn');
+          expect(errList.errors[0].detail).toBe('"createdOn" must be a valid date.');
+          done();
+        });
+    });
+
+    it('rejects if a sub-resource object is invalid in a OneToMany relationship.', (done) => {
+      const user = {
+        phoneNumbers: [
+          {id: 1},
+          {id: 2.4},
+        ]
+      };
+
+      validator
+        .validate(user, User)
+        .catch(errList => {
+          expect(errList.errors[0].field).toBe('id');
+          expect(errList.errors[0].detail).toBe('"id" must be a valid integer.');
           done();
         });
     });

@@ -4,7 +4,11 @@ import {
   NotNullValidator, ValidationMetadata
 } from 'bsy-validation';
 
-import { metaFactory, ColumnMetadata } from '../../metadata/';
+import {
+  metaFactory, ColumnMetadata, RelationshipMetadata
+} from '../../metadata/';
+
+import { SubModelTypeValidator, KeyValType } from '../';
 
 /**
  * A specialized ObjectValidator (from bsy-validation) that's used to validate
@@ -23,41 +27,70 @@ export class ModelValidator extends ObjectValidator {
 
   /**
    * Verify that each property of obj meets the requirements defined by
-   * [[Column]] decoration, such as data type, maximum length, and
-   * nullability.  If valid, then check any user-defined validation, such as
-   * email and phone number validation.  (Reference the bsy-validation package,
-   * as the ObjectValidator class is used for validation.)
+   * [[Column]] and [[Relationship]] decoration, such as data type, maximum
+   * length, and nullability.  If valid, then check any user-defined
+   * validation, such as email and phone number validation.  (Reference the
+   * bsy-validation package, as the ObjectValidator class is used for
+   * validation.)
    * @param obj - The object to validate against class Entity.
    * @param Entity - A class that has properties decorated with @Validate.
    * This is the schema against which obj will be validated.
    */
-  validate(
+  async validate(
     obj: object,
     Entity: {new(): any}): Promise<void> {
 
     // First check if obj is valid based on the ColumnMetadata (e.g. data type,
-    // max length, etc.) using the custom getValidationMetadata method.  If
-    // that passes, then validate the object using a standard ObjectValidator
-    // (i.e. any custom validation added by a user, like email and phone
-    // checks).
-    return super
-      .validate(obj, Entity)
-      .then(() => {
-        // objectValidator may be null (no chaining).
-        if (this.objectValidator)
-          return this.objectValidator.validate(obj, Entity);
-      });
+    // max length, etc.) and RelationshipMetadata using the custom
+    // getValidationMetadata method.
+    await super
+      .validate(obj, Entity);
+
+    // If the column- and relationship-level validation passes, that passes,
+    // then validate the object using a standard ObjectValidator (i.e. any
+    // custom validation added by a user, like email and phone checks).
+    //
+    // Note that objectValidator may be null (no chaining).
+    if (this.objectValidator) {
+      await this.objectValidator
+        .validate(obj, Entity);
+    }
+
+    // Next, validate any sub-resources.
+    const relMeta = metaFactory
+      .getRelationshipStore()
+      .getRelationships(Entity, null, true);
+
+    for (let meta of relMeta) {
+      if ((obj as KeyValType)[meta.mapTo]) {
+        if (meta.cardinality === 'OneToMany') {
+          const subResources = (obj as KeyValType)[meta.mapTo];
+
+          for (let resource of subResources) {
+            await this
+              .validate(resource, meta.to());
+          }
+        }
+        else {
+          const subResource = (obj as KeyValType)[meta.mapTo];
+
+          await this
+            .validate(subResource, meta.to());
+        }
+      }
+    }
   }
 
   /**
    * Generate validation metadata (see bsy-validation) for the Entity.
    */
   getValidationMetadata(Entity: {new(): any}): ValidationMetadata[] {
+    // Column-level validation.
     const colMeta = metaFactory
       .getColumnStore()
       .getColumnMetadata(Entity);
 
-    return colMeta
+    const colValMeta = colMeta
       .map((meta: ColumnMetadata) => {
         const validators: Validator[] = [];
 
@@ -101,6 +134,22 @@ export class ModelValidator extends ObjectValidator {
 
         return new ValidationMetadata(Entity, meta.mapTo, validators);
       });
+
+
+    // Relationship-level validation (e.g. checks that a sub-resource
+    // is an array or an object, depending on the cardinality of the
+    // relationship).
+    const relMeta = metaFactory
+      .getRelationshipStore()
+      .getRelationships(Entity, null, true);
+
+    const relValMeta = relMeta
+      .map((meta: RelationshipMetadata) =>
+        new ValidationMetadata(Entity, meta.mapTo,
+          [new SubModelTypeValidator(meta.cardinality)]));;
+
+    return colValMeta
+      .concat(relValMeta)
   }
 }
 

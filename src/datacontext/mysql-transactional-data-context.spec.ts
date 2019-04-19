@@ -116,6 +116,17 @@ describe('MySQLTransactionalDataContext()', () => {
         });
     });
 
+    it('does not commit nested transactions, only the top-most one.', (done) => {
+      dataContext
+        .beginTransaction(transDC => transDC
+          .beginTransaction(innerTransDC => Promise.resolve())
+          .then(() => expect(transMgr.commit).not.toHaveBeenCalled())) // Nested.
+        .then(() => {
+          expect(transMgr.commit).toHaveBeenCalled();
+          done();
+        });
+    });
+
     it('does not commit the transaction if the user manually rolls it back.', (done) => {
       dataContext
         .beginTransaction(() => {
@@ -126,7 +137,6 @@ describe('MySQLTransactionalDataContext()', () => {
           expect(transMgr.commit).not.toHaveBeenCalled();
           done();
         });
-
     });
 
     it('rolls back the transaction if the user-supplied transaction function returns a rejected promise.', (done) => {

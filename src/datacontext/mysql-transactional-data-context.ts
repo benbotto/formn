@@ -59,9 +59,14 @@ export class MySQLTransactionalDataContext extends MySQLDataContext {
    * will proxy the return when transFunc completes.
    */
   async beginTransaction<R>(transFunc: (dc: MySQLTransactionalDataContext) => Promise<R>): Promise<R> {
-    const transState = this.transMgr.getTransactionState();
+    const transState  = this.transMgr.getTransactionState();
+    let   nestedTrans = true;
 
     if (transState === 'READY') {
+      // This flag indicates that this transaction is not a nested one, and
+      // therefore should be committed if the user's function succeeds.
+      nestedTrans = false;
+
       await this.transMgr.begin();
 
       // Initialize the query executer using the transaction's single connection.
@@ -91,8 +96,9 @@ export class MySQLTransactionalDataContext extends MySQLDataContext {
     }
 
     // If the user-supplied function resolves and the user did not manually
-    // roll back the transaction then commit.
-    if (this.transMgr.getTransactionState() !== 'ROLLED_BACK')
+    // roll back the transaction then commit, and this is not a nested
+    // transaction.
+    if (this.transMgr.getTransactionState() !== 'ROLLED_BACK' && !nestedTrans)
       await this.transMgr.commit();
 
     // Proxy the return of the user-supplied function.

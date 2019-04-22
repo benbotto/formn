@@ -61,7 +61,7 @@ export abstract class DataContext {
    * @return A [[FromAdapter]] that implements [[FromAdapter.select]],
    * [[FromAdapter.update]], and [[FromAdapter.delete]].
    */
-  abstract from<T>(Entity: TableType, alias: string): FromAdapter<T>;
+  abstract from<T>(Entity: TableType, alias?: string): FromAdapter<T>;
 
   /**
    * Create a new [[UpdateModel]] instance that can be used to update a model

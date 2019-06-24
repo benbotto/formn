@@ -23,7 +23,7 @@
     "jasmine": "~3.3.0",
     "jasmine-console-reporter": "~3.1.0",
     "ts-node": "~7.0.1",
-    "typedoc": "~0.13.0"
+    "typedoc": "0.x.x"
   },
   "dependencies": {
     "@types/mysql2": "types/mysql2",

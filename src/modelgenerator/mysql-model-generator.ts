@@ -2,6 +2,8 @@ import { MySQLDataContext } from '../datacontext/';
 
 import { ParameterType } from '../query/';
 
+import { PathHelper } from '../util/';
+
 import {
   ModelGenerator, TableFormatter, DefaultTableFormatter, MySQLTable,
   MySQLColumn, MySQLKeyColumnUsage, ModelTable, ModelColumn, ModelRelationship,
@@ -25,14 +27,17 @@ export class MySQLModelGenerator extends ModelGenerator {
    * formatting property names in the generated class entities.
    * @param relFormatter - A [[RelationshipFormatter]] instances that is used
    * to format relationship property names.
+   * @param pathHelper - A [[PathHelper]] instance for creating the entity
+   * directory.
    */
   constructor(
     private dataContext: MySQLDataContext,
     protected tableFormatter: TableFormatter = new DefaultTableFormatter(),
     protected columnFormatter: ColumnFormatter = new DefaultColumnFormatter(),
-    protected relFormatter: RelationshipFormatter = new DefaultRelationshipFormatter()) {
+    protected relFormatter: RelationshipFormatter = new DefaultRelationshipFormatter(),
+    protected pathHelper: PathHelper = new PathHelper()) {
 
-    super(tableFormatter, columnFormatter, relFormatter);
+    super(tableFormatter, columnFormatter, relFormatter, pathHelper);
   }
 
   /**

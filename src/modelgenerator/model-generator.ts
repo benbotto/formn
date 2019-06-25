@@ -1,6 +1,8 @@
 import { promisify } from 'util';
-import { resolve, isAbsolute } from 'path';
-import { writeFile, mkdir, stat } from 'fs';
+import { writeFile } from 'fs';
+import { join } from 'path';
+
+import { PathHelper } from '../util/';
 
 import {
   TableFormatter, ColumnFormatter, RelationshipFormatter, ModelTable
@@ -18,11 +20,14 @@ export abstract class ModelGenerator {
    * formatting property names in the generated class entities.
    * @param relFormatter - A [[RelationshipFormatter]] instances that is used
    * to format relationship property names.
+   * @param pathHelper - A [[PathHelper]] instance for creating the entity
+   * directory.
    */
   constructor(
     protected tableFormatter: TableFormatter,
     protected columnFormatter: ColumnFormatter,
-    protected relFormatter: RelationshipFormatter) {
+    protected relFormatter: RelationshipFormatter,
+    protected pathHelper: PathHelper = new PathHelper()) {
   }
 
   /**
@@ -41,26 +46,19 @@ export abstract class ModelGenerator {
    * @param entDir - The path to which models should be written.
    */
   async writeModels(models: ModelTable[], entDir: string): Promise<void> {
-    const statP      = promisify(stat);
-    const mkdirP     = promisify(mkdir);
     const writeFileP = promisify(writeFile);
 
     // Resolve the entity dir so that it's absolute.  If not absolute, it's
     // considered relative to the current working directory.
-    if (!isAbsolute(entDir))
-      entDir = `${process.cwd()}/${entDir}`;
-    entDir = `${resolve(entDir)}/`;
+    entDir = this.pathHelper
+      .getAbsolutePath(entDir);
 
     // Make the directory if it doesn't exist.
-    try {
-      await statP(entDir);
-    }
-    catch (err) {
-      await mkdirP(entDir, {recursive: true});
-    }
+    await this.pathHelper
+      .mkdirIfNotExists(entDir);
 
     for (let i = 0; i < models.length; ++i) {
-      const fullPath = `${entDir}${models[i].getImportFileName()}`;
+      const fullPath = join(entDir, models[i].getImportFileName());
 
       await writeFileP(fullPath, models[i].toString(), 'utf8');
     }

@@ -1,4 +1,5 @@
 export * from './key-val-type';
+export * from './path-helper';
 export * from './validator/sub-model-type-validator';
 export * from './validator/model-validator';
 export * from './validator/insert-model-validator';

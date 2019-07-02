@@ -1,4 +1,4 @@
-import { Connection, Pool, PoolConnection } from 'mysql2/promise'
+import { Connection, Pool, PoolConnection } from 'mysql2/promise';
 
 import { Executer, SelectResultType, ParameterType, InsertResultType, MutateResultType } from '../';
 

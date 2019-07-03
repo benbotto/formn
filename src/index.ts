@@ -9,4 +9,5 @@ export * from './datacontext/';
 export * from './modelgenerator/';
 export * from './migrator/';
 export * from './util/';
+export * from './logger/';
 

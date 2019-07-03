@@ -33,9 +33,9 @@ export class MySQLMigrator extends Migrator {
   createMigrationsTable(): Promise<void> {
     const sql = `
       CREATE TABLE IF NOT EXISTS formn_migrations (
-        migrationID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         runOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        migrationName NVARCHAR(255) NOT NULL
+        name NVARCHAR(255) NOT NULL
       )`;
 
     return this.dataContext

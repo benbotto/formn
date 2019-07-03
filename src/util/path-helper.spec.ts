@@ -39,5 +39,35 @@ describe('PathHelper()', () => {
         });
     });
   });
+
+  describe('.ls()', () => {
+    beforeEach(() => {
+      spyOn(fs, 'readdir').and.callFake((dir:string, callback: Function) => {
+        callback(null, ['dir1', 'dir2', 'file1.js', 'file2.txt', 'asdf.js']);
+      });
+    });
+
+    it('lists all files in a directory.', (done) => {
+      pathHelper
+        .ls('dir', /^.*\.js$/)
+        .then(files => {
+          expect(files.length).toBe(2);
+          expect(files[0]).toBe('asdf.js');
+          expect(files[1]).toBe('file1.js');
+          done();
+        });
+    });
+
+    it('lists all files in reverse order.', (done) => {
+      pathHelper
+        .ls('dir', /^.*\.js$/, -1)
+        .then(files => {
+          expect(files.length).toBe(2);
+          expect(files[0]).toBe('file1.js');
+          expect(files[1]).toBe('asdf.js');
+          done();
+        });
+    });
+  });
 });
 

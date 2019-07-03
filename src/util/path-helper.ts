@@ -1,4 +1,4 @@
-import { mkdir, stat } from 'fs';
+import { mkdir, stat, readdir } from 'fs';
 import { resolve, isAbsolute, join } from 'path';
 import { promisify } from 'util';
 
@@ -34,5 +34,23 @@ export class PathHelper {
     catch (err) {
       await mkdirP(absPath, {recursive: true});
     }
+  }
+
+  /**
+   * Get a list of files in a directory, matching a pattern and ordered by
+   * name.
+   * @param dir - The directory to list, which is resolved using
+   * getAbsolutePath.
+   * @param match - A regex pattern that files must match.
+   * @param order - The order direction: 1 ascending: -1 descending.
+   */
+  ls(dir: string, match: RegExp = /.*/, order: number = 1): Promise<string[]> {
+    const readdirP = promisify(readdir);
+    const absDir   = this.getAbsolutePath(dir);
+
+    return readdirP(absDir)
+      .then(files => files
+        .sort((l, r) => l.localeCompare(r) * order)
+        .filter(file => !!file.match(match)));
   }
 }

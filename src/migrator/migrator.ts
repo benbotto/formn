@@ -96,6 +96,29 @@ export abstract class Migrator {
   }
 
   /**
+   * Run a script against the database.
+   * @param migration - The migration script, which will be resolved using
+   * [[PathHelper#getAbsolutePath]].
+   */
+  async run(migration: string): Promise<any> {
+    const absMigPath = this.pathHelper.getAbsolutePath(migration);
+    const migScript  = this.loadMigrationScript(absMigPath);
+
+    if (!(migScript as any).run)
+      throw new Error(`"run" method not defined in script "${migration}."`);
+
+    this.logger.log('-------------------------------------------------------------');
+    this.logger.log(`Invoking "run" in file "${migration}."`);
+    this.logger.log('-------------------------------------------------------------');
+
+    const res = await (migScript as any).run(this.dataContext);
+
+    this.logger.log('Result: ', res);
+
+    return res;
+  }
+
+  /**
    * Create the migration directory if it doesn't exist.
    */
   createMigrationsDir(): Promise<void> {
@@ -133,13 +156,12 @@ export abstract class Migrator {
   }
 
   /**
-   * Helper to load a migration script.
+   * Helper to load a migration script.  It's just a wrapper around require(),
+   * but is helpful for mocking.
+   * @param migration - The full path to the migration script.
    */
   loadMigrationScript(migration: string): object {
-    const absMigPath = join(this.pathHelper.getAbsolutePath(this.migDir), migration);
-    const migScript  = require(absMigPath);
-
-    return migScript;
+    return require(migration);
   }
 
   /**
@@ -149,7 +171,8 @@ export abstract class Migrator {
    * @return The return value from the migration method is returned.
    */
   async runMigration(migration: string, direction: string): Promise<any> {
-    const migScript = this.loadMigrationScript(migration);
+    const absMigPath = join(this.pathHelper.getAbsolutePath(this.migDir), migration);
+    const migScript  = this.loadMigrationScript(migration);
 
     if (!(migScript as any)[direction])
       throw new Error(`"${direction}" method not defined in migration "${migration}."`);

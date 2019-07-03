@@ -39,7 +39,8 @@ describe('Migrator()', () => {
     loadMigSpy.and
       .returnValue({
         up: () => Promise.resolve('up called'),
-        down: () => Promise.resolve('down called')
+        down: () => Promise.resolve('down called'),
+        run: () => Promise.resolve('run called')
       });
 
     // Mocks the results of the queries that the DataContext uses..
@@ -281,6 +282,28 @@ describe('Migrator()', () => {
         .then(() => {
           expect(runMigSpy.calls.count()).toBe(1);
           expect(runMigSpy.calls.argsFor(0)[0]).toBe('migration2.js');
+          done();
+        });
+    });
+  });
+
+  describe('.run()', () => {
+    it('throws an error if the migration script does not have a "run" method.', (done) => {
+      loadMigSpy.and.returnValue({});
+
+      migrator
+        .run('/tester.js')
+        .catch(err => {
+          expect(err.message).toBe('"run" method not defined in script "/tester.js."');
+          done();
+        });
+    });
+
+    it('calls the run method.', (done) => {
+      migrator
+        .run('/tester.js')
+        .then(res => {
+          expect(res).toBe('run called');
           done();
         });
     });

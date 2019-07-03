@@ -7,6 +7,8 @@ import { PathHelper } from '../util/';
 
 import { DataContext } from '../datacontext/';
 
+import { Logger, ConsoleLogger } from '../logger/';
+
 import { MIGRATION_TEMPLATE, FormnMigration } from './';
 
 /**
@@ -20,12 +22,15 @@ export abstract class Migrator {
    * @param migDir - The directory to use for migration scripts, which defaults
    * to "migrations."  If the path is not absolute, it's considered relative to
    * the current working directory.
+   * @param logger - A [[Logger]] instance for logging info about the migration
+   * process.
    * @param pathHelper - A [[PathHelper]] instance for creating the migration
    * directory.
    */
   constructor(
     protected dataContext: DataContext,
     protected migDir: string = 'migrations',
+    protected logger: Logger = new ConsoleLogger(),
     protected pathHelper: PathHelper = new PathHelper()) {
   }
 
@@ -35,18 +40,10 @@ export abstract class Migrator {
   abstract createMigrationsTable(): Promise<void>;
 
   /**
-   * Create the migration directory if it doesn't exist.
-   */
-  createMigrationsDir(): Promise<void> {
-    return this.pathHelper
-      .mkdirIfNotExists(this.migDir);
-  }
-
-  /**
    * Create a migration.
    * @param migrationName - The name of the migration file.
    */
-  createMigration(migrationName: string, migDir?: string): Promise<void> {
+  create(migrationName: string, migDir?: string): Promise<void> {
     const timestamp  = moment().format('YYYY-MM-DD__HH-mm-ss-SSS');
     const fullName   = `${timestamp}__${migrationName}.js`;
     const fullPath   = join(this.pathHelper.getAbsolutePath(this.migDir), fullName);
@@ -63,6 +60,32 @@ export abstract class Migrator {
   }
 
   /**
+   * Run all new migrations.
+   */
+  async up(): Promise<void> {
+    // Migrations in the database, newest first.
+    // Migration files without the path, ordered by name descending.
+    const [dbMigrations, migFiles] = await Promise
+      .all([this.retrieve(), this.listMigrationFiles()]);
+
+    // A list of migration files that don't exist in the db.
+    const newMigrations = migFiles
+      .filter(file => !dbMigrations
+        .find(dbMig => dbMig.name === file));
+
+    for (let migration of newMigrations)
+      await this.runMigration(migration, 'up');
+  }
+
+  /**
+   * Create the migration directory if it doesn't exist.
+   */
+  createMigrationsDir(): Promise<void> {
+    return this.pathHelper
+      .mkdirIfNotExists(this.migDir);
+  }
+
+  /**
    * Retrieve all the migrations from the database.
    */
   retrieve(): Promise<FormnMigration[]> {
@@ -71,6 +94,67 @@ export abstract class Migrator {
       .select()
       .orderBy({property: 'fm.name', dir: 'DESC'})
       .execute();
+  }
+
+  /**
+   * List all the migration files in the migrations directory, ordered by name,
+   * descending (newest first).
+   */
+  listMigrationFiles(): Promise<string[]> {
+    return this.pathHelper
+      .ls(this.migDir, /^.*\.js$/, -1);
+  }
+
+  /**
+   * Helper to load a migration script.
+   */
+  loadMigrationScript(migration: string): object {
+    const absMigPath = join(this.pathHelper.getAbsolutePath(this.migDir), migration);
+    const migScript  = require(absMigPath);
+
+    return migScript;
+  }
+
+  /**
+   * Run a migration in a given direction (up or down).
+   * @param migration - The migration file without the path.
+   * @param direction - The direction, up or down.
+   * @return The return value from the migration method is returned.
+   */
+  async runMigration(migration: string, direction: string): Promise<any> {
+    const migScript = this.loadMigrationScript(migration);
+
+    if (!(migScript as any)[direction])
+      throw new Error(`"${direction}" method not defined in migration "${migration}."`);
+
+    this.logger.log('-------------------------------------------------------------');
+    this.logger.log(`Running migration ${direction} in file ${migration}.`);
+    this.logger.log('-------------------------------------------------------------');
+
+    // Run the migration.
+    const res = await (migScript as any)[direction](this.dataContext);
+
+    this.logger.log('Result: ', res);
+
+    // Add/remove the migration record.
+    if (direction === 'up') {
+      const migRecord = new FormnMigration();
+
+      migRecord.name = migration;
+
+      await this.dataContext
+        .insert(FormnMigration, migRecord)
+        .execute();
+    }
+    else {
+      await this.dataContext
+        .from(FormnMigration, 'fm')
+        .where({$eq: {'fm.name': ':name'}}, {name: migration})
+        .delete()
+        .execute();
+    }
+
+    return res;
   }
 }
 

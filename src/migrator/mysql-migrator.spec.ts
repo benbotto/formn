@@ -2,18 +2,22 @@ import { PathHelper } from '../util/';
 
 import { MySQLDataContext } from '../datacontext/';
 
+import { NullLogger } from '../logger/';
+
 import { MySQLMigrator } from './';
 
 describe('Migrator()', () => {
   let migrator: MySQLMigrator;
   let pathHelper: PathHelper;
   let dataContext: MySQLDataContext;
+  let logger: NullLogger;
 
   beforeEach(() => {
     pathHelper = new PathHelper();
     dataContext = new MySQLDataContext();
+    logger = new NullLogger();
 
-    migrator = new MySQLMigrator(dataContext, 'migrations', pathHelper);
+    migrator = new MySQLMigrator(dataContext, 'migrations', logger, pathHelper);
   });
 
   describe('.createMigrationsTable()', () => {

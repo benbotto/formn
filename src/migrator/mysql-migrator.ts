@@ -4,6 +4,8 @@ import { DataContext } from '../datacontext/';
 
 import { PathHelper } from '../util/';
 
+import { Logger, ConsoleLogger } from '../logger/';
+
 /**
  * Database migrator for MySQL.
  */
@@ -16,15 +18,18 @@ export class MySQLMigrator extends Migrator {
    * @param migDir - The directory to use for migration scripts, which defaults
    * to "migrations."  If the path is not absolute, it's considered relative to
    * the current working directory.
+   * @param logger - A [[Logger]] instance for logging info about the migration
+   * process.
    * @param pathHelper - A [[PathHelper]] instance for creating the migration
    * directory.
    */
   constructor(
     protected dataContext: DataContext,
     protected migDir: string = 'migrations',
+    protected logger: Logger = new ConsoleLogger(),
     protected pathHelper: PathHelper = new PathHelper()) {
 
-    super(dataContext, migDir, pathHelper);
+    super(dataContext, migDir, logger, pathHelper);
   }
 
   /**

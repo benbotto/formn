@@ -5,6 +5,8 @@ import {
   TypeTest
 } from '../';
 
+import { FormnMigration } from '../../migrator/';
+
 import { Column, Table, ManyToOne, OneToMany, OneToOne, metaFactory } from '../../metadata/';
 
 import { YesNoConverter } from '../../converter/';
@@ -283,5 +285,18 @@ export function initDB() {
 
   tblDec = Table({name: 'KEY_COLUMN_USAGE'});
   tblDec(MySQLKeyColumnUsage);
+
+  // FormnMigration.
+  colDec = Column({isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'});
+  colDec(FormnMigration.prototype, 'id');
+
+  colDec = Column({isNullable: false, maxLength: 255});
+  colDec(FormnMigration.prototype, 'name');
+
+  colDec = Column({hasDefault: true, isNullable: false});
+  colDec(FormnMigration.prototype, 'runOn');
+
+  tblDec = Table({name: 'formn_migrations'});
+  tblDec(FormnMigration);
 }
 

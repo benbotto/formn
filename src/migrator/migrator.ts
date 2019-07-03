@@ -7,7 +7,7 @@ import { PathHelper } from '../util/';
 
 import { DataContext } from '../datacontext/';
 
-import { MIGRATION_TEMPLATE } from './';
+import { MIGRATION_TEMPLATE, FormnMigration } from './';
 
 /**
  * Driver for running database migrations.
@@ -60,6 +60,17 @@ export abstract class Migrator {
       return Promise.reject(new Error('Migrations names may only contain word characters (/^\w+$/).'));
 
     return writeFileP(fullPath, MIGRATION_TEMPLATE);
+  }
+
+  /**
+   * Retrieve all the migrations from the database.
+   */
+  retrieve(): Promise<FormnMigration[]> {
+    return this.dataContext
+      .from<FormnMigration>(FormnMigration, 'fm')
+      .select()
+      .orderBy({property: 'fm.name', dir: 'DESC'})
+      .execute();
   }
 }
 

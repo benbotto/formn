@@ -5,7 +5,7 @@ import { PathHelper } from '../util/';
 
 import { MySQLDataContext } from '../datacontext/';
 
-import { Migrator, MIGRATION_TEMPLATE } from './';
+import { Migrator, MIGRATION_TEMPLATE, FormnMigration } from './';
 
 describe('Migrator()', () => {
   class TestMigrator extends Migrator {
@@ -85,6 +85,31 @@ describe('Migrator()', () => {
 
       migrator
         .createMigration('create_table_foo');
+    });
+  });
+
+  describe('.retrieve()', () => {
+    it('pulls all the migrations from the database.', (done) => {
+      const mockExecuter = jasmine.createSpyObj('executer', ['select']);
+
+      mockExecuter.select.and
+        .returnValue(Promise
+          .resolve([
+            {'fm.id': 1, 'fm.name': '1_fake', 'fm.runOn': '2019-07-02 01:02:03'},
+            {'fm.id': 2, 'fm.name': '2_fake', 'fm.runOn': '2019-07-02 02:02:03'},
+            {'fm.id': 3, 'fm.name': '3_fake', 'fm.runOn': '2019-07-03 02:02:03'},
+          ]));
+
+      spyOn(dataContext, 'getExecuter').and
+        .returnValue(mockExecuter);
+
+      migrator
+        .retrieve()
+        .then(migs => {
+          expect(migs.length).toBe(3);
+          migs.forEach(mig => expect(mig instanceof FormnMigration).toBe(true));
+          done();
+        });
     });
   });
 });

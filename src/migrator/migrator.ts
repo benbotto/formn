@@ -78,6 +78,24 @@ export abstract class Migrator {
   }
 
   /**
+   * Bring down the last migration.
+   */
+  async down(): Promise<void> {
+    // The latest migration.
+    // All migration files.
+    const [latestMig, migFiles] = await Promise
+      .all([this.retrieveLatest(), this.listMigrationFiles()]);
+
+    if (!latestMig)
+      throw new Error('No migration to bring down.');
+
+    if (!migFiles.find(file => file === latestMig.name))
+      throw new Error(`Migration file "${latestMig.name}" not found.`);
+
+    return this.runMigration(latestMig.name, 'down');
+  }
+
+  /**
    * Create the migration directory if it doesn't exist.
    */
   createMigrationsDir(): Promise<void> {

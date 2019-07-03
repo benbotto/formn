@@ -7,6 +7,8 @@ import { MySQLDataContext } from '../datacontext/';
 
 import { NullLogger } from '../logger/';
 
+import { Executer } from '../query/';
+
 import { Migrator, MIGRATION_TEMPLATE, FormnMigration } from './';
 
 describe('Migrator()', () => {
@@ -21,6 +23,7 @@ describe('Migrator()', () => {
   let dataContext: MySQLDataContext;
   let logger: NullLogger;
   let loadMigSpy: jasmine.Spy;
+  let mockExecuter: jasmine.SpyObj<Executer>;
 
   beforeEach(() => {
     pathHelper = new PathHelper();
@@ -38,6 +41,26 @@ describe('Migrator()', () => {
         up: () => Promise.resolve('up called'),
         down: () => Promise.resolve('down called')
       });
+
+    // Mocks the results of the queries that the DataContext uses..
+    mockExecuter = jasmine.createSpyObj('executer', ['select', 'insert', 'delete']);
+
+    mockExecuter.select.and
+      .returnValue(Promise
+        .resolve([
+          {'fm.id': 3, 'fm.name': '3_fake', 'fm.runOn': '2019-07-03 02:02:03'},
+          {'fm.id': 2, 'fm.name': '2_fake', 'fm.runOn': '2019-07-02 02:02:03'},
+          {'fm.id': 1, 'fm.name': '1_fake', 'fm.runOn': '2019-07-02 01:02:03'},
+        ]));
+
+    mockExecuter.delete.and
+      .returnValue(Promise.resolve({affectedRows: 1}));
+
+    mockExecuter.insert.and
+      .returnValue(Promise.resolve({insertId: 42}));
+
+    spyOn(dataContext, 'getExecuter').and
+      .returnValue(mockExecuter);
   });
 
   describe('.createMigrationsDir()', () => {
@@ -105,19 +128,6 @@ describe('Migrator()', () => {
 
   describe('.retrieve()', () => {
     it('pulls all the migrations from the database.', (done) => {
-      const mockExecuter = jasmine.createSpyObj('executer', ['select']);
-
-      mockExecuter.select.and
-        .returnValue(Promise
-          .resolve([
-            {'fm.id': 3, 'fm.name': '3_fake', 'fm.runOn': '2019-07-03 02:02:03'},
-            {'fm.id': 2, 'fm.name': '2_fake', 'fm.runOn': '2019-07-02 02:02:03'},
-            {'fm.id': 1, 'fm.name': '1_fake', 'fm.runOn': '2019-07-02 01:02:03'},
-          ]));
-
-      spyOn(dataContext, 'getExecuter').and
-        .returnValue(mockExecuter);
-
       migrator
         .retrieve()
         .then(migs => {
@@ -130,19 +140,6 @@ describe('Migrator()', () => {
 
   describe('.retrieveLatest()', () => {
     it('pulls the last migration from the database.', (done) => {
-      const mockExecuter = jasmine.createSpyObj('executer', ['select']);
-
-      mockExecuter.select.and
-        .returnValue(Promise
-          .resolve([
-            {'fm.id': 3, 'fm.name': '3_fake', 'fm.runOn': '2019-07-03 02:02:03'},
-            {'fm.id': 2, 'fm.name': '2_fake', 'fm.runOn': '2019-07-02 02:02:03'},
-            {'fm.id': 1, 'fm.name': '1_fake', 'fm.runOn': '2019-07-02 01:02:03'},
-          ]));
-
-      spyOn(dataContext, 'getExecuter').and
-        .returnValue(mockExecuter);
-
       migrator
         .retrieveLatest()
         .then(mig => {
@@ -152,12 +149,7 @@ describe('Migrator()', () => {
     });
 
     it('returns null if there are no migrations in the database.', (done) => {
-      const mockExecuter = jasmine.createSpyObj('executer', ['select']);
-
       mockExecuter.select.and.returnValue(Promise.resolve([]));
-
-      spyOn(dataContext, 'getExecuter').and
-        .returnValue(mockExecuter);
 
       migrator
         .retrieveLatest()
@@ -197,14 +189,6 @@ describe('Migrator()', () => {
     });
 
     it('runs the migration up and inserts a log.', (done) => {
-      const mockExecuter = jasmine.createSpyObj('executer', ['insert']);
-
-      mockExecuter.insert.and
-        .returnValue(Promise.resolve({insertId: 42}));
-
-      spyOn(dataContext, 'getExecuter').and
-        .returnValue(mockExecuter);
-
       migrator
         .runMigration('fake_migration.js', 'up')
         .then(res => {
@@ -215,14 +199,6 @@ describe('Migrator()', () => {
     });
 
     it('runs the migration down and deletes the log.', (done) => {
-      const mockExecuter = jasmine.createSpyObj('executer', ['delete']);
-
-      mockExecuter.delete.and
-        .returnValue(Promise.resolve({affectedRows: 1}));
-
-      spyOn(dataContext, 'getExecuter').and
-        .returnValue(mockExecuter);
-
       migrator
         .runMigration('fake_migration.js', 'down')
         .then(res => {
@@ -253,6 +229,58 @@ describe('Migrator()', () => {
         .then(() => {
           expect(runMigSpy.calls.count()).toBe(1);
           expect(runMigSpy.calls.argsFor(0)[0]).toBe('migration3.js');
+          done();
+        });
+    });
+  });
+
+  describe('.down()', () => {
+    let migFiles: string[];
+    let dbMig: FormnMigration;
+    let retSpy: jasmine.Spy;
+    let listSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      migFiles = ['migration1.js', 'migration2.js', 'migration3.js'];
+      dbMig = new FormnMigration();
+
+      dbMig.id   = 2;
+      dbMig.name = 'migration2.js';
+
+      retSpy  = spyOn(migrator, 'retrieveLatest').and.returnValue(Promise.resolve(dbMig));
+      listSpy = spyOn(migrator, 'listMigrationFiles').and.returnValue(Promise.resolve(migFiles));
+    });
+
+    it('throws an error if there are no migrations in the database.', (done) => {
+      retSpy.and.returnValue(Promise.resolve(null));
+
+      migrator
+        .down()
+        .catch(err => {
+          expect(err.message).toBe('No migration to bring down.');
+          done();
+        });
+    });
+
+    it('throws an error if the migration file is not found on disk.', (done) => {
+      migFiles.splice(1, 1);
+
+      migrator
+        .down()
+        .catch(err => {
+          expect(err.message).toBe(`Migration file "migration2.js" not found.`);
+          done();
+        });
+    });
+
+    it('brings down the migration and deletes the log.', (done) => {
+      const runMigSpy = spyOn(migrator, 'runMigration').and.returnValue(Promise.resolve());
+
+      migrator
+        .down()
+        .then(() => {
+          expect(runMigSpy.calls.count()).toBe(1);
+          expect(runMigSpy.calls.argsFor(0)[0]).toBe('migration2.js');
           done();
         });
     });

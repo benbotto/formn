@@ -110,9 +110,9 @@ describe('Migrator()', () => {
       mockExecuter.select.and
         .returnValue(Promise
           .resolve([
-            {'fm.id': 1, 'fm.name': '1_fake', 'fm.runOn': '2019-07-02 01:02:03'},
-            {'fm.id': 2, 'fm.name': '2_fake', 'fm.runOn': '2019-07-02 02:02:03'},
             {'fm.id': 3, 'fm.name': '3_fake', 'fm.runOn': '2019-07-03 02:02:03'},
+            {'fm.id': 2, 'fm.name': '2_fake', 'fm.runOn': '2019-07-02 02:02:03'},
+            {'fm.id': 1, 'fm.name': '1_fake', 'fm.runOn': '2019-07-02 01:02:03'},
           ]));
 
       spyOn(dataContext, 'getExecuter').and
@@ -123,6 +123,46 @@ describe('Migrator()', () => {
         .then(migs => {
           expect(migs.length).toBe(3);
           migs.forEach(mig => expect(mig instanceof FormnMigration).toBe(true));
+          done();
+        });
+    });
+  });
+
+  describe('.retrieveLatest()', () => {
+    it('pulls the last migration from the database.', (done) => {
+      const mockExecuter = jasmine.createSpyObj('executer', ['select']);
+
+      mockExecuter.select.and
+        .returnValue(Promise
+          .resolve([
+            {'fm.id': 3, 'fm.name': '3_fake', 'fm.runOn': '2019-07-03 02:02:03'},
+            {'fm.id': 2, 'fm.name': '2_fake', 'fm.runOn': '2019-07-02 02:02:03'},
+            {'fm.id': 1, 'fm.name': '1_fake', 'fm.runOn': '2019-07-02 01:02:03'},
+          ]));
+
+      spyOn(dataContext, 'getExecuter').and
+        .returnValue(mockExecuter);
+
+      migrator
+        .retrieveLatest()
+        .then(mig => {
+          expect(mig.name).toBe('3_fake');
+          done();
+        });
+    });
+
+    it('returns null if there are no migrations in the database.', (done) => {
+      const mockExecuter = jasmine.createSpyObj('executer', ['select']);
+
+      mockExecuter.select.and.returnValue(Promise.resolve([]));
+
+      spyOn(dataContext, 'getExecuter').and
+        .returnValue(mockExecuter);
+
+      migrator
+        .retrieveLatest()
+        .then(mig => {
+          expect(mig).toBeNull();
           done();
         });
     });

@@ -97,6 +97,15 @@ export abstract class Migrator {
   }
 
   /**
+   * Retrieve the latest migration, or null if there are no migrations.
+   */
+  retrieveLatest(): Promise<FormnMigration> {
+    return this
+      .retrieve()
+      .then(migs => migs.length ? migs[0] : null);
+  }
+
+  /**
    * List all the migration files in the migrations directory, ordered by name,
    * descending (newest first).
    */

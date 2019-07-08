@@ -64,9 +64,9 @@ export abstract class Migrator {
    */
   async up(): Promise<void> {
     // Migrations in the database, newest first.
-    // Migration files without the path, ordered by name descending.
+    // Migration files without the path, ordered by name ascending (oldest first).
     const [dbMigrations, migFiles] = await Promise
-      .all([this.retrieve(), this.listMigrationFiles()]);
+      .all([this.retrieve(), this.listMigrationFiles(1)]);
 
     // A list of migration files that don't exist in the db.
     const newMigrations = migFiles
@@ -84,7 +84,7 @@ export abstract class Migrator {
     // The latest migration.
     // All migration files.
     const [latestMig, migFiles] = await Promise
-      .all([this.retrieveLatest(), this.listMigrationFiles()]);
+      .all([this.retrieveLatest(), this.listMigrationFiles(-1)]);
 
     if (!latestMig)
       throw new Error('No migration to bring down.');
@@ -149,10 +149,12 @@ export abstract class Migrator {
   /**
    * List all the migration files in the migrations directory, ordered by name,
    * descending (newest first).
+   * @param order - The order of the returned files.  1 for ascending; -1 for
+   * descending.
    */
-  listMigrationFiles(): Promise<string[]> {
+  listMigrationFiles(order: number): Promise<string[]> {
     return this.pathHelper
-      .ls(this.migDir, /^.*\.js$/, -1);
+      .ls(this.migDir, /^.*\.js$/, order);
   }
 
   /**

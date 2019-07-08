@@ -162,6 +162,20 @@ describe('Migrator()', () => {
   });
 
   describe('.listMigrationFiles()', () => {
+    it('pulls all the js files from the migrations directory in ascending order.', (done) => {
+      spyOn(pathHelper, 'ls').and.callFake((dir: string, match: RegExp, order: number) => {
+        expect(dir).toBe('/path/to/migrations');
+        expect(match.test('foo.js')).toBe(true);
+        expect(order).toBe(1);
+        done();
+
+        return Promise.resolve(['file1.js', 'file2.js']);
+      });
+
+      migrator
+        .listMigrationFiles(1);
+    });
+
     it('pulls all the js files from the migrations directory in descending order.', (done) => {
       spyOn(pathHelper, 'ls').and.callFake((dir: string, match: RegExp, order: number) => {
         expect(dir).toBe('/path/to/migrations');
@@ -169,11 +183,11 @@ describe('Migrator()', () => {
         expect(order).toBe(-1);
         done();
 
-        return Promise.resolve(['file1.js', 'file2.js']);
+        return Promise.resolve(['file2.js', 'file1.js']);
       });
 
       migrator
-        .listMigrationFiles();
+        .listMigrationFiles(-1);
     });
   });
 

@@ -92,6 +92,7 @@ to normalized entities that look like this:
   projects and databases.
 * There's a built-in model generator to generate entity classes from a
   database.
+* The CLI handles database migrations.
 * The query interface is intuitive and closely resembles SQL.
 * It's type safe.
 * Security concerns like SQL injection are covered.

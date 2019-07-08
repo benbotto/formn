@@ -172,7 +172,7 @@ export abstract class Migrator {
    */
   async runMigration(migration: string, direction: string): Promise<any> {
     const absMigPath = join(this.pathHelper.getAbsolutePath(this.migDir), migration);
-    const migScript  = this.loadMigrationScript(migration);
+    const migScript  = this.loadMigrationScript(absMigPath);
 
     if (!(migScript as any)[direction])
       throw new Error(`"${direction}" method not defined in migration "${migration}."`);

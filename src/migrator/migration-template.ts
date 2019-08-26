@@ -12,11 +12,11 @@ module.exports = {
 
     return dataContext
       .getExecuter()
-      .query(sql, params); 
+      .query(sql, params);
   },
 
   /**
-   * Bring down a migration.
+   * Bring down the migration.
    */
   down(dataContext) {
     const sql    = \`\`;
@@ -26,7 +26,7 @@ module.exports = {
 
     return dataContext
       .getExecuter()
-      .query(sql, params); 
+      .query(sql, params);
   }
 };
 `;

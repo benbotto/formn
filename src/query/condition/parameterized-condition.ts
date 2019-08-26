@@ -34,5 +34,35 @@ export class ParameterizedCondition {
   getParameterList(): ParameterList {
     return this.paramList;
   }
+
+  /**
+   * Convert cond and param objects into a ParameterizedCondition.
+   * @param cond An condition object that can be transpiled into a SQL where
+   * clause.
+   * @param parms Parameter replacements for the condition.
+   */
+  static normalize(cond?: object, params?: ParameterType): ParameterizedCondition;
+
+  /**
+   * Do-nothing, identity normailization.  (This method just returns cond.)
+   * @param cond A ParameterizedCondition object built with a ConditionBuilder.
+   */
+  static normalize(cond: ParameterizedCondition): ParameterizedCondition;
+
+  /**
+   * Given cond and params object or a ParameterizedCondition, normalize to a
+   * ParameterizedCondition.
+   */
+  static normalize(cond: object | ParameterizedCondition, params?: ParameterType): ParameterizedCondition {
+    if (cond instanceof ParameterizedCondition)
+      return cond;
+
+    const paramList = new ParameterList();
+
+    for (const key in params)
+      paramList.addParameter(key, params[key]);
+
+    return new ParameterizedCondition(cond, paramList);
+  }
 }
 

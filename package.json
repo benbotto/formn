@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@types/jasmine": "~3.3.0",
-    "chokidar-cli": "~1.2.1",
+    "chokidar-cli": "2.x.x",
     "jasmine": "~3.3.0",
     "jasmine-console-reporter": "~3.1.0",
     "ts-node": "~7.0.1",
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@types/mysql2": "types/mysql2",
+    "@types/node": "12.x.x",
     "@types/pluralize": "~0.0.29",
     "bsy-validation": "2.x.x",
     "change-case": "~3.0.2",

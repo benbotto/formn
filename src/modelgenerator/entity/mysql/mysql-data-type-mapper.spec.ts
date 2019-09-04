@@ -10,6 +10,7 @@ describe('MySQLDataTypeMapper()', () => {
         'bigint',
         'float',
         'double',
+        'decimal',
       ];
 
       types.forEach(type =>

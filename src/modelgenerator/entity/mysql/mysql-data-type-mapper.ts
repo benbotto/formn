@@ -17,6 +17,7 @@ export class MySQLDataTypeMapper {
       case 'bigint':
       case 'float':
       case 'double':
+      case 'decimal':
         return 'number';
       case 'tinyint':
         if (columnType === 'tinyint(1)')

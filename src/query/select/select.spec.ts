@@ -58,10 +58,10 @@ describe('Select()', function() {
         .select();
 
       expect(query.toString()).toBe(
-        'SELECT  `u`.`userID` AS `u.id`,\n'          + 
-        '        `u`.`firstName` AS `u.first`,\n'    + 
-        '        `u`.`lastName` AS `u.last`,\n'      + 
-        '        `u`.`createdOn` AS `u.createdOn`\n' + 
+        'SELECT  `u`.`userID` AS `u.id`,\n'          +
+        '        `u`.`firstName` AS `u.first`,\n'    +
+        '        `u`.`lastName` AS `u.last`,\n'      +
+        '        `u`.`createdOn` AS `u.createdOn`\n' +
         'FROM    `users` AS `u`');
     });
 
@@ -250,7 +250,7 @@ describe('Select()', function() {
             'u.id', 'u.first', 'u.last',
             'pn.id', 'pn.phoneNumber',
             'uxp.userID', 'uxp.productID',
-            'p.id', 'p.description',
+            'p.id', 'p.description', 'p.isActive',
             'ph.id', 'ph.photoURL');
 
         query

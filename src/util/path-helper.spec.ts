@@ -24,10 +24,10 @@ describe('PathHelper()', () => {
 
   describe('.mkdirIfNotExists()', () => {
     it('creates the directory if it doesn\'t exist.', (done) => {
-      spyOn(fs, 'stat').and.callFake((path: string, callback: Function) =>
+      (spyOn(fs, 'stat') as jasmine.Spy).and.callFake((path: string, callback: Function) =>
         callback(new Error('file not found...')));
 
-      spyOn(fs, 'mkdir').and.callFake((path: string, opts: object, callback: Function) =>
+      (spyOn(fs, 'mkdir') as jasmine.Spy).and.callFake((path: string, opts: object, callback: Function) =>
         callback());
 
       pathHelper
@@ -42,7 +42,7 @@ describe('PathHelper()', () => {
 
   describe('.ls()', () => {
     beforeEach(() => {
-      spyOn(fs, 'readdir').and.callFake((dir:string, callback: Function) => {
+      (spyOn(fs, 'readdir') as jasmine.Spy).and.callFake((dir:string, callback: Function) => {
         callback(null, ['dir1', 'dir2', 'file1.js', 'file2.txt', 'asdf.js']);
       });
     });

@@ -20,17 +20,17 @@ describe('MySQLTransactionalDataContext()', () => {
 
     // Begin, commit, and rollback by default return a resolved promise from
     // the mock.
-    transMgr.begin.and.callFake(() => {
+    (transMgr.begin as jasmine.Spy).and.callFake(() => {
       transMgr.getTransactionState.and.returnValue('STARTED');
       return Promise.resolve();
     });
 
-    transMgr.commit.and.callFake(() => {
+    (transMgr.commit as jasmine.Spy).and.callFake(() => {
       transMgr.getTransactionState.and.returnValue('COMMITTED');
       return Promise.resolve();
     });
 
-    transMgr.rollback.and.callFake(() => {
+    (transMgr.rollback as jasmine.Spy).and.callFake(() => {
       transMgr.getTransactionState.and.returnValue('ROLLED_BACK');
       return Promise.resolve();
     });

@@ -23,7 +23,7 @@ describe('MySQLExecuter()', () => {
       const params   = {};
       const query    = 'SELECT userID FROM users';
 
-      con.query.and.returnValue(Promise.resolve([[{userID: 1}], {}]));
+      (con.query as jasmine.Spy).and.returnValue(Promise.resolve([[{userID: 1}], {}]));
 
       qe
         .select(query, params)
@@ -41,7 +41,7 @@ describe('MySQLExecuter()', () => {
       const params   = {};
       const query    = 'INSERT INTO users (firstName) VALUES (:firstName)';
 
-      con.query.and.returnValue(Promise.resolve([{insertId: 42}, {}]));
+      (con.query as jasmine.Spy).and.returnValue(Promise.resolve([{insertId: 42}, {}]));
 
       qe
         .insert(query, params)
@@ -59,7 +59,7 @@ describe('MySQLExecuter()', () => {
       const params   = {};
       const query    = 'DELETE FROM users WHERE userID = 1';
 
-      con.query.and.returnValue(Promise.resolve([{affectedRows: 1}, {}]));
+      (con.query as jasmine.Spy).and.returnValue(Promise.resolve([{affectedRows: 1}, {}]));
       qe
         .delete(query, params)
         .then(result => {
@@ -77,7 +77,7 @@ describe('MySQLExecuter()', () => {
       const params   = {};
       const query    = "UPDATE users SET firstName = 'Joe' WHERE userID = 2";
 
-      con.query.and.returnValue(Promise.resolve([{affectedRows: 1}, {}]));
+      (con.query as jasmine.Spy).and.returnValue(Promise.resolve([{affectedRows: 1}, {}]));
       qe
         .update(query, params)
         .then(result => {
@@ -95,7 +95,7 @@ describe('MySQLExecuter()', () => {
       const params   = {};
       const query    = 'SELECT 1+1';
 
-      con.query.and.returnValue(Promise.resolve());
+      (con.query as jasmine.Spy).and.returnValue(Promise.resolve());
       qe
         .query(query, params)
         .then(() => done())

@@ -17,11 +17,11 @@ describe('MySQLDataContext()', () => {
 
   beforeEach(() => {
     mockConn = jasmine.createSpyObj('Conn', ['release', 'query']);
-    mockConn.query.and.returnValue(Promise.resolve());
+    (mockConn.query as jasmine.Spy).and.returnValue(Promise.resolve());
 
     mockPool = jasmine.createSpyObj('Pool', ['end', 'getConnection']);
     mockPool.end.and.returnValue(Promise.resolve());
-    mockPool.getConnection.and.returnValue(Promise.resolve(mockConn));
+    (mockPool.getConnection as jasmine.Spy).and.returnValue(Promise.resolve(mockConn));
 
     createPoolSpy = spyOn(mysql2, 'createPool')
       .and.returnValue(mockPool);

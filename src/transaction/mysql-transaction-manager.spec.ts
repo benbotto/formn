@@ -11,7 +11,7 @@ describe('MySQLTransactionManager()', () => {
 
   beforeEach(() => {
     mockConn = jasmine.createSpyObj('conn', ['query']);
-    mockConn.query.and.returnValue(Promise.resolve());
+    (mockConn.query as jasmine.Spy).and.returnValue(Promise.resolve());
 
     connMan = jasmine.createSpyObj('connMan', ['getConnection', 'release']);
     connMan.getConnection.and.returnValue(Promise.resolve(mockConn));

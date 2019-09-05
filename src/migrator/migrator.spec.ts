@@ -7,7 +7,7 @@ import { MySQLDataContext } from '../datacontext/';
 
 import { NullLogger } from '../logger/';
 
-import { Executer } from '../query/';
+import { Executer, MySQLExecuter } from '../query/';
 
 import { Migrator, MIGRATION_TEMPLATE, FormnMigration } from './';
 
@@ -61,7 +61,7 @@ describe('Migrator()', () => {
       .returnValue(Promise.resolve({insertId: 42}));
 
     spyOn(dataContext, 'getExecuter').and
-      .returnValue(mockExecuter);
+      .returnValue((mockExecuter as unknown) as MySQLExecuter);
   });
 
   describe('.createMigrationsDir()', () => {
@@ -117,7 +117,9 @@ describe('Migrator()', () => {
     });
 
     it('creates the migration.', (done) => {
-      spyOn(fs, 'writeFile').and.callFake((path: string, data: string) => {
+      const writeSpy = spyOn(fs, 'writeFile') as jasmine.Spy;
+
+      writeSpy.and.callFake((path: string, data: string) => {
         expect(data).toBe(MIGRATION_TEMPLATE);
         done();
       });

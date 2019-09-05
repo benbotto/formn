@@ -19,7 +19,7 @@ describe('MySQLModelGenerator()', () => {
     // The mysql2.createPool method is mocked, and a mocked query method (used
     // by the executer).
     mockConn = jasmine.createSpyObj('Conn', ['release', 'query']);
-    mockConn.query.and.returnValue(Promise.resolve());
+    (mockConn.query as jasmine.Spy).and.returnValue(Promise.resolve());
 
     mockPool = jasmine.createSpyObj('Pool', ['getConnection', 'query']);
     mockPool.getConnection.and.returnValue(Promise.resolve(mockConn));
@@ -56,12 +56,12 @@ describe('MySQLModelGenerator()', () => {
     const phoneNumbersSchema = require('../test/query/phone-numbers-schema.json');
 
     it('pulls tables, columns, and key column usage for the database.', (done) => {
-      mockPool.query.and.returnValue(Promise.resolve([[]]));
+      (mockPool.query as jasmine.Spy).and.returnValue(Promise.resolve([[]]));
 
       generator
         .generateModels('formn_test_db')
         .then(() => {
-          const sql = mockPool.query.calls.argsFor(0)[0];
+          const sql = (mockPool.query as jasmine.Spy).calls.argsFor(0)[0];
 
           //console.log(sql);
 
@@ -74,7 +74,8 @@ describe('MySQLModelGenerator()', () => {
     });
 
     it('generates a model for the table.', (done) => {
-      mockPool.query.and.returnValue(Promise.resolve([[...usersSchema, ...phoneNumbersSchema]]));
+      (mockPool.query as jasmine.Spy).and
+        .returnValue(Promise.resolve([[...usersSchema, ...phoneNumbersSchema]]));
 
       generator
         .generateModels('formn_test_db')
@@ -135,18 +136,18 @@ export class PhoneNumber {
     it('writes the files to disk.', (done) => {
       const files: string[] = [];
 
-      spyOn(fs, 'writeFile').and.callFake((file: string, data: string, opts: any, callback: Function) => {
+      (spyOn(fs, 'writeFile') as jasmine.Spy).and.callFake((file: string, data: string, opts: any, callback: Function) => {
         files.push(file);
         callback();
       });
 
-      spyOn(fs, 'stat').and.callFake((path: string, callback: Function) =>
+      (spyOn(fs, 'stat') as jasmine.Spy).and.callFake((path: string, callback: Function) =>
         callback(new Error('file not found...')));
 
-      spyOn(fs, 'mkdir').and.callFake((path: string, opts: object, callback: Function) =>
+      (spyOn(fs, 'mkdir') as jasmine.Spy).and.callFake((path: string, opts: object, callback: Function) =>
         callback());
 
-      mockPool.query.and.returnValue(Promise.resolve([[...usersSchema, ...phoneNumbersSchema]]));
+      (mockPool.query as jasmine.Spy).and.returnValue(Promise.resolve([[...usersSchema, ...phoneNumbersSchema]]));
 
       generator
         .generateModels('formn_test_db', '/fake/path')

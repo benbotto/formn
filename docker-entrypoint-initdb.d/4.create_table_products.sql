@@ -5,6 +5,6 @@ CREATE TABLE products (
   primaryPhotoID INT);
 
 INSERT INTO products (description) VALUES ('Nike');
-INSERT INTO products (description) VALUES ('Crystals');
+INSERT INTO products (description, isActive) VALUES ('Crystals', 0);
 INSERT INTO products (description) VALUES ('Rebok');
 

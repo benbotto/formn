@@ -42,7 +42,7 @@ export class DataMapper {
         .map(keyCol => queryRow[keyCol.name])
         .toString();
       let doc;
-        
+
       // First time encountering this key.  Create a document for it.
       if (lookup[keyVal] === undefined) {
         // The schema holds the table (see the Table decorator), and the table
@@ -66,8 +66,19 @@ export class DataMapper {
           // is the Column-decorated property name.)
           if (colMeta.converter && colMeta.converter.onRetrieve)
             doc[colMeta.mapTo] = colMeta.converter.onRetrieve(queryRow[colName]);
-          else
+          else {
             doc[colMeta.mapTo] = queryRow[colName];
+
+            if (queryRow[colName] !== null && queryRow[colName] !== undefined) {
+              // Primitive types Boolean and Number get type-casted.
+              if (colMeta.dataType === 'Boolean') {
+                doc[colMeta.mapTo] = Boolean(queryRow[colName]);
+              }
+              else if (colMeta.dataType === 'Number') {
+                doc[colMeta.mapTo] = Number(queryRow[colName]);
+              }
+            }
+          }
         }
 
         // This lookup is used to ensure uniqueness.
@@ -112,7 +123,7 @@ export class DataMapper {
 
       return doc;
     }
-    
+
     // Serialize each row recursively.
     for (let i = 0; i < query.length; ++i)
       serializeRow(query[i], schema, lookup, collection);

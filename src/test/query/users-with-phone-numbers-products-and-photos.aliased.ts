@@ -10,6 +10,7 @@ const sql = `
           \`uxp\`.\`productID\` AS \`uxp.productID\`,
           \`p\`.\`productID\` AS \`p.id\`,
           \`p\`.\`description\` AS \`p.description\`,
+          \`p\`.\`isActive\` AS \`p.isActive\`,
           \`ph\`.\`photoID\` AS \`ph.id\`,
           \`ph\`.\`photoURL\` AS \`ph.photoURL\`
   FROM    \`users\` AS \`u\`

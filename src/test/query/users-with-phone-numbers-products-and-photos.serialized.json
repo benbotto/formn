@@ -24,6 +24,7 @@
         "product": {
           "id": 1,
           "description": "Nike",
+          "isActive": true,
           "photos": [
             {
               "id": 3,
@@ -46,6 +47,7 @@
         "product": {
           "id": 3,
           "description": "Rebok",
+          "isActive": true,
           "photos": [
             {
               "id": 12,
@@ -77,6 +79,7 @@
         "product": {
           "id": 2,
           "description": "Crystals",
+          "isActive": false,
           "photos": []
         }
       }
@@ -94,6 +97,7 @@
         "product": {
           "id": 1,
           "description": "Nike",
+          "isActive": true,
           "photos": [
             {
               "id": 3,

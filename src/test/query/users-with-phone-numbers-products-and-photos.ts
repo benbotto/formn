@@ -4,7 +4,7 @@ const sql = `
   SELECT  u.userID, u.firstName, u.lastName,
           pn.phoneNumberID, pn.phoneNumber,
           uxp.userID AS uxp_userID, uxp.productID AS uxp_productID,
-          p.productID, p.description,
+          p.productID, p.description, p.isActive,
           ph.photoID, ph.photoURL
   FROM    users u
   LEFT OUTER JOIN phone_numbers pn ON u.userID = pn.userID

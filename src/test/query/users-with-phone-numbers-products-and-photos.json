@@ -9,6 +9,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 3,
     "photoURL": "https://photos.com/nike.jpg"
   },
@@ -22,6 +23,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 6,
     "photoURL": "https://photos.com/MJ.jpg"
   },
@@ -35,6 +37,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 9,
     "photoURL": "https://photos.com/hoops.jpg"
   },
@@ -48,6 +51,7 @@
     "uxp_productID": 3,
     "productID": 3,
     "description": "Rebok",
+    "isActive": 1,
     "photoID": 12,
     "photoURL": "https://photos.com/rebok.jpg"
   },
@@ -61,6 +65,7 @@
     "uxp_productID": 3,
     "productID": 3,
     "description": "Rebok",
+    "isActive": 1,
     "photoID": 15,
     "photoURL": "https://photos.com/mma.jpg"
   },
@@ -74,6 +79,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 3,
     "photoURL": "https://photos.com/nike.jpg"
   },
@@ -87,6 +93,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 6,
     "photoURL": "https://photos.com/MJ.jpg"
   },
@@ -100,6 +107,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 9,
     "photoURL": "https://photos.com/hoops.jpg"
   },
@@ -113,6 +121,7 @@
     "uxp_productID": 3,
     "productID": 3,
     "description": "Rebok",
+    "isActive": 1,
     "photoID": 12,
     "photoURL": "https://photos.com/rebok.jpg"
   },
@@ -126,6 +135,7 @@
     "uxp_productID": 3,
     "productID": 3,
     "description": "Rebok",
+    "isActive": 1,
     "photoID": 15,
     "photoURL": "https://photos.com/mma.jpg"
   },
@@ -139,6 +149,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 3,
     "photoURL": "https://photos.com/nike.jpg"
   },
@@ -152,6 +163,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 6,
     "photoURL": "https://photos.com/MJ.jpg"
   },
@@ -165,6 +177,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 9,
     "photoURL": "https://photos.com/hoops.jpg"
   },
@@ -178,6 +191,7 @@
     "uxp_productID": 3,
     "productID": 3,
     "description": "Rebok",
+    "isActive": 1,
     "photoID": 12,
     "photoURL": "https://photos.com/rebok.jpg"
   },
@@ -191,6 +205,7 @@
     "uxp_productID": 3,
     "productID": 3,
     "description": "Rebok",
+    "isActive": 1,
     "photoID": 15,
     "photoURL": "https://photos.com/mma.jpg"
   },
@@ -204,6 +219,7 @@
     "uxp_productID": 2,
     "productID": 2,
     "description": "Crystals",
+    "isActive": 0,
     "photoID": null,
     "photoURL": null
   },
@@ -217,6 +233,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 3,
     "photoURL": "https://photos.com/nike.jpg"
   },
@@ -230,6 +247,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 6,
     "photoURL": "https://photos.com/MJ.jpg"
   },
@@ -243,6 +261,7 @@
     "uxp_productID": 1,
     "productID": 1,
     "description": "Nike",
+    "isActive": 1,
     "photoID": 9,
     "photoURL": "https://photos.com/hoops.jpg"
   },
@@ -256,6 +275,7 @@
     "uxp_productID": null,
     "productID": null,
     "description": null,
+    "isActive": null,
     "photoID": null,
     "photoURL": null
   }

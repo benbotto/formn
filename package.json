@@ -1,6 +1,6 @@
 {
   "name": "formn",
-  "version": "5.8.1",
+  "version": "5.8.2",
   "description": "Formn, pronounced foreman, is an object-relational mapper for Node.js. What's the \"F\" stand for? It depends on your mood.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,22 +18,22 @@
     "prepublishOnly": "npm run test && npm run clean && npm run build"
   },
   "devDependencies": {
-    "@types/jasmine": "~3.3.0",
+    "@types/jasmine": "3.x.x",
     "chokidar-cli": "2.x.x",
-    "jasmine": "~3.3.0",
-    "jasmine-console-reporter": "~3.1.0",
-    "ts-node": "~7.0.1",
+    "jasmine": "3.x.x",
+    "jasmine-console-reporter": "3.x.x",
+    "ts-node": "8.x.x",
     "typedoc": "0.x.x"
   },
   "dependencies": {
     "@types/mysql2": "types/mysql2",
-    "@types/node": "12.x.x",
-    "@types/pluralize": "~0.0.29",
+    "@types/node": "10.x.x",
+    "@types/pluralize": "0.x.x",
     "bsy-validation": "2.x.x",
-    "change-case": "~3.0.2",
-    "mysql2": "~1.6.4",
-    "pluralize": "~7.0.0",
-    "reflect-metadata": "~0.1.12",
-    "typescript": "~3.1.6"
+    "change-case": "3.x.x",
+    "mysql2": "1.x.x",
+    "pluralize": "7.x.x",
+    "reflect-metadata": "0.x.x",
+    "typescript": "3.x.x"
   }
 }

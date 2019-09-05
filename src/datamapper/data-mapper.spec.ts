@@ -47,7 +47,8 @@ describe('DataMapper()', () => {
       tblStore.getTable(Product),
       colStore.getPrimaryKey(Product),
       ['productID'])
-      .addColumn(colStore.getColumnMetadataByName(Product, 'description'), 'description');
+      .addColumn(colStore.getColumnMetadataByName(Product, 'description'), 'description')
+      .addColumn(colStore.getColumnMetadataByName(Product, 'isActive'), 'isActive');
 
     photoSchema = new Schema(
       tblStore.getTable(Photo),
@@ -247,6 +248,7 @@ describe('DataMapper()', () => {
       const users = toPlain(dm.serialize(query, userSchema));
 
       expect(users).toEqual(require('../test/query/users-with-phone-numbers-products-and-photos.serialized'));
+      console.log(JSON.stringify(users, null, 2));
     });
 
     it('serializes sub-documents to null if the PK is not present.', () => {

@@ -419,7 +419,7 @@ describe('ConditionParser()', function() {
         expect(tree.children[1].token.value).toBe(':name0');
         expect(tree.children[2].token.value).toBe(':name1');
         expect(tree.children[3].token.value).toBe(':name2');
-        
+
       });
 
       it('returns a valid tree from a logical-condition sentence.', function() {

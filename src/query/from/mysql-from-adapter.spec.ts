@@ -48,8 +48,8 @@ describe('MySQLFromAdapter()', () => {
 
       expect(sel instanceof Select).toBe(true);
       expect(sel.toString()).toBe(
-        'SELECT  `u`.`userID` AS `u.id`,\n'      + 
-        '        `u`.`firstName` AS `u.first`\n' + 
+        'SELECT  `u`.`userID` AS `u.id`,\n'      +
+        '        `u`.`firstName` AS `u.first`\n' +
         'FROM    `users` AS `u`');
     });
 
@@ -59,8 +59,8 @@ describe('MySQLFromAdapter()', () => {
 
       expect(sel instanceof Select).toBe(true);
       expect(sel.toString()).toBe(
-        'SELECT  `u`.`userID` AS `u.id`,\n'          + 
-        '        `u`.`firstName` AS `u.first`,\n'    + 
+        'SELECT  `u`.`userID` AS `u.id`,\n'          +
+        '        `u`.`firstName` AS `u.first`,\n'    +
         '        `u`.`lastName` AS `u.last`,\n'      +
         '        `u`.`createdOn` AS `u.createdOn`\n' +
         'FROM    `users` AS `u`');

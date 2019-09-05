@@ -54,7 +54,7 @@ export class ConditionParser {
       const pairParts = ['comparison-operator', 'null-comparison-operator', 'in-comparison-operator', 'boolean-operator'];
 
       charTerminal('{');
-      
+
       if (!tokenIn(pairParts))
         throw new ConditionError(errorString('[' + pairParts.join(' | ') + ']'));
 
@@ -149,7 +149,7 @@ export class ConditionParser {
     // <nullable> ::= null | <parameter>
     function nullable(): void {
       const values = ['null', 'parameter'];
-      
+
       if (!tokenIn(values))
         throw new ConditionError(errorString('[' + values.join(' | ') + ']'));
 
@@ -162,7 +162,7 @@ export class ConditionParser {
     // <value> ::= <parameter> | <column> | <number>
     function value(): void {
       const values = ['parameter', 'column', 'number'];
-      
+
       if (!tokenIn(values))
         throw new ConditionError(errorString('[' + values.join(' | ') + ']'));
 

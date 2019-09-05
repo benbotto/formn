@@ -98,7 +98,7 @@ export class ModelValidator extends ObjectValidator {
         switch (meta.dataType) {
           case 'String':
             validators.push(new StringValidator());
-            
+
             if (meta.maxLength !== undefined)
               validators.push(new MaxLengthValidator(meta.maxLength));
             break;

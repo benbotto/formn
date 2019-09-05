@@ -65,7 +65,7 @@ export abstract class Update extends Query {
     for (let fqProp in this.model) {
       assert(fromMeta.isColumnAvailable(fqProp),
         `Column "${fqProp}" is not available for updating.`);
-      
+
       this.updateCols.push(fromMeta.getFromColumnMetaByProp(fqProp));
     }
   }

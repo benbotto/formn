@@ -142,7 +142,6 @@ describe('MySQLConnectionManager()', () => {
 
       expect(() => connMan.getConnection())
         .toThrowError('MySQLConnectionManager.getConnection() called but the connection is not established.  Call connect().');
-      
     });
 
     it('returns a connection from the pool.', (done) => {
@@ -164,7 +163,7 @@ describe('MySQLConnectionManager()', () => {
 
       expect(() => connMan.getPool())
         .toThrowError('MySQLConnectionManager.getPool() called but the connection is not established.  Call connect().');
-      
+
     });
 
     it('returns the pool.', (done) => {

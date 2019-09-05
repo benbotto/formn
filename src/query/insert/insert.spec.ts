@@ -78,7 +78,7 @@ describe('Insert()', () => {
       // When the Executer.insert method is called return
       // immediately with an insertId.  The insertId starts at
       // 1 and is incremented on each query.
-      insertSpy.and.callFake((query: string, params: ParameterType) => 
+      insertSpy.and.callFake((query: string, params: ParameterType) =>
         Promise.resolve({insertId: ++insertId}));
 
       // User for testing.

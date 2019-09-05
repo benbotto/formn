@@ -60,14 +60,14 @@ describe('MySQLUpdate()', () => {
     it('returns an empty string if there are not columns to update.', () => {
       const upd = getUpdate(
         getFrom(User, 'u'), {});
-      
+
       expect(upd.toString()).toBe('');
     });
 
     it('returns an update statement for one table.', () => {
       const upd = getUpdate(
         getFrom(User, 'u'), {'u.first' : 'Ben', 'u.last' : 'Botto'});
-      
+
       expect(upd.toString()).toBe(
         'UPDATE  `users` AS `u`\n' +
         'SET\n' +
@@ -91,7 +91,7 @@ describe('MySQLUpdate()', () => {
       const from = getFrom(User, 'u')
         .where({$eq: {'u.id' : ':myID'}}, {myID: 42});
       const upd = getUpdate(from, {'u.first' : 'Ben', 'u.last' : 'Botto'});
-      
+
       expect(upd.toString()).toBe(
         'UPDATE  `users` AS `u`\n' +
         'SET\n' +
@@ -126,7 +126,7 @@ describe('MySQLUpdate()', () => {
     it('resolves with 0 affectedRows if there are no columns to update.', (done) => {
       const upd = getUpdate(
         getFrom(User, 'u'), {});
-      
+
       upd
         .execute()
         .then(res => {
@@ -141,7 +141,7 @@ describe('MySQLUpdate()', () => {
       const from = getFrom(User, 'u')
         .where({$eq: {'u.id' : ':myID'}}, {myID: 42});
       const upd = getUpdate(from, {'u.first' : 'Ben', 'u.last' : 'Botto'});
-      
+
       upd
         .execute()
         .then(res => {

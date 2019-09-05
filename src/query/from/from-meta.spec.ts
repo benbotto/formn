@@ -101,7 +101,7 @@ describe('FromMeta()', function() {
       it('stores the relationship between the two fromMeta.', () => {
         fromMeta.addTable(User, 'u');
         fromMeta.addTable(PhoneNumber, 'pn', 'u', 'phoneNumbers');
-        
+
         expect(fromMeta.tableMetas.get('pn').relationshipMetadata)
           .toBe(relStore.getRelationship(User, PhoneNumber, 'phoneNumbers'));
       });

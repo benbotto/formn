@@ -34,7 +34,7 @@ describe('ModelColumn()', () => {
     });
 
     it('does not include the name property if the column name matches the property name.', () => {
-      col.setName('age'); 
+      col.setName('age');
       expect(col.getDecoratorString()).toBe('  @Column()');
     });
 

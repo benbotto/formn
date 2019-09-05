@@ -2,7 +2,7 @@ import { ConditionError } from '../../error/';
 
 import { LexerToken } from '../';
 
-/** 
+/**
  * Class that lexicographically parses a condition object into tokens.
  */
 export class ConditionLexer {
@@ -49,7 +49,7 @@ export class ConditionLexer {
           break;
         case '"':
           // Move past the quote.
-          if (++i >= condStr.length) 
+          if (++i >= condStr.length)
             throw new ConditionError('Expected character but found EOL.');
 
           // The string immediatly after the quote, and the index of the next quote.
@@ -114,7 +114,7 @@ export class ConditionLexer {
         // Null.
         case 'n':
           str = condStr.substr(i, 4);
-          
+
           if (str !== 'null')
             throw new ConditionError(`Expected null but found ${str}.`);
 

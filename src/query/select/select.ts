@@ -228,7 +228,7 @@ export class Select<T> extends Query {
 
         // Keep a lookup of table alias->schema.
         schemaLookup.set(fromTblMeta.alias, schema);
-        
+
         // If this table has no parent then the schema is top level.  Else
         // this is a sub schema and the parent is guaranteed to be present in
         // the lookup.

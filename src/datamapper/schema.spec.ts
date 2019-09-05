@@ -81,7 +81,7 @@ describe('Schema()', function() {
         tblStore.getTable(PhoneNumber),
         colStore.getPrimaryKey(PhoneNumber),
         ['phoneNumberID']);
-      
+
       rel = relStore.getRelationships(User, PhoneNumber, true, 'phoneNumbers')[0];
     });
 

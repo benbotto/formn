@@ -90,7 +90,7 @@ export class ModelTransformer {
         // element of the array is recursively transformed.
         if (meta.cardinality === 'OneToMany') {
           (entity as KeyValType)[meta.mapTo] = [];
-          
+
           for (let obj of rawSubRes) {
             (entity as KeyValType)[meta.mapTo]
               .push(await this.transform(obj, meta.to()));

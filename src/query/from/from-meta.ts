@@ -46,7 +46,7 @@ export class FromMeta {
    * WHERE and ON conditions.
    */
   public paramList: ParameterList = new ParameterList();
-  
+
   /**
    * Initialize.
    * @param colStore - Used for accessing columns in tables.
@@ -128,7 +128,7 @@ export class FromMeta {
     // Make each column available for selection or conditions, and keep
     // a lookup of fq-property names to fq-column names.
     const colMetas = this.colStore.getColumnMetadata(Entity);
-    
+
     colMetas.forEach(colMeta => {
       const fqColName = ColumnMetadata
         .createFQName(alias, colMeta.name);

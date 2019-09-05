@@ -251,7 +251,7 @@ export function initDB() {
 
   colDec = Column({name: 'EXTRA', converter: new MySQLIsGeneratedConverter()});
   colDec(MySQLColumn.prototype, 'isGenerated');
-  
+
   relDec = OneToMany<MySQLColumn, MySQLKeyColumnUsage>(
     () => MySQLKeyColumnUsage,
     (c, fk) => [

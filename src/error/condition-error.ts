@@ -1,4 +1,4 @@
-/** 
+/**
  * Custom Error instance for Condition (lex/parse/compile) errors.
  */
 export class ConditionError extends Error {

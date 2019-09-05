@@ -36,7 +36,7 @@ export class MySQLColumn {
 
   @Column({name: 'EXTRA', converter: new IsGeneratedConverter()})
   isGenerated: boolean;
-  
+
   @OneToMany<MySQLColumn, MySQLKeyColumnUsage>(
     () => MySQLKeyColumnUsage,
     (c, fk) => [

@@ -205,7 +205,7 @@ export class ModelColumn {
 
     const propName = this.getPropertyName();
 
-    return `  ${propName}: ${this.getDataType()}`; 
+    return `  ${propName}: ${this.getDataType()}`;
   }
 
   /**

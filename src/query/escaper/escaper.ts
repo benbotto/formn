@@ -15,7 +15,7 @@ export abstract class Escaper {
    */
   escapeFullyQualifiedColumn(fqc: string): string {
     const firstDot = fqc.indexOf('.');
-    
+
     // There is no dot, it's just a column name.
     if (firstDot === -1)
       return this.escapeProperty(fqc);

@@ -6,7 +6,7 @@ import { ConnectionOptions } from '../connection/';
 import { Executer, Escaper, Insert, FromAdapter, UpdateModel, DeleteModel }
   from '../query/';
 
-/** 
+/**
  * This is the main interface to the ORM.  It provides access to CRUD
  * operations and connection management.
  */

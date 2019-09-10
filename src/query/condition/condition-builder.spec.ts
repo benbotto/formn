@@ -12,8 +12,34 @@ describe('ConditionBuilder()', () => {
 
     it('throws an error if the parameter does not start with a colon.', () => {
       expect(() =>
-        cb.eq('p.firstName', 'first', 'Ben'))
+        cb.comp('$eq', 'p.firstName', 'first', 'Ben'))
         .toThrowError('Parameter names must start with a colon.');
+    });
+  });
+
+  describe('.inComp()', () => {
+    it('throws an error if the operator is Invalid.', () => {
+      expect(() =>
+        cb.inComp('$foo', 'p.firstName', ':first', ['Ben']))
+        .toThrowError('Invalid condition operator "$foo."');
+    });
+
+    it('throws an error if the parameter does not start with a colon.', () => {
+      expect(() =>
+        cb.inComp('$in', 'p.firstName', 'first', ['Ben']))
+        .toThrowError('Parameter names must start with a colon.');
+    });
+
+    it('throws an error if the parameter base name is not a string.', () => {
+      expect(() =>
+        cb.inComp('$in', 'p.firstName', [':first'], ['Ben']))
+        .toThrowError('Parameter base name must be a string.');
+    });
+
+    it('throws an error if the properties list is not an array.', () => {
+      expect(() =>
+        cb.inComp('$in', 'p.firstName', 'foo'))
+        .toThrowError('IN condition properties must be an array.');
     });
   });
 
@@ -108,8 +134,19 @@ describe('ConditionBuilder()', () => {
     it('returns a ParameterizedCondition.', () => {
       const cond = cb.in('p.firstName', ':first', ['Ben', 'Jack', 'Joe']);
 
-      expect(cond.getCond()).toEqual({$in: {'p.firstName': ':first'}});
+      expect(cond.getCond()).toEqual(
+        {$in: {'p.firstName': [':first_0', ':first_1', ':first_2']}});
       expect(cond.getParams()).toEqual({first_0: 'Ben', first_1: 'Jack', first_2: 'Joe'});
+    });
+
+    it('returns a ParameterizedCondition with columns.', () => {
+      const cond = cb.in('p.firstName', ['sue.name', 'joe.name']);
+
+      console.log(cond.getCond());
+
+      expect(cond.getCond()).toEqual(
+        {$in: {'p.firstName': ['sue.name', 'joe.name']}});
+      expect(cond.getParams()).toEqual({});
     });
   });
 
@@ -117,7 +154,8 @@ describe('ConditionBuilder()', () => {
     it('returns a ParameterizedCondition.', () => {
       const cond = cb.notIn('p.firstName', ':first', ['Ben', 'Jack', 'Joe']);
 
-      expect(cond.getCond()).toEqual({$notIn: {'p.firstName': ':first'}});
+      expect(cond.getCond()).toEqual(
+        {$notIn: {'p.firstName': [':first_0', ':first_1', ':first_2']}});
       expect(cond.getParams()).toEqual({first_0: 'Ben', first_1: 'Jack', first_2: 'Joe'});
     });
   });

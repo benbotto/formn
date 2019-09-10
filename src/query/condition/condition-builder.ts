@@ -10,7 +10,7 @@ export class ConditionBuilder {
   /**
    * A comparison operation.
    * @param op - The comparison operator, as a string: $eq, $neq, $lt,
-   * $lte, $gt, $gte, $like, or $notLike.
+   * $lte, $gt, $gte, $like, $notLike, $is, $isnt.
    * @param prop - The name of a fully-qualified property in a query in the form
    * &lt;table-alias&gt;.&lt;property&gt;.
    * @param propOrParamName - Either a fully-qualified property, or a parameter name
@@ -26,7 +26,6 @@ export class ConditionBuilder {
     const paramList = new ParameterList();
     const validOps  = [
       '$eq', '$neq', '$lt', '$lte', '$gt', '$gte', '$like', '$notLike',
-      '$in', '$notIn',
       '$is', '$isnt',
     ];
 
@@ -36,20 +35,67 @@ export class ConditionBuilder {
       assert(propOrParamName[0] === ':',
         'Parameter names must start with a colon.');
 
-      if (Array.isArray(param)) {
-        const paramBaseName = propOrParamName.substr(1);
-
-        param.forEach(param => paramList
-          .addParameter(paramList
-            .createParameterName(paramBaseName),
-            param));
-      }
-      else
-        paramList.addParameter(propOrParamName.substr(1), param);
+      paramList.addParameter(propOrParamName.substr(1), param);
     }
 
     return new ParameterizedCondition(
       {[op]: {[prop]: propOrParamName}},
+      paramList);
+  }
+
+  /**
+   * A IN (IN or NOT IN) comparison operation.
+   * @param op - The comparison operator, as a string: $in, $notIn.
+   * @param prop - The name of a fully-qualified property in a query in the form
+   * &lt;table-alias&gt;.&lt;property&gt;.
+   * @param propsOrParamBaseName - Either a fully-qualified property, or a
+   * parameter name preceded by a colon (e.g. :someParameter).  If a parameter
+   * name is provided, it's used a base name.  Each property is parameterized,
+   * and the parameter names are suffixed with _# (e.g. :param_0, :param_1,
+   * ..., :param_n).
+   * @param params - An array of replacement values if propOrParamName is a
+   * parameter name.
+   */
+  inComp(
+    op: string,
+    prop: string,
+    propsOrParamBaseName: string | string[],
+    params?: any[]): ParameterizedCondition {
+
+    const paramList = new ParameterList();
+    const validOps  = ['$in', '$notIn'];
+
+    assert(validOps.indexOf(op) !== -1, `Invalid condition operator "${op}."`);
+
+    if (params !== undefined) {
+      assert(typeof propsOrParamBaseName === 'string',
+        'Parameter base name must be a string.');
+
+      assert(propsOrParamBaseName[0] === ':',
+        'Parameter names must start with a colon.');
+
+      const paramBaseName = (propsOrParamBaseName as string).substr(1);
+
+      params.forEach(param => paramList
+        .addParameter(paramList
+          .createParameterName(paramBaseName),
+          param));
+
+      const paramNames = paramList
+        .getParamNames()
+        .map(p => `:${p}`);
+
+      return new ParameterizedCondition(
+        {[op]: {[prop]: paramNames}},
+        paramList);
+    }
+    else {
+      assert(Array.isArray(propsOrParamBaseName),
+        'IN condition properties must be an array.');
+    }
+
+    return new ParameterizedCondition(
+      {[op]: {[prop]: propsOrParamBaseName}},
       paramList);
   }
 
@@ -137,17 +183,17 @@ export class ConditionBuilder {
   }
 
   /**
-   * In comparison.  See [[ConditionBuilder.comp]].
+   * In comparison.  See [[ConditionBuilder.inComp]].
    */
-  in(prop: string, propOrParamName: string, param?: any[]): ParameterizedCondition {
-    return this.comp('$in', prop, propOrParamName, param);
+  in(prop: string, propsOrParamBaseName: string | string[], param?: any[]): ParameterizedCondition {
+    return this.inComp('$in', prop, propsOrParamBaseName, param);
   }
 
   /**
-   * Not in comparison.  See [[ConditionBuilder.comp]].
+   * Not in comparison.  See [[ConditionBuilder.inComp]].
    */
-  notIn(prop: string, propOrParamName: string, param?: any[]): ParameterizedCondition {
-    return this.comp('$notIn', prop, propOrParamName, param);
+  notIn(prop: string, propsOrParamBaseName: string | string[], param?: any[]): ParameterizedCondition {
+    return this.inComp('$notIn', prop, propsOrParamBaseName, param);
   }
 
   /**

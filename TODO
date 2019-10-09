@@ -1,13 +1,3 @@
-It would be nice to provide a decompile method in the ConditionCompiler.  This could take a condition object and build a new condition object using a ColumnLookup instance (e.g. replace all column names).  That could be useful in APIs because the programmer could provide a limited list of filterable properties with sane names (i.e. the API consumer wouldn't need to know about internal aliases).
-A thought I had is that each from/join could add the alias to an object, so above there would be
-   {
-     u: {id: 'u.id', first: 'u.first', ...},
-     pn: {id: 'pn.id', ...}
-   }
- Then select could take a function: select(({u}) => [u.id, u.first]).  It wouldn't help with type safety, though, because TS doesn't support variadic generics.
-
-Here's what I'm thinking for the condition builder, set as a to-do item in ndm.
- 
 It would be nice if empty conditions returned empty strings, but it's kind of complex to implement.  Eg {} = '', {$and: []} = '', {$in: {col: []}} = ''
 
 For MSSQL support:
@@ -22,4 +12,3 @@ For MSSQL support:
   Test fully-qualified table names in From.
   Test fully-qualified table names in Insert.
   Test fully-qualified table names in UpdateModel.
-

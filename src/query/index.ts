@@ -7,6 +7,7 @@ export * from './condition/parameter-type';
 export * from './condition/parse-tree';
 export * from './condition/parameterized-condition';
 export * from './condition/condition-builder';
+export * from './condition/condition-mapper';
 
 export * from './query';
 export * from './mutate-model';

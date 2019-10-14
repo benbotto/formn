@@ -42,7 +42,7 @@ describe('Select()', function() {
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getSelect = <T>(from: From) =>
-      new TestSelect<T>(colStore, tblStore, relStore, propStore, escaper, executer, from);
+      new TestSelect<T>(colStore, escaper, executer, from);
   });
 
   describe('.constructor()', function() {

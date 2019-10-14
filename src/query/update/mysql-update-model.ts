@@ -46,8 +46,7 @@ export class MySQLUpdateModel<T> extends UpdateModel<T> {
   protected produceQuery(from: From): MySQLUpdate {
     const updateModel = this.createUpdateModel(from);
 
-    return new MySQLUpdate(this.colStore, this.tblStore, this.relStore, this.propStore, this.escaper,
-      this.executer, from, updateModel);
+    return new MySQLUpdate(this.escaper, this.executer, from, updateModel);
   }
 }
 

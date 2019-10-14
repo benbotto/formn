@@ -2,7 +2,7 @@ import { assert } from '../error/';
 
 import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore, EntityType } from '../metadata/';
 
-import { ParameterList, ParameterType, Query, Escaper, Executer, From,
+import { ParameterList, ParameterType, Query, Escaper, From,
   ExecutableQuery } from './';
 
 /**
@@ -32,8 +32,6 @@ export abstract class MutateModel<Q extends Query, T> extends Query {
    * @param escaper - An [[Escaper]] matching the database type (e.g.
    * [[MySQLEscaper]] or [[MSSQLEscaper]]).  Used when escaping column names in
    * compiled conditions.
-   * @param executer - An [[Executer]] instance that matches the database type
-   * (e.g. [[MySQLExecuter]]).
    * @param Entity - The type of model to mutate, which is the constructor of a
    * [[Table]]-decorated class.
    * @param model - An Entity instance to mutate, which must have the primary
@@ -45,11 +43,10 @@ export abstract class MutateModel<Q extends Query, T> extends Query {
     protected relStore: RelationshipStore,
     protected propStore: PropertyMapStore,
     protected escaper: Escaper,
-    protected executer: Executer,
     protected Entity: EntityType<T>,
     protected model: T) {
 
-    super(colStore, tblStore, relStore, propStore, escaper, executer);
+    super();
 
     this.from = this.createFrom();
     this.query = this.produceQuery(this.from);

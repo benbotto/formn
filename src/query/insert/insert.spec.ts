@@ -32,7 +32,7 @@ describe('Insert()', () => {
 
     // Insert curry to produce an Insert instance with just an entity and model.
     getInsert = <T>(Entity: EntityType<T>, model: T) =>
-      new Insert<T>(colStore, tblStore, relStore, propStore, escaper, executer, Entity, model);
+      new Insert<T>(colStore, tblStore, escaper, executer, Entity, model);
   });
 
   describe('.constructor()', () => {

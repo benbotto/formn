@@ -41,8 +41,7 @@ export class MySQLFromAdapter<T> extends FromAdapter<T> {
    * @return An executable [[Select]] instance.
    */
   select(...cols: string[]): MySQLSelect<T> {
-    return new MySQLSelect<T>(this.colStore, this.tblStore, this.relStore,
-      this.propStore, this.escaper, this.executer, this)
+    return new MySQLSelect<T>(this.colStore, this.escaper, this.executer, this)
       .select(...cols);
   }
 
@@ -52,8 +51,7 @@ export class MySQLFromAdapter<T> extends FromAdapter<T> {
    * @return A [[MySQLUpdate]] instance that is executable.
    */
   update(model: UpdateType): MySQLUpdate {
-    return new MySQLUpdate(this.colStore, this.tblStore, this.relStore,
-      this.propStore, this.escaper, this.executer, this, model);
+    return new MySQLUpdate(this.escaper, this.executer, this, model);
   }
 }
 

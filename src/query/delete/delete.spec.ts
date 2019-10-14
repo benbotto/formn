@@ -36,7 +36,7 @@ describe('Delete()', () => {
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getDelete = (from: From, alias?: string) =>
-      new Delete(colStore, tblStore, relStore, propStore, escaper, executer, from, alias);
+      new Delete(escaper, executer, from, alias);
   });
 
   describe('.constructor()', () => {

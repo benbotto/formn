@@ -1,7 +1,5 @@
 import { assert } from '../../error/';
 
-import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore } from '../../metadata/';
-
 import { Query, Escaper, Executer, From, FromColumnMeta, ExecutableQuery,
   MutateResultType } from '../';
 
@@ -11,11 +9,6 @@ import { Query, Escaper, Executer, From, FromColumnMeta, ExecutableQuery,
 export class Delete extends Query {
   /**
    * Initialize the [[Query]] using a [[From]] instance.
-   * @param colStore - Used for accessing columns in tables.
-   * @param tblStore - Used for accessing tables in the database.
-   * @param relStore - Used for accessing relationships between tables.
-   * @param propStore - Used for pulling table property maps (used in
-   * conjunction with the relStore to get remote columns).
    * @param escaper - An [[Escaper]] matching the database type (e.g.
    * [[MySQLEscaper]] or [[MSSQLEscaper]]).  Used when escaping column names in
    * compiled conditions.
@@ -27,16 +20,12 @@ export class Delete extends Query {
    * to the base table.
    */
   constructor(
-    protected colStore: ColumnStore,
-    protected tblStore: TableStore,
-    protected relStore: RelationshipStore,
-    protected propStore: PropertyMapStore,
     protected escaper: Escaper,
     protected executer: Executer,
     protected from: From,
     protected alias?: string) {
 
-    super(colStore, tblStore, relStore, propStore, escaper, executer);
+    super();
 
     // Alias defaults to the base table.
     if (!this.alias)

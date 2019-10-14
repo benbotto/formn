@@ -1,7 +1,6 @@
 import { assert } from '../../error/';
 
-import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
-  ColumnMetadata, EntityType } from '../../metadata/';
+import { ColumnStore, TableStore, ColumnMetadata, EntityType } from '../../metadata/';
 
 import { ParameterType, ParameterList, Escaper, Executer, Query,
   ExecutableQuery } from '../';
@@ -21,9 +20,6 @@ export class Insert<T> extends Query {
    * Initialize the Query.
    * @param colStore - Used for accessing columns in tables.
    * @param tblStore - Used for accessing tables in the database.
-   * @param relStore - Used for accessing relationships between tables.
-   * @param propStore - Used for pulling table property maps (used in
-   * conjunction with the relStore to get remote columns).
    * @param escaper - An [[Escaper]] matching the database type (e.g.
    * [[MySQLEscaper]] or [[MSSQLEscaper]]).  Used when escaping column names in
    * compiled conditions.
@@ -36,14 +32,12 @@ export class Insert<T> extends Query {
   constructor(
     protected colStore: ColumnStore,
     protected tblStore: TableStore,
-    protected relStore: RelationshipStore,
-    protected propStore: PropertyMapStore,
     protected escaper: Escaper,
     protected executer: Executer,
     private Entity: EntityType<T>,
     private model: T) {
 
-    super(colStore, tblStore, relStore, propStore, escaper, executer);
+    super();
 
     this.storeInsertCols();
     this.storeParameters();

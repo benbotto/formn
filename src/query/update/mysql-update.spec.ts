@@ -39,7 +39,7 @@ describe('MySQLUpdate()', () => {
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getUpdate = (from: From, model: UpdateType) =>
-      new MySQLUpdate(colStore, tblStore, relStore, propStore, escaper, executer, from, model);
+      new MySQLUpdate(escaper, executer, from, model);
   });
 
   describe('.constructor()', () => {

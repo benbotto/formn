@@ -1,9 +1,7 @@
 import { assert } from '../../error/';
 
-import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore } from '../../metadata/';
-
-import { UpdateType, ParameterList, Query, Escaper, Executer, From,
-  FromColumnMeta, ExecutableQuery, MutateResultType } from '../';
+import { UpdateType, ParameterList, Query, Executer, From, FromColumnMeta,
+  ExecutableQuery, MutateResultType } from '../';
 
 /**
  * A [[Query]] that represents an UPDATE.
@@ -20,14 +18,6 @@ export abstract class Update extends Query {
 
   /**
    * Initialize the query using a From instance.
-   * @param colStore - Used for accessing columns in tables.
-   * @param tblStore - Used for accessing tables in the database.
-   * @param relStore - Used for accessing relationships between tables.
-   * @param propStore - Used for pulling table property maps (used in
-   * conjunction with the relStore to get remote columns).
-   * @param escaper - An [[Escaper]] matching the database type (e.g.
-   * [[MySQLEscaper]] or [[MSSQLEscaper]]).  Used when escaping column names in
-   * compiled conditions.
    * @param executer - An [[Executer]] instance that matches the database type
    * (e.g. [[MySQLExecuter]]).
    * @param from - A [[From]] instance which holds the base table, all
@@ -38,16 +28,11 @@ export abstract class Update extends Query {
    * value to update in the database.
    */
   constructor(
-    protected colStore: ColumnStore,
-    protected tblStore: TableStore,
-    protected relStore: RelationshipStore,
-    protected propStore: PropertyMapStore,
-    protected escaper: Escaper,
     protected executer: Executer,
     protected from: From,
     protected model: UpdateType) {
 
-    super(colStore, tblStore, relStore, propStore, escaper, executer);
+    super();
 
     this.storeUpdateCols();
     this.storeParameters();

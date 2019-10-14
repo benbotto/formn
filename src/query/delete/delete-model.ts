@@ -37,7 +37,7 @@ export class DeleteModel<T> extends MutateModel<Delete, T> {
     protected Entity: EntityType<T>,
     protected model: T) {
 
-    super(colStore, tblStore, relStore, propStore, escaper, executer, Entity, model);
+    super(colStore, tblStore, relStore, propStore, escaper, Entity, model);
   }
 
   /**
@@ -45,8 +45,7 @@ export class DeleteModel<T> extends MutateModel<Delete, T> {
    * @param from - A [[From]] instance, passed to the [[Delete]] constructor.
    */
   protected produceQuery(from: From): Delete {
-    return new Delete(this.colStore, this.tblStore, this.relStore, this.propStore, this.escaper,
-      this.executer, from);
+    return new Delete(this.escaper, this.executer, from);
   }
 
   /**

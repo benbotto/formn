@@ -53,8 +53,7 @@ export abstract class FromAdapter<T> extends From {
    * @return A Delete instance that can be executed.
    */
   delete(alias?: string): Delete {
-    return new Delete(this.colStore, this.tblStore, this.relStore,
-      this.propStore, this.escaper, this.executer, this, alias)
+    return new Delete(this.escaper, this.executer, this, alias);
   }
 
   /**

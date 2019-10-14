@@ -35,7 +35,7 @@ describe('MySQLSelect()', () => {
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getSelect = <T>(from: From) =>
-      new MySQLSelect<T>(colStore, tblStore, relStore, propStore, escaper, executer, from);
+      new MySQLSelect<T>(colStore, escaper, executer, from);
   });
 
   describe('.toString()', () => {

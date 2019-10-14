@@ -1,6 +1,6 @@
 import { assert } from '../../error/';
 
-import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore } from '../../metadata/';
+import { PropertyMapStore } from '../../metadata/';
 
 import { UpdateType, ParameterList, MySQLEscaper, MySQLExecuter, From, Update,
   ExecutableQuery, FromColumnMeta } from '../';
@@ -11,11 +11,6 @@ import { UpdateType, ParameterList, MySQLEscaper, MySQLExecuter, From, Update,
 export class MySQLUpdate extends Update {
   /**
    * Initialize the query using a From instance.
-   * @param colStore - Used for accessing columns in tables.
-   * @param tblStore - Used for accessing tables in the database.
-   * @param relStore - Used for accessing relationships between tables.
-   * @param propStore - Used for pulling table property maps (used in
-   * conjunction with the relStore to get remote columns).
    * @param escaper - An [[Escaper]] for MySQL.  Used when escaping column
    * names.
    * @param executer - An [[Executer]] instance for MySQL.
@@ -27,16 +22,12 @@ export class MySQLUpdate extends Update {
    * value to update in the database.
    */
   constructor(
-    protected colStore: ColumnStore,
-    protected tblStore: TableStore,
-    protected relStore: RelationshipStore,
-    protected propStore: PropertyMapStore,
     protected escaper: MySQLEscaper,
     protected executer: MySQLExecuter,
     protected from: From,
     protected model: UpdateType) {
 
-    super(colStore, tblStore, relStore, propStore, escaper, executer, from, model);
+    super(executer, from, model);
   }
 
   /**

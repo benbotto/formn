@@ -47,8 +47,8 @@ export abstract class DataContext {
    * [[Insert.execute]].
    */
   insert<T>(Entity: EntityType<T>, model: T): Insert<T> {
-    return new Insert<T>(this.colStore, this.tblStore, this.relStore,
-      this.propStore, this.getEscaper(), this.getExecuter(), Entity, model);
+    return new Insert<T>(this.colStore, this.tblStore, this.getEscaper(),
+      this.getExecuter(), Entity, model);
   }
 
   /**

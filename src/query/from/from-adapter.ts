@@ -43,11 +43,7 @@ export abstract class FromAdapter<T> extends From {
    * @param cols - An optional set of columns to select.
    * @return An executable [[Select]] instance.
    */
-  select(...cols: string[]): Select<T> {
-    return new Select<T>(this.colStore, this.tblStore, this.relStore,
-      this.propStore, this.escaper, this.executer, this)
-      .select(...cols);
-  }
+  abstract select(...cols: string[]): Select<T>;
 
   /**
    * Delete from a table.  See [[Delete]].

@@ -1,7 +1,8 @@
 import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
   ColumnMetadata, EntityType } from '../../metadata/';
 
-import { MySQLEscaper, MySQLExecuter, FromAdapter, UpdateType, MySQLUpdate } from '../';
+import {MySQLEscaper, MySQLExecuter, FromAdapter, UpdateType, MySQLUpdate,
+  Select, MySQLSelect } from '../';
 
 /**
  * A specialized [[FromAdapter]] for MySQL databases.  See [[FromAdapter]].
@@ -32,6 +33,17 @@ export class MySQLFromAdapter<T> extends FromAdapter<T> {
     fromAlias?: string) {
 
     super(colStore, tblStore, relStore, propStore, escaper, executer, FromEntity, fromAlias);
+  }
+
+  /**
+   * Select from the table.  See [[Select.select]].
+   * @param cols - An optional set of columns to select.
+   * @return An executable [[Select]] instance.
+   */
+  select(...cols: string[]): MySQLSelect<T> {
+    return new MySQLSelect<T>(this.colStore, this.tblStore, this.relStore,
+      this.propStore, this.escaper, this.executer, this)
+      .select(...cols);
   }
 
   /**

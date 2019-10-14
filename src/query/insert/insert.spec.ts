@@ -1,7 +1,6 @@
 import { Connection } from 'mysql2/promise';
 
-import { metaFactory, RelationshipStore, TableStore, ColumnStore,
-  PropertyMapStore, EntityType } from '../../metadata/';
+import { metaFactory, TableStore, ColumnStore, EntityType } from '../../metadata/';
 
 import { Converter } from '../../converter';
 
@@ -10,10 +9,8 @@ import { initDB, User, UCConverter } from '../../test/';
 import { Insert, Query, ParameterType, MySQLEscaper, MySQLExecuter } from '../';
 
 describe('Insert()', () => {
-  let relStore: RelationshipStore;
   let tblStore: TableStore;
   let colStore: ColumnStore;
-  let propStore: PropertyMapStore;
   let escaper: MySQLEscaper;
   let executer: MySQLExecuter;
   let con: jasmine.SpyObj<Connection>;
@@ -24,8 +21,6 @@ describe('Insert()', () => {
 
     tblStore  = metaFactory.getTableStore();
     colStore  = metaFactory.getColumnStore();
-    relStore  = metaFactory.getRelationshipStore();
-    propStore = metaFactory.getPropertyMapStore();
     escaper   = new MySQLEscaper();
     con       = jasmine.createSpyObj('con', ['query']);
     executer  = new MySQLExecuter(con);

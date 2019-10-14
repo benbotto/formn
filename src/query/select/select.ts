@@ -188,14 +188,6 @@ export abstract class Select<T> extends Query {
   }
 
   /**
-   * Get the ORDER BY portion of the query string, or an empty string if there
-   * is no order.
-   */
-  getOrderByString(): string {
-    return this.order.getOrderByString();
-  }
-
-  /**
    * Execute the query and return an array of results of type T.
    * @return A promise that shall be resolved with the normalized query results
    * of type T.  If an error occurs while executing the query, the returned

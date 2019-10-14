@@ -115,17 +115,6 @@ describe('Select()', () => {
     });
   });
 
-  describe('.orderBy()', () => {
-    // Note that this uses the OrderBy class and is mainly tested there.
-    it('adds the ORDER BY clause.', () => {
-      const query = getSelect<User>(getFrom(User, 'u'))
-        .select('u.id', 'u.first', 'u.last')
-        .orderBy('u.first');
-
-      expect(query.getOrderByString()).toBe('ORDER BY `u`.`firstName` ASC');
-    });
-  });
-
   describe('.execute()', () => {
     let selectSpy: jasmine.Spy;
 

@@ -86,6 +86,24 @@ describe('ConditionMapper()', () => {
       }
     });
 
+    it('throws an error if a parameter is missing on a nested condition.', () => {
+      try {
+        const cond = {
+          $and: [
+            {$eq: {'description': ':foo'}},
+            {$eq: {'name': ':nane'}},
+          ]
+        };
+        const params = {name: 'Bob'};
+
+        mapper.map(cond, columnLookup, params);
+        expect(true).toBe(false);
+      }
+      catch (err) {
+        expect(err.message).toBe('Replacement value for parameter "foo" not present.');
+      }
+    });
+
     it('throws an error if the column is not present in the lookup.', () => {
       try {
         const cond = {$eq: {'foo': ':foo'}};

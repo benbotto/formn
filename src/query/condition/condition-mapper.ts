@@ -68,7 +68,7 @@ export class ConditionMapper {
           // cond0  cond1 condN
           const op   = tree.token.value;
           const kids = tree.children
-            .map(kid => recompile(kid, columnLookup));
+            .map(kid => recompile(kid, columnLookup, params));
 
           return {[op]: kids};
         }

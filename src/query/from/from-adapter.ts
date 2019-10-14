@@ -1,7 +1,8 @@
 import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
   ColumnMetadata, EntityType } from '../../metadata/';
 
-import { Escaper, Executer, From, Select, Delete, Update, UpdateType } from '../';
+import { Escaper, Executer, From, Select, Delete, Update, UpdateType,
+  Count, OrderBy } from '../';
 
 /**
  * Adapter for the [[From]] class that exposes a nice user interface for
@@ -63,5 +64,16 @@ export abstract class FromAdapter<T> extends From {
    * [[MySQLUpdate]]).
    */
   abstract update(model: UpdateType): Update;
+
+  /**
+   * Get the record count from a table.
+   * @param col - An optional column to count on.  If not provided, then
+   * COUNT(*) is used.
+   */
+  count(col?: string): Count {
+    return new Count(this.escaper, this.executer, this,
+      new OrderBy(this.escaper, this))
+      .count(col);
+  }
 }
 

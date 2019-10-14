@@ -106,5 +106,16 @@ describe('MySQLFromAdapter()', () => {
         '`u`.`firstName` = :u_first_0');
     });
   });
+
+  describe('.count()', () => {
+    it('returns a Count instance with the From set.', () => {
+      const count = getFrom(User, 'u')
+        .count('u.id');
+
+      expect(count.toString()).toBe(
+        'SELECT  COUNT(`u`.`userID`) AS count\n' +
+        'FROM    `users` AS `u`');
+    });
+  });
 });
 

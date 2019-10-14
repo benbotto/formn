@@ -12,6 +12,10 @@ export * from './condition/condition-mapper';
 export * from './query';
 export * from './mutate-model';
 
+export * from './order/order-direction-type';
+export * from './order/order-by-type';
+export * from './order/order-by';
+
 export * from './delete/delete';
 export * from './delete/delete-model';
 
@@ -34,8 +38,6 @@ export * from './from/from-table-meta';
 export * from './from/join-type';
 export * from './from/mysql-from-adapter';
 export * from './insert/insert';
-export * from './select/order-by-type';
-export * from './select/order-direction-type';
 export * from './select/select';
 export * from './select/mysql-select';
 
@@ -44,4 +46,6 @@ export * from './update/update-model';
 export * from './update/mysql-update';
 export * from './update/mysql-update-model';
 export * from './update/update-type';
+
+export * from './count/count';
 

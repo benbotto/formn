@@ -11,13 +11,17 @@ import { Query, Escaper, Executer, From, FromColumnMeta, OrderByType,
 /**
  * Represents a SELECT query.
  */
-export class Select<T> extends Query {
+export abstract class Select<T> extends Query {
   // These are the columns that the user selected, by fully-qualified property.
   // It's a map from property name to FromColumnMeta.
-  private selectCols: Map<string, FromColumnMeta> = new Map();
+  protected selectCols: Map<string, FromColumnMeta> = new Map();
 
   // The order of the query.
-  private order: OrderByType[] = [];
+  protected order: OrderByType[] = [];
+
+  // Optional row offset and limit.
+  protected offset: number;
+  protected rowCount: number;
 
   /**
    * Initialize the query using a From instance.
@@ -41,7 +45,7 @@ export class Select<T> extends Query {
     protected propStore: PropertyMapStore,
     protected escaper: Escaper,
     protected executer: Executer,
-    private from: From) {
+    protected from: From) {
 
     super(colStore, tblStore, relStore, propStore, escaper, executer);
   }
@@ -143,10 +147,45 @@ export class Select<T> extends Query {
   }
 
   /**
-   * Get the SQL that represents the query.
-   * @return The SQL representing the select statement.
+   * Limit the number of rows returned.
+   * @param rowCount - The number of rows to return.
    */
-  toString(): string {
+  limit(rowCount: number): this;
+
+  /**
+   * Limit the number of rows returned with an offset.
+   * @param offset - The start index of the first row to return.
+   * @param rowCount - The number of rows to return.
+   */
+  limit(limitOrOffset: number, rowCount: number): this;
+
+  /**
+   * Limit the number of rows returned.
+   * @param offset - The start index of the first row to return.
+   * @param rowCount - The number of rows to return.
+   */
+  limit(limitOrOffset: number, rowCount?: number): this {
+    if (rowCount === undefined) {
+      this.offset   = 0;
+      this.rowCount = limitOrOffset;
+    }
+    else {
+      this.offset   = limitOrOffset;
+      this.rowCount = rowCount;
+    }
+
+    // These values are used in SQL directly, so there's an extract type
+    // saftey check to prevent SQL injection.
+    assert(typeof this.offset === 'number', 'offset must be a number');
+    assert(typeof this.rowCount === 'number', 'rowCount must be a number');
+
+    return this;
+  }
+
+  /**
+   * Get the SELECT portion of the query string.
+   */
+  getSelectString(): string {
     let sql = 'SELECT  ';
 
     // No columns specified.
@@ -169,16 +208,17 @@ export class Select<T> extends Query {
       })
       .join(',\n        ');
 
-    // Add the FROM (which includes the JOINS and WHERE).
-    sql += '\n';
-    sql += this.from.toString();
+    return sql;
+  }
 
-    // Add the order.
+  /**
+   * Get the ORDER BY portion of the query string, or an empty string if there
+   * is no order.
+   */
+  getOrderByString(): string {
     if (this.order.length) {
       const fromMeta = this.from.getFromMeta();
-
-      sql += '\n';
-      sql += 'ORDER BY ';
+      let   sql      = 'ORDER BY '
 
       sql += this.order
         .map(order => {
@@ -188,9 +228,11 @@ export class Select<T> extends Query {
           return `${colName} ${order.dir}`;
         })
         .join(', ');
+
+      return sql;
     }
 
-    return sql;
+    return '';
   }
 
   /**

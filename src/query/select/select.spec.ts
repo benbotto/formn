@@ -19,6 +19,13 @@ describe('Select()', function() {
   let getFrom: (FromEntity: TableType, fromAlias?: string) => From;
   let getSelect: <T>(from: From) => Select<T>;
 
+  // Select is abstract (toString is driver specific).
+  class TestSelect<T> extends Select<T> {
+    toString(): string {
+      return '';
+    }
+  }
+
   beforeEach(function() {
     initDB();
 
@@ -35,7 +42,7 @@ describe('Select()', function() {
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getSelect = <T>(from: From) =>
-      new Select<T>(colStore, tblStore, relStore, propStore, escaper, executer, from);
+      new TestSelect<T>(colStore, tblStore, relStore, propStore, escaper, executer, from);
   });
 
   describe('.constructor()', function() {
@@ -49,7 +56,7 @@ describe('Select()', function() {
     it('throws an error if no columns are selected.', () => {
       const query = getSelect<User>(getFrom(User, 'u'));
 
-      expect(() => query.toString())
+      expect(() => query.getSelectString())
         .toThrowError('No columns selected.  Call select().');
     });
 
@@ -57,12 +64,11 @@ describe('Select()', function() {
       const query = getSelect<User>(getFrom(User, 'u'))
         .select();
 
-      expect(query.toString()).toBe(
-        'SELECT  `u`.`userID` AS `u.id`,\n'          +
-        '        `u`.`firstName` AS `u.first`,\n'    +
-        '        `u`.`lastName` AS `u.last`,\n'      +
-        '        `u`.`createdOn` AS `u.createdOn`\n' +
-        'FROM    `users` AS `u`');
+      expect(query.getSelectString()).toBe(
+        'SELECT  `u`.`userID` AS `u.id`,\n'       +
+        '        `u`.`firstName` AS `u.first`,\n' +
+        '        `u`.`lastName` AS `u.last`,\n'   +
+        '        `u`.`createdOn` AS `u.createdOn`');
     });
 
     it('cannot be called twice on the same query.', function() {
@@ -131,12 +137,7 @@ describe('Select()', function() {
         .select('u.id', 'u.first', 'u.last')
         .orderBy('u.first');
 
-      expect(query.toString()).toBe(
-        'SELECT  `u`.`userID` AS `u.id`,\n'       +
-        '        `u`.`firstName` AS `u.first`,\n' +
-        '        `u`.`lastName` AS `u.last`\n'    +
-        'FROM    `users` AS `u`\n' +
-        'ORDER BY `u`.`firstName` ASC');
+      expect(query.getOrderByString()).toBe('ORDER BY `u`.`firstName` ASC');
     });
 
     it('adds the ORDER BY clause for multiple columns.', function() {
@@ -144,11 +145,7 @@ describe('Select()', function() {
         .select('u.id', 'u.first', 'u.last')
         .orderBy('u.id', 'u.first', 'u.last');
 
-      expect(query.toString()).toBe(
-        'SELECT  `u`.`userID` AS `u.id`,\n'       +
-        '        `u`.`firstName` AS `u.first`,\n' +
-        '        `u`.`lastName` AS `u.last`\n'    +
-        'FROM    `users` AS `u`\n' +
+      expect(query.getOrderByString()).toBe(
         'ORDER BY `u`.`userID` ASC, `u`.`firstName` ASC, `u`.`lastName` ASC');
     });
 
@@ -160,11 +157,7 @@ describe('Select()', function() {
           {property: 'u.first', dir: 'ASC'},
           {property: 'u.last', dir: 'DESC'});
 
-      expect(query.toString()).toBe(
-        'SELECT  `u`.`userID` AS `u.id`,\n'       +
-        '        `u`.`firstName` AS `u.first`,\n' +
-        '        `u`.`lastName` AS `u.last`\n'    +
-        'FROM    `users` AS `u`\n' +
+      expect(query.getOrderByString()).toBe(
         'ORDER BY `u`.`userID` ASC, `u`.`firstName` ASC, `u`.`lastName` DESC');
     });
   });

@@ -37,6 +37,7 @@ export * from './insert/insert';
 export * from './select/order-by-type';
 export * from './select/order-direction-type';
 export * from './select/select';
+export * from './select/mysql-select';
 
 export * from './update/update';
 export * from './update/update-model';

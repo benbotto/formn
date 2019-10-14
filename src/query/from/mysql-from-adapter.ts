@@ -2,7 +2,7 @@ import { ColumnStore, TableStore, RelationshipStore, PropertyMapStore,
   ColumnMetadata, EntityType } from '../../metadata/';
 
 import {MySQLEscaper, MySQLExecuter, FromAdapter, UpdateType, MySQLUpdate,
-  Select, MySQLSelect } from '../';
+  Select, MySQLSelect, OrderBy } from '../';
 
 /**
  * A specialized [[FromAdapter]] for MySQL databases.  See [[FromAdapter]].
@@ -41,7 +41,9 @@ export class MySQLFromAdapter<T> extends FromAdapter<T> {
    * @return An executable [[Select]] instance.
    */
   select(...cols: string[]): MySQLSelect<T> {
-    return new MySQLSelect<T>(this.colStore, this.escaper, this.executer, this)
+    const order = new OrderBy(this.escaper, this);
+
+    return new MySQLSelect<T>(this.colStore, this.escaper, this.executer, this, order)
       .select(...cols);
   }
 

@@ -16,7 +16,7 @@ export class MySQLSelect<T> extends Select<T> {
     sql += this.from.toString();
 
     // Add the order if there is an order.
-    if (this.order.length) {
+    if (this.order.isOrdered()) {
       sql += '\n';
       sql += this.getOrderByString();
     }

@@ -6,9 +6,9 @@ import { metaFactory, RelationshipStore, TableStore, ColumnStore,
 import { initDB, User, PhoneNumber, UserXProduct, Product, Photo, toPlain }
   from '../../test/';
 
-import { MySQLEscaper, MySQLExecuter, From, Select } from '../';
+import { MySQLEscaper, MySQLExecuter, From, Select, OrderBy } from '../';
 
-describe('Select()', function() {
+describe('Select()', () => {
   let relStore: RelationshipStore;
   let tblStore: TableStore;
   let colStore: ColumnStore;
@@ -26,7 +26,7 @@ describe('Select()', function() {
     }
   }
 
-  beforeEach(function() {
+  beforeEach(() => {
     initDB();
 
     tblStore  = metaFactory.getTableStore();
@@ -42,17 +42,18 @@ describe('Select()', function() {
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getSelect = <T>(from: From) =>
-      new TestSelect<T>(colStore, escaper, executer, from);
+      new TestSelect<T>(colStore, escaper, executer, from,
+        new OrderBy(escaper, from));
   });
 
-  describe('.constructor()', function() {
-    it('can be initialized using a From instance.', function() {
+  describe('.constructor()', () => {
+    it('can be initialized using a From instance.', () => {
       expect(() => getSelect<User>(getFrom(User, 'u')))
         .not.toThrow();
     });
   });
 
-  describe('.select()', function() {
+  describe('.select()', () => {
     it('throws an error if no columns are selected.', () => {
       const query = getSelect<User>(getFrom(User, 'u'));
 
@@ -60,7 +61,7 @@ describe('Select()', function() {
         .toThrowError('No columns selected.  Call select().');
     });
 
-    it('does not require any arguments.', function() {
+    it('does not require any arguments.', () => {
       const query = getSelect<User>(getFrom(User, 'u'))
         .select();
 
@@ -71,31 +72,31 @@ describe('Select()', function() {
         '        `u`.`createdOn` AS `u.createdOn`');
     });
 
-    it('cannot be called twice on the same query.', function() {
-      expect(function() {
+    it('cannot be called twice on the same query.', () => {
+      expect(() => {
         getSelect<User>(getFrom(User, 'users'))
           .select('users.id', 'users.first', 'users.last')
           .select('users.id', 'users.first', 'users.last');
       }).toThrowError('select already performed on query.');
     });
 
-    it('throws an error if one of the selected columns is invalid.', function() {
-      expect(function() {
+    it('throws an error if one of the selected columns is invalid.', () => {
+      expect(() => {
         getSelect<User>(getFrom(User, 'users')).select('id'); // Should be users.id.
       }).toThrowError('Column "id" is not available.  ' +
         'Columns must be fully-qualified (<table-alias>.<property>).');
     });
 
-    it('throws an error if the primary key of a table is not selected.', function() {
-      expect(function() {
+    it('throws an error if the primary key of a table is not selected.', () => {
+      expect(() => {
         getSelect<User>(getFrom(User, 'users')).select('users.first');
       }).toThrowError(
         'The primary key of every table must be selected, but the ' +
         'primary key of table "users" (alias "users") was not selected.');
     });
 
-    it('throws an error if the primary key of a joined table is not selected.', function() {
-      expect(function() {
+    it('throws an error if the primary key of a joined table is not selected.', () => {
+      expect(() => {
         const from = getFrom(User, 'u')
           .innerJoin(PhoneNumber, 'pn', 'u.phoneNumbers');
 
@@ -106,68 +107,31 @@ describe('Select()', function() {
         'primary key of table "phone_numbers" (alias "pn") was not selected.');
     });
 
-    it('throws an error if the same column is selected twice.', function() {
-      expect(function() {
+    it('throws an error if the same column is selected twice.', () => {
+      expect(() => {
         getSelect<User>(getFrom(User, 'u'))
         .select('u.id', 'u.first', 'u.first')
       }).toThrowError('Column "u.first" already selected.');
     });
   });
 
-  describe('.orderBy()', function() {
-    it('cannot be called twice on the same query.', function() {
-      expect(function() {
-        getSelect<User>(getFrom(User, 'u'))
-          .select('u.id', 'u.first', 'u.last')
-          .orderBy('u.first')
-          .orderBy('u.first');
-      }).toThrowError('orderBy already performed on query.');
-    });
-
-    it('throws an error if the orderBy column is not available.', function() {
-      expect(function() {
-        getSelect<User>(getFrom(User, 'u'))
-          .select('u.id', 'u.first', 'u.last')
-          .orderBy('bad.column');
-      }).toThrowError('"bad.column" is not available for orderBy.');
-    });
-
-    it('adds the ORDER BY clause for a single column.', function() {
+  describe('.orderBy()', () => {
+    // Note that this uses the OrderBy class and is mainly tested there.
+    it('adds the ORDER BY clause.', () => {
       const query = getSelect<User>(getFrom(User, 'u'))
         .select('u.id', 'u.first', 'u.last')
         .orderBy('u.first');
 
       expect(query.getOrderByString()).toBe('ORDER BY `u`.`firstName` ASC');
     });
-
-    it('adds the ORDER BY clause for multiple columns.', function() {
-      const query = getSelect<User>(getFrom(User, 'u'))
-        .select('u.id', 'u.first', 'u.last')
-        .orderBy('u.id', 'u.first', 'u.last');
-
-      expect(query.getOrderByString()).toBe(
-        'ORDER BY `u`.`userID` ASC, `u`.`firstName` ASC, `u`.`lastName` ASC');
-    });
-
-    it('can have multiple directions, ASC and DESC.', function() {
-      const query = getSelect<User>(getFrom(User, 'u'))
-        .select('u.id', 'u.first', 'u.last')
-        .orderBy(
-          {property: 'u.id', dir: 'ASC'},
-          {property: 'u.first', dir: 'ASC'},
-          {property: 'u.last', dir: 'DESC'});
-
-      expect(query.getOrderByString()).toBe(
-        'ORDER BY `u`.`userID` ASC, `u`.`firstName` ASC, `u`.`lastName` DESC');
-    });
   });
 
-  describe('.execute()', function() {
+  describe('.execute()', () => {
     let selectSpy: jasmine.Spy;
 
     beforeEach(() => selectSpy = spyOn(executer, 'select'));
 
-    it('executes the query using the Executer\'s select() method.', function() {
+    it('executes the query using the Executer\'s select() method.', () => {
       selectSpy.and.returnValue(Promise.resolve([{}]));
 
       const query = getSelect<User>(getFrom(User, 'u'))
@@ -177,7 +141,7 @@ describe('Select()', function() {
       expect(selectSpy).toHaveBeenCalled();
     });
 
-    it('passes the parameters to the Executer\'s select() method.', function() {
+    it('passes the parameters to the Executer\'s select() method.', () => {
       selectSpy.and.returnValue(Promise.resolve([{}]));
 
       const params = {userID: 12, firstName: 'Joe'};
@@ -199,7 +163,7 @@ describe('Select()', function() {
       expect(selectSpy.calls.argsFor(0)[1]).toEqual(params);
     });
 
-    describe('data mapping -', function() {
+    describe('data mapping -', () => {
       it('serializes a single table.', (done) => {
         const usersRaw = require('../../test/query/users.json');
 

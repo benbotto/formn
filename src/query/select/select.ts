@@ -4,7 +4,7 @@ import { ColumnStore, PropertyMapStore, ColumnMetadata } from '../../metadata/';
 
 import { Schema, DataMapper } from '../../datamapper/';
 
-import { Query, Escaper, Executer, From, FromColumnMeta, OrderByType,
+import { Query, Escaper, Executer, From, FromColumnMeta, OrderByType, OrderBy,
   ExecutableQuery } from '../';
 
 /**
@@ -14,9 +14,6 @@ export abstract class Select<T> extends Query {
   // These are the columns that the user selected, by fully-qualified property.
   // It's a map from property name to FromColumnMeta.
   protected selectCols: Map<string, FromColumnMeta> = new Map();
-
-  // The order of the query.
-  protected order: OrderByType[] = [];
 
   // Optional row offset and limit.
   protected offset: number;
@@ -32,12 +29,15 @@ export abstract class Select<T> extends Query {
    * (e.g. [[MySQLExecuter]]).
    * @param from - A [[From]] instance which holds the base table, all
    * joined-in tables, and the where clause.
+   * @param order - An [[OrderBy]] instance which is optionally used to order
+   * the query results.
    */
   constructor(
     protected colStore: ColumnStore,
     protected escaper: Escaper,
     protected executer: Executer,
-    protected from: From) {
+    protected from: From,
+    protected order: OrderBy) {
 
     super();
   }
@@ -117,23 +117,7 @@ export abstract class Select<T> extends Query {
    * the fully-qualified property and direction.
    */
   orderBy(...orders: OrderByType[] | string[]): this {
-    // orderBy may only be called once.
-    assert(this.order.length === 0,
-      'orderBy already performed on query.');
-
-    for (let i = 0; i < orders.length; ++i) {
-      const order: OrderByType = typeof orders[i] === 'string' ?
-        {property: orders[i], dir: 'ASC'} as OrderByType :
-        orders[i] as OrderByType;
-
-      // Make sure the column is available for ordering.
-      const fromMeta = this.from.getFromMeta();
-
-      assert(fromMeta.isColumnAvailable(order.property),
-        `"${order.property}" is not available for orderBy.`);
-
-      this.order.push(order);
-    }
+    this.order.orderBy(...orders);
 
     return this;
   }
@@ -208,23 +192,7 @@ export abstract class Select<T> extends Query {
    * is no order.
    */
   getOrderByString(): string {
-    if (this.order.length) {
-      const fromMeta = this.from.getFromMeta();
-      let   sql      = 'ORDER BY '
-
-      sql += this.order
-        .map(order => {
-          const colMeta = fromMeta.getFromColumnMetaByProp(order.property);
-          const colName = this.escaper.escapeFullyQualifiedColumn(colMeta.fqColName);
-
-          return `${colName} ${order.dir}`;
-        })
-        .join(', ');
-
-      return sql;
-    }
-
-    return '';
+    return this.order.getOrderByString();
   }
 
   /**

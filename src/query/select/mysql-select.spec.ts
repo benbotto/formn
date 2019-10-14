@@ -6,7 +6,7 @@ import { metaFactory, RelationshipStore, TableStore, ColumnStore,
 import { initDB, User, PhoneNumber, UserXProduct, Product, Photo, toPlain }
   from '../../test/';
 
-import { MySQLEscaper, MySQLExecuter, From, MySQLSelect } from '../';
+import { MySQLEscaper, MySQLExecuter, From, MySQLSelect, OrderBy } from '../';
 
 describe('MySQLSelect()', () => {
   let relStore: RelationshipStore;
@@ -35,7 +35,8 @@ describe('MySQLSelect()', () => {
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getSelect = <T>(from: From) =>
-      new MySQLSelect<T>(colStore, escaper, executer, from);
+      new MySQLSelect<T>(colStore, escaper, executer, from,
+        new OrderBy(escaper, from));
   });
 
   describe('.toString()', () => {

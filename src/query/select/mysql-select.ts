@@ -18,7 +18,7 @@ export class MySQLSelect<T> extends Select<T> {
     // Add the order if there is an order.
     if (this.order.isOrdered()) {
       sql += '\n';
-      sql += this.getOrderByString();
+      sql += this.order.getOrderByString();
     }
 
     // Add the limit (offset and row count) if there is a limit.

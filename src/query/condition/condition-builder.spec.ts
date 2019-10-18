@@ -192,6 +192,18 @@ describe('ConditionBuilder()', () => {
       });
       expect(cond.getParams()).toEqual({first: 'Ben', last: 'Bot'});
     });
+
+    it('ignores undefined conditions.', () => {
+      const cond = cb.and(
+        cb.eq('p.firstName', ':first', 'Ben'),
+        undefined);
+
+      expect(cond.getCond()).toEqual({
+        $and: [
+          {$eq: {'p.firstName': ':first'}}
+        ]
+      });
+    });
   });
 
   describe('.or()', () => {

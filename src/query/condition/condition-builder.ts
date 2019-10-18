@@ -119,8 +119,10 @@ export class ConditionBuilder {
     };
 
     for (let i = 0; i < conds.length; ++i) {
-      cond[op].push(conds[i].getCond());
-      paramList.addParameters(conds[i].getParams());
+      if (conds[i]) {
+        cond[op].push(conds[i].getCond());
+        paramList.addParameters(conds[i].getParams());
+      }
     }
 
     return new ParameterizedCondition(cond, paramList);

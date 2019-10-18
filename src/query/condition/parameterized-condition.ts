@@ -57,10 +57,8 @@ export class ParameterizedCondition {
     if (cond instanceof ParameterizedCondition)
       return cond;
 
-    const paramList = new ParameterList();
-
-    for (const key in params)
-      paramList.addParameter(key, params[key]);
+    const paramList = new ParameterList()
+      .addParameters(params);
 
     return new ParameterizedCondition(cond, paramList);
   }

@@ -17,6 +17,14 @@ describe('ParameterizedCondition()', () => {
       expect(pCond.getCond()).toBe(cond);
       expect(pCond.getParams().userId).toBe(42);
     });
+
+    it('uses an empty object if no parameters are supplied.', () => {
+      const cond   = {'$eq': {'u.id': 'p.userId'}};
+      const pCond  = ParameterizedCondition.normalize(cond);
+
+      expect(pCond.getCond()).toBe(cond);
+      expect(pCond.getParams()).toEqual({});
+    });
   });
 });
 

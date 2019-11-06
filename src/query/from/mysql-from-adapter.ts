@@ -48,6 +48,16 @@ export class MySQLFromAdapter<T> extends FromAdapter<T> {
   }
 
   /**
+   * Select distinct from the table.  See [[Select.select]].
+   * @param cols - An optional set of columns to select.
+   * @return An executable [[Select]] instance.
+   */
+  selectDistinct(...cols: string[]): MySQLSelect<T> {
+    return this.select(...cols)
+      .distinct();
+  }
+
+  /**
    * Update a table.  See [[MySQLUpdate]].
    * @param model - The model describing what to update.
    * @return A [[MySQLUpdate]] instance that is executable.

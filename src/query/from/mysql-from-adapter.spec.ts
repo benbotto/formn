@@ -67,6 +67,20 @@ describe('MySQLFromAdapter()', () => {
     });
   });
 
+  describe('.selectDistinct()', () => {
+    it('returns a Select instance and the results are distinct.', () => {
+      const sel = getFrom(User, 'u')
+        .selectDistinct('u.id', 'u.first');
+
+      expect(sel instanceof Select).toBe(true);
+      expect(sel.toString()).toBe(
+        'SELECT  DISTINCT\n'                     +
+        '        `u`.`userID` AS `u.id`,\n'      +
+        '        `u`.`firstName` AS `u.first`\n' +
+        'FROM    `users` AS `u`');
+    });
+  });
+
   describe('.delete()', () => {
     it('returns a Delete instance with the supplied table alias.', () => {
       const del = getFrom(User, 'u')

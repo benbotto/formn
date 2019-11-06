@@ -47,6 +47,13 @@ export abstract class FromAdapter<T> extends From {
   abstract select(...cols: string[]): Select<T>;
 
   /**
+   * Select distinct from the table.  See [[Select.select]].
+   * @param cols - An optional set of columns to select.
+   * @return An executable [[Select]] instance.
+   */
+  abstract selectDistinct(...cols: string[]): Select<T>;
+
+  /**
    * Delete from a table.  See [[Delete]].
    * @param alias - The unique alias of the table from which
    * records will be deleted.  Optional, defaults to the alias of the from

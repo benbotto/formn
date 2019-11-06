@@ -31,13 +31,15 @@ export abstract class Select<T> extends Query {
    * joined-in tables, and the where clause.
    * @param order - An [[OrderBy]] instance which is optionally used to order
    * the query results.
+   * @param isDistinct - Set to true to make the resultset distinct.
    */
   constructor(
     protected colStore: ColumnStore,
     protected escaper: Escaper,
     protected executer: Executer,
     protected from: From,
-    protected order: OrderBy) {
+    protected order: OrderBy,
+    protected isDistinct: boolean = false) {
 
     super();
   }
@@ -159,10 +161,22 @@ export abstract class Select<T> extends Query {
   }
 
   /**
+   * Make the query distinct.
+   */
+  distinct(): this {
+    this.isDistinct = true;
+
+    return this;
+  }
+
+  /**
    * Get the SELECT portion of the query string.
    */
   getSelectString(): string {
     let sql = 'SELECT  ';
+
+    if (this.isDistinct)
+      sql += 'DISTINCT\n        ';
 
     // No columns specified.
     assert(this.selectCols.size, 'No columns selected.  Call select().');

@@ -18,6 +18,7 @@ describe('Select()', () => {
   let con: jasmine.SpyObj<Connection>;
   let getFrom: (FromEntity: TableType, fromAlias?: string) => From;
   let getSelect: <T>(from: From) => Select<T>;
+  let getSelectDistinct: <T>(from: From) => Select<T>;
 
   // Select is abstract (toString is driver specific).
   class TestSelect<T> extends Select<T> {
@@ -44,6 +45,10 @@ describe('Select()', () => {
     getSelect = <T>(from: From) =>
       new TestSelect<T>(colStore, escaper, executer, from,
         new OrderBy(escaper, from));
+
+    getSelectDistinct = <T>(from: From) =>
+      new TestSelect<T>(colStore, escaper, executer, from,
+        new OrderBy(escaper, from), true);
   });
 
   describe('.constructor()', () => {
@@ -70,6 +75,15 @@ describe('Select()', () => {
         '        `u`.`firstName` AS `u.first`,\n' +
         '        `u`.`lastName` AS `u.last`,\n'   +
         '        `u`.`createdOn` AS `u.createdOn`');
+    });
+
+    it('can be made distinct.', () => {
+      const query = getSelectDistinct<User>(getFrom(User, 'u'))
+        .select('u.id');
+
+      expect(query.getSelectString()).toBe(
+        'SELECT  DISTINCT\n' +
+        '        `u`.`userID` AS `u.id`');
     });
 
     it('cannot be called twice on the same query.', () => {
@@ -112,6 +126,21 @@ describe('Select()', () => {
         getSelect<User>(getFrom(User, 'u'))
         .select('u.id', 'u.first', 'u.first')
       }).toThrowError('Column "u.first" already selected.');
+    });
+  });
+
+  describe('.distinct()', () => {
+    it('can be made distinct.', () => {
+      const query = getSelect<User>(getFrom(User, 'u'))
+        .select()
+        .distinct();
+
+      expect(query.getSelectString()).toBe(
+        'SELECT  DISTINCT\n'                      +
+        '        `u`.`userID` AS `u.id`,\n'       +
+        '        `u`.`firstName` AS `u.first`,\n' +
+        '        `u`.`lastName` AS `u.last`,\n'   +
+        '        `u`.`createdOn` AS `u.createdOn`');
     });
   });
 

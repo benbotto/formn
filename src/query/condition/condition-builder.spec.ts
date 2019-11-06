@@ -142,8 +142,6 @@ describe('ConditionBuilder()', () => {
     it('returns a ParameterizedCondition with columns.', () => {
       const cond = cb.in('p.firstName', ['sue.name', 'joe.name']);
 
-      console.log(cond.getCond());
-
       expect(cond.getCond()).toEqual(
         {$in: {'p.firstName': ['sue.name', 'joe.name']}});
       expect(cond.getParams()).toEqual({});

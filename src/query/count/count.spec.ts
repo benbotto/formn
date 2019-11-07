@@ -5,7 +5,7 @@ import { metaFactory, RelationshipStore, TableStore, ColumnStore,
 
 import { initDB, User } from '../../test/';
 
-import { MySQLEscaper, MySQLExecuter, From, Count, OrderBy } from '../';
+import { MySQLEscaper, MySQLExecuter, From, Count } from '../';
 
 describe('Count()', () => {
   let relStore: RelationshipStore;
@@ -17,6 +17,7 @@ describe('Count()', () => {
   let con: jasmine.SpyObj<Connection>;
   let getFrom: (FromEntity: TableType, fromAlias?: string) => From;
   let getCount: (from: From) => Count;
+  let getDistinctCount: (from: From) => Count;
 
   beforeEach(() => {
     initDB();
@@ -34,7 +35,10 @@ describe('Count()', () => {
       new From(colStore, tblStore, relStore, propStore, escaper, FromEntity, fromAlias);
 
     getCount = (from: From) =>
-      new Count(escaper, executer, from, new OrderBy(escaper, from));
+      new Count(escaper, executer, from);
+
+    getDistinctCount = (from: From) =>
+      new Count(escaper, executer, from, true);
   });
 
   describe('.constructor()', () => {
@@ -65,6 +69,16 @@ describe('Count()', () => {
         'FROM    `users` AS `u`');
     });
 
+    it('counts a single column distinctly.', () => {
+      const query = getDistinctCount(getFrom(User, 'u'));
+
+      query.count('u.id');
+
+      expect(query.toString()).toBe(
+        'SELECT  COUNT(DISTINCT `u`.`userID`) AS count\n' +
+        'FROM    `users` AS `u`');
+    });
+
     it('throws if the column is not available for selection.', () => {
       expect(() => {
         const query = getCount(getFrom(User, 'u'));
@@ -74,18 +88,17 @@ describe('Count()', () => {
     });
   });
 
-  describe('.orderBy()', () => {
-    it('orders the query by a single column.', () => {
-      const query = getCount(getFrom(User, 'u'));
+  describe('.distinct()', () => {
+    it('makes the count distinct.', () => {
+      const query = getDistinctCount(getFrom(User, 'u'));
 
       query
-        .count()
-        .orderBy('u.id');
+        .count('u.id')
+        .distinct();
 
       expect(query.toString()).toBe(
-        'SELECT  COUNT(*) AS count\n' +
-        'FROM    `users` AS `u`\n'      +
-        'ORDER BY `u`.`userID` ASC');
+        'SELECT  COUNT(DISTINCT `u`.`userID`) AS count\n' +
+        'FROM    `users` AS `u`');
     });
   });
 

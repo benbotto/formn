@@ -2,8 +2,7 @@ import { assert } from '../../error/';
 
 import { Schema, DataMapper } from '../../datamapper/';
 
-import { Query, Escaper, Executer, From, OrderByType, OrderBy,
-  ExecutableQuery, SelectResultType } from '../';
+import { Query, Escaper, Executer, From, ExecutableQuery, SelectResultType } from '../';
 
 /**
  * Represents a count query (SELECT COUNT(*)).
@@ -21,16 +20,24 @@ export class Count extends Query {
    * (e.g. [[MySQLExecuter]]).
    * @param from - A [[From]] instance which holds the base table, all
    * joined-in tables, and the where clause.
-   * @param order - An [[OrderBy]] instance which is optionally used to order
-   * the query results.
+   * @param isDistinct - Set to true to make the count distinct.
    */
   constructor(
     protected escaper: Escaper,
     protected executer: Executer,
     protected from: From,
-    protected order: OrderBy) {
+    protected isDistinct: boolean = false) {
 
     super();
+  }
+
+  /**
+   * Make the query distinct.
+   */
+  distinct(): this {
+    this.isDistinct = true;
+
+    return this;
   }
 
   /**
@@ -56,18 +63,6 @@ export class Count extends Query {
   }
 
   /**
-   * Order by one or more columns.
-   * @param orders - A list of fully-qualified properties in the form
-   * &lt;table-alias&gt;.&lt;property&gt;, or an array of [[OrderByType]] with
-   * the fully-qualified property and direction.
-   */
-  orderBy(...orders: OrderByType[] | string[]): this {
-    this.order.orderBy(...orders);
-
-    return this;
-  }
-
-  /**
    * Get the SQL as a string.
    */
   toString(): string {
@@ -75,7 +70,7 @@ export class Count extends Query {
 
     // COUNT portion of the query.
     if (this.countCol === undefined || this.countCol === '*')
-      sql += 'COUNT(*) AS count'
+      sql += `COUNT(*) AS count`
     else {
       // Map the property to a fully-qualified column name, then escape it.
       const fromMeta    = this.from.getFromMeta();
@@ -83,18 +78,17 @@ export class Count extends Query {
       const fqColName   = this.escaper
         .escapeFullyQualifiedColumn(fromColMeta.fqColName);
 
-      sql += `COUNT(${fqColName}) AS count`;
+      sql += 'COUNT(';
+
+      if (this.isDistinct)
+        sql += 'DISTINCT ';
+
+      sql += `${fqColName}) AS count`;
     }
 
     // Add the FROM (which includes the JOINS and WHERE).
     sql += '\n';
     sql += this.from.toString();
-
-    // Add the order if there is an order.
-    if (this.order.isOrdered()) {
-      sql += '\n';
-      sql += this.order.getOrderByString();
-    }
 
     return sql;
   }

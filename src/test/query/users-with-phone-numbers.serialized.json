@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "first": "Joe",
+    "last": "Shmo",
+    "phoneNumbers": [
+      {
+        "id": 1,
+        "phoneNumber": "530-307-8810"
+      },
+      {
+        "id": 2,
+        "phoneNumber": "916-200-1440"
+      },
+      {
+        "id": 3,
+        "phoneNumber": "916-293-4667"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "first": "Rand",
+    "last": "AlThore",
+    "phoneNumbers": [
+      {
+        "id": 4,
+        "phoneNumber": "666-451-4412"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "first": "Holly",
+    "last": "Davis",
+    "phoneNumbers": []
+  },
+  {
+    "id": 4,
+    "first": "Jenny",
+    "last": "Mather",
+    "phoneNumbers": []
+  }
+]

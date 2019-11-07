@@ -4,8 +4,8 @@ import { ColumnStore, PropertyMapStore, ColumnMetadata } from '../../metadata/';
 
 import { Schema, DataMapper } from '../../datamapper/';
 
-import { Query, Escaper, Executer, From, FromColumnMeta, OrderByType, OrderBy,
-  ExecutableQuery } from '../';
+import { Query, Escaper, Executer, From, FromTableMeta, FromColumnMeta,
+  OrderByType, OrderBy, ExecutableQuery } from '../';
 
 /**
  * Represents a SELECT query.
@@ -45,7 +45,37 @@ export abstract class Select<T> extends Query {
   }
 
   /**
-   * Select columns manually.
+   * Helper function to check if the primary key column(s) of a table
+   * is selected.
+   */
+  protected isPrimaryKeySelected(fromTblMeta: FromTableMeta): boolean {
+    const basePK = this.colStore
+      .getPrimaryKey(fromTblMeta.tableMetadata.Entity);
+
+    return basePK
+      .every(pk => {
+        const pkAlias = ColumnMetadata
+          .createFQName(fromTblMeta.alias, pk.mapTo);
+
+        return this.selectCols.has(pkAlias);
+      });
+  }
+
+  /**
+   * Select columns.  If not columns are supplied then the columns from every
+   * table are selected.
+   *
+   * This method can only be called once or an exception is raised.
+   *
+   * Each column can only be selected a single time.
+   *
+   * The primary key of the base table (the FROM'd table) is required.
+   *
+   * If a column from a table is selected, then the primary key is also required.
+   *
+   * If a column from a table is selected, then its parent's primary key is
+   * also required, and all its ancestors' primary keys are required.
+   *
    * @param cols - An optional set of columns to select.  Each argument should
    * be a fully-qualified property name in the form
    * &lt;table-alias&gt;.&lt;property&gt;.  If no columns are specified, then
@@ -82,30 +112,58 @@ export abstract class Select<T> extends Query {
       this.selectCols.set(fqProp, fromColMeta);
     });
 
-    // The primary key from each table must be selected.  The serialization
-    // needs a way to uniquely identify each object; the primary key is used
-    // for this.
-    const fromTblMetas = fromMeta.getFromTableMeta();
+    const [baseFromTblMeta, ...joinFromTblMetas] = fromMeta.getFromTableMeta();
 
-    fromTblMetas
+    // The primary key of the base table is always required.  It's needed
+    // to serialize the results since it's the top-level serialized entity
+    // that's returned from execute().
+    assert(this.isPrimaryKeySelected(baseFromTblMeta),
+      'The primary key of the base table must be selected, but the primary ' +
+      `key of table "${baseFromTblMeta.tableMetadata.getFQName()}" ` +
+      `(alias "${baseFromTblMeta.alias}") was not selected.`);
+
+    joinFromTblMetas
       .forEach(fromTblMeta => {
         const tblAlias = fromTblMeta.alias;
-        const tblMeta  = fromTblMeta.tableMetadata;
 
-        // This is the primary key of the table, which is an array.
-        const pk = this.colStore
-          .getPrimaryKey(tblMeta.Entity);
+        // True if at least one column is selected from the table.
+        const hasColSelected = Array.from(this.selectCols.values())
+          .some((col: FromColumnMeta) => col.tableAlias === tblAlias);
 
-        for (let i = 0; i < pk.length; ++i) {
-          // This is the alias of the column in the standard
-          // <table-alias>.<property> format.
-          const pkAlias = ColumnMetadata
-            .createFQName(tblAlias, pk[i].mapTo);
+        if (hasColSelected) {
+          // If a column is selected from a table then the primary key must
+          // also be selected.  The serialization needs a way to uniquely
+          // identify each object; the primary key is used.
+          assert(this.isPrimaryKeySelected(fromTblMeta),
+            'If a column is selected from a table then the primary key of ' +
+            'that table must also be selected; however, the primary key of ' +
+            `table "${fromTblMeta.tableMetadata.getFQName()}" (alias ` +
+            `"${tblAlias}") was not selected.`);
 
-          assert(this.selectCols.has(pkAlias),
-            'The primary key of every table must be selected, but the primary key ' +
-            `of table "${tblMeta.getFQName()}" (alias "${tblAlias}") ` +
-            'was not selected.');
+          // If a column is selected then the parent must be present;
+          // otherwise, there is nothing to map the entity onto.  This
+          // traverses from the current table all the way to the base (FROM)
+          // table and checks that the primary key is present on each ancestor.
+          // Ex: When selecting from users->users_x_products->products, if
+          // something from products is selected then both users_x_products'
+          // and users' primary keys are required.
+          let parentAlias = fromTblMeta.parentAlias;
+          const traversal = [tblAlias];
+
+          while (parentAlias) {
+            const parentFromTblMeta = fromMeta.getFromTableMetaByAlias(parentAlias);
+
+            traversal.push(parentAlias);
+
+            assert(this.isPrimaryKeySelected(parentFromTblMeta),
+              'The primary key of table ' +
+              `"${parentFromTblMeta.tableMetadata.getFQName()}" ` +
+              `(alias "${parentAlias}") must be selected because it is an ` +
+              `ancestor of table "${fromTblMeta.tableMetadata.getFQName()}" ` +
+              `(alias "${tblAlias}").  Traversal: ${traversal.reverse().join('<-')}.`);
+
+            parentAlias = parentFromTblMeta.parentAlias;
+          }
         }
       });
 
@@ -237,9 +295,10 @@ export abstract class Select<T> extends Query {
         // Keep a lookup of table alias->schema.
         schemaLookup.set(fromTblMeta.alias, schema);
 
-        // If this table has no parent then the schema is top level.  Else
-        // this is a sub schema and the parent is guaranteed to be present in
-        // the lookup.
+        // If this table has no parent then the schema is top level.  Else this
+        // is a sub schema and the parent is guaranteed to be present in the
+        // lookup because Map values are in insertion order and the tables are
+        // joined in order.
         if (fromTblMeta.parentAlias === null)
           baseSchema = schema;
         else {

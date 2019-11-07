@@ -101,15 +101,15 @@ describe('Select()', () => {
         'Columns must be fully-qualified (<table-alias>.<property>).');
     });
 
-    it('throws an error if the primary key of a table is not selected.', () => {
+    it('throws an error if the primary key of the from table is not selected.', () => {
       expect(() => {
         getSelect<User>(getFrom(User, 'users')).select('users.first');
       }).toThrowError(
-        'The primary key of every table must be selected, but the ' +
+        'The primary key of the base table must be selected, but the ' +
         'primary key of table "users" (alias "users") was not selected.');
     });
 
-    it('throws an error if the primary key of a joined table is not selected.', () => {
+    it('throws an error if the primary key of a joined table is not selected but another column is.', () => {
       expect(() => {
         const from = getFrom(User, 'u')
           .innerJoin(PhoneNumber, 'pn', 'u.phoneNumbers');
@@ -117,8 +117,43 @@ describe('Select()', () => {
         getSelect<User>(from)
           .select('u.id', 'u.first', 'pn.phoneNumber');
       }).toThrowError(
-        'The primary key of every table must be selected, but the ' +
-        'primary key of table "phone_numbers" (alias "pn") was not selected.');
+        'If a column is selected from a table then the primary key of that ' +
+        'table must also be selected; however, the primary key of table ' +
+        '"phone_numbers" (alias "pn") was not selected.');
+    });
+
+    it('throws an error if a column from a child table is selected, but '+
+       'the pk of the parent table is skipped.', () => {
+      expect(() => {
+        const from = getFrom(User, 'u')
+          .leftOuterJoin(UserXProduct, 'uxp', 'u.userXProducts')
+          .leftOuterJoin(Product, 'p', 'uxp.product');
+
+        getSelect<User>(from)
+          .select('u.id', 'p.id');
+      }).toThrowError(
+        'The primary key of table "users_x_products" (alias "uxp") must be ' +
+        'selected because it is an ancestor of table "products" (alias ' +
+        '"p").  Traversal: uxp<-p.');
+    });
+
+    it('throws an error if a column from a child table is selected, but '+
+       'the pk of the grandparent table is skipped.', () => {
+      expect(() => {
+        const from = getFrom(User, 'u')
+          .leftOuterJoin(PhoneNumber, 'pn', 'u.phoneNumbers')
+          .leftOuterJoin(UserXProduct, 'uxp', 'u.userXProducts')
+          .leftOuterJoin(Product, 'p', 'uxp.product')
+          .leftOuterJoin(Photo, 'ph', 'p.photos')
+          .leftOuterJoin(Photo, 'small', 'ph.smallThumbnail')
+          .leftOuterJoin(Photo, 'large', 'ph.largeThumbnail');
+
+        getSelect<User>(from)
+          .select('u.id', 'large.id', 'large.photoURL');
+      }).toThrowError(
+        'The primary key of table "photos" (alias "ph") must be selected ' +
+        'because it is an ancestor of table "photos" (alias "large").  ' +
+        'Traversal: ph<-large.');
     });
 
     it('throws an error if the same column is selected twice.', () => {

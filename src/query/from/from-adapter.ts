@@ -78,9 +78,19 @@ export abstract class FromAdapter<T> extends From {
    * COUNT(*) is used.
    */
   count(col?: string): Count {
-    return new Count(this.escaper, this.executer, this,
-      new OrderBy(this.escaper, this))
+    return new Count(this.escaper, this.executer, this)
       .count(col);
+  }
+
+  /**
+   * Get the distinct record count from a table.
+   * @param col - An optional column to count on.  If not provided, then
+   * COUNT(*) is used.
+   */
+  countDistinct(col: string): Count {
+    return this
+      .count(col)
+      .distinct();
   }
 }
 

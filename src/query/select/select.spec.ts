@@ -217,8 +217,8 @@ describe('Select()', () => {
     });
 
     describe('data mapping -', () => {
-      it('serializes a single table.', (done) => {
-        const usersRaw = require('../../test/query/users.json');
+      it('serializes a single table.', done => {
+        const usersRaw = require('../../test/query/users');
 
         selectSpy.and.returnValue(Promise.resolve(usersRaw));
 
@@ -236,8 +236,8 @@ describe('Select()', () => {
           });
       });
 
-      it('maps the results to a normalized object using a DataMapper instance.', function(done) {
-        const usersRaw = require('../../test/query/users-with-phone-numbers-products-and-photos.aliased.json');
+      it('maps the results to a normalized object using a DataMapper instance.', done => {
+        const usersRaw = require('../../test/query/users-with-phone-numbers-products-and-photos.aliased');
 
         selectSpy.and.returnValue(Promise.resolve(usersRaw));
 
@@ -271,7 +271,70 @@ describe('Select()', () => {
           });
       });
 
-      it('propagates errors that originate in the Executer.', function(done) {
+      it('serializes the top-level entity only when no child columns are selected.', done => {
+        const usersRaw = require('../../test/query/users-with-phone-numbers-products-and-photos.aliased.top-level');
+
+        selectSpy.and.returnValue(Promise.resolve(usersRaw));
+
+        const from = getFrom(User, 'u')
+          .leftOuterJoin(PhoneNumber, 'pn', 'u.phoneNumbers')
+          .leftOuterJoin(UserXProduct, 'uxp', 'u.userXProducts')
+          .leftOuterJoin(Product, 'p', 'uxp.product')
+          .leftOuterJoin(Photo, 'ph', 'p.photos',
+            {
+              $and: [
+                {$eq: {'p.id' : 'ph.prodID'}},
+                {$isnt: {'ph.largeThumbnailID': null}},
+                {$isnt: {'ph.smallThumbnailID': null}},
+              ]
+            });
+
+        const query = getSelect<User>(from)
+          .orderBy('u.id', 'pn.id', 'p.id', 'ph.id')
+          .select(
+            'u.id', 'u.first', 'u.last');
+
+        query
+          .execute()
+          .then(users => {
+            expect(toPlain(users)).toEqual(require('../../test/query/users.serialized'));
+            done();
+          });
+      });
+
+      it('skips child entities with no columns selected.', done => {
+        const usersRaw = require('../../test/query/users-with-phone-numbers-products-and-photos.aliased.users-and-phone-numbers-only');
+
+        selectSpy.and.returnValue(Promise.resolve(usersRaw));
+
+        const from = getFrom(User, 'u')
+          .leftOuterJoin(PhoneNumber, 'pn', 'u.phoneNumbers')
+          .leftOuterJoin(UserXProduct, 'uxp', 'u.userXProducts')
+          .leftOuterJoin(Product, 'p', 'uxp.product')
+          .leftOuterJoin(Photo, 'ph', 'p.photos',
+            {
+              $and: [
+                {$eq: {'p.id' : 'ph.prodID'}},
+                {$isnt: {'ph.largeThumbnailID': null}},
+                {$isnt: {'ph.smallThumbnailID': null}},
+              ]
+            });
+
+        const query = getSelect<User>(from)
+          .orderBy('u.id', 'pn.id', 'p.id', 'ph.id')
+          .select(
+            'u.id', 'u.first', 'u.last',
+            'pn.id', 'pn.phoneNumber');
+
+        query
+          .execute()
+          .then(users => {
+            expect(toPlain(users)).toEqual(require('../../test/query/users-with-phone-numbers.serialized'));
+            done();
+          });
+      });
+
+      it('propagates errors that originate in the Executer.', done => {
         selectSpy.and.returnValue(Promise.reject(new Error('test')));
         getSelect<User>(getFrom(User, 'u'))
           .select()

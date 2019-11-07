@@ -122,48 +122,52 @@ export abstract class Select<T> extends Query {
       `key of table "${baseFromTblMeta.tableMetadata.getFQName()}" ` +
       `(alias "${baseFromTblMeta.alias}") was not selected.`);
 
+    // This is a set of all the table aliases that have selected columns (e.g.
+    // that need to be serialized when the query is executed).
+    const selTblAliases = new Set();
+
+    for (const fromColMeta of this.selectCols.values())
+      selTblAliases.add(fromColMeta.tableAlias);
+
+    // This loops over all joined-in tables that have at least one column
+    // selected.
     joinFromTblMetas
+      .filter(fromTblMeta => selTblAliases.has(fromTblMeta.alias))
       .forEach(fromTblMeta => {
         const tblAlias = fromTblMeta.alias;
 
-        // True if at least one column is selected from the table.
-        const hasColSelected = Array.from(this.selectCols.values())
-          .some((col: FromColumnMeta) => col.tableAlias === tblAlias);
+        // If a column is selected from a table then the primary key must
+        // also be selected.  The serialization needs a way to uniquely
+        // identify each serialized entity; the primary key is used.
+        assert(this.isPrimaryKeySelected(fromTblMeta),
+          'If a column is selected from a table then the primary key of ' +
+          'that table must also be selected; however, the primary key of ' +
+          `table "${fromTblMeta.tableMetadata.getFQName()}" (alias ` +
+          `"${tblAlias}") was not selected.`);
 
-        if (hasColSelected) {
-          // If a column is selected from a table then the primary key must
-          // also be selected.  The serialization needs a way to uniquely
-          // identify each object; the primary key is used.
-          assert(this.isPrimaryKeySelected(fromTblMeta),
-            'If a column is selected from a table then the primary key of ' +
-            'that table must also be selected; however, the primary key of ' +
-            `table "${fromTblMeta.tableMetadata.getFQName()}" (alias ` +
-            `"${tblAlias}") was not selected.`);
+        // If a column is selected then the parent must be present;
+        // otherwise, there is nothing to map the entity onto.  This
+        // traverses from the current table all the way to the base (FROM)
+        // table and checks that the primary key is present on each ancestor.
+        // Ex: When selecting from users->users_x_products->products, if
+        // something from products is selected then both users_x_products'
+        // and users' primary keys are required.
+        let parentAlias = fromTblMeta.parentAlias;
+        const traversal = [tblAlias];
 
-          // If a column is selected then the parent must be present;
-          // otherwise, there is nothing to map the entity onto.  This
-          // traverses from the current table all the way to the base (FROM)
-          // table and checks that the primary key is present on each ancestor.
-          // Ex: When selecting from users->users_x_products->products, if
-          // something from products is selected then both users_x_products'
-          // and users' primary keys are required.
-          let parentAlias = fromTblMeta.parentAlias;
-          const traversal = [tblAlias];
+        while (parentAlias) {
+          const parentFromTblMeta = fromMeta.getFromTableMetaByAlias(parentAlias);
 
-          while (parentAlias) {
-            const parentFromTblMeta = fromMeta.getFromTableMetaByAlias(parentAlias);
+          traversal.push(parentAlias);
 
-            traversal.push(parentAlias);
+          assert(this.isPrimaryKeySelected(parentFromTblMeta),
+            'The primary key of table ' +
+            `"${parentFromTblMeta.tableMetadata.getFQName()}" ` +
+            `(alias "${parentAlias}") must be selected because it is an ` +
+            `ancestor of table "${fromTblMeta.tableMetadata.getFQName()}" ` +
+            `(alias "${tblAlias}").  Traversal: ${traversal.reverse().join('<-')}.`);
 
-            assert(this.isPrimaryKeySelected(parentFromTblMeta),
-              'The primary key of table ' +
-              `"${parentFromTblMeta.tableMetadata.getFQName()}" ` +
-              `(alias "${parentAlias}") must be selected because it is an ` +
-              `ancestor of table "${fromTblMeta.tableMetadata.getFQName()}" ` +
-              `(alias "${tblAlias}").  Traversal: ${traversal.reverse().join('<-')}.`);
-
-            parentAlias = parentFromTblMeta.parentAlias;
-          }
+          parentAlias = parentFromTblMeta.parentAlias;
         }
       });
 
@@ -261,7 +265,7 @@ export abstract class Select<T> extends Query {
 
   /**
    * Execute the query and return an array of results of type T.
-   * @return A promise that shall be resolved with the normalized query results
+   * @return A Promise that shall be resolved with the normalized query results
    * of type T.  If an error occurs while executing the query, the returned
    * promise shall be rejected with the unmodified error.
    */
@@ -275,11 +279,23 @@ export abstract class Select<T> extends Query {
     // No columns specified.
     assert(this.selectCols.size, 'No columns selected.  Call select().');
 
-    // The primary key for each table is needed to create each schema.  Find
-    // each primary key and create the schema.
-    const fromMeta     = this.from.getFromMeta();
-    const fromTblMetas = fromMeta.getFromTableMeta();
+    // Each table referenced by selected columns will be serialized.  This is
+    // a set of all the table aliases that have selected columns.
+    const selTblAliases = new Set();
 
+    for (const fromColMeta of this.selectCols.values())
+      selTblAliases.add(fromColMeta.tableAlias);
+
+    // These are the FromTableMetas that need to be serialized (the ones that
+    // have a column selected).
+    const fromTblMetas = this.from
+      .getFromMeta()
+      .getFromTableMeta()
+      .filter(fromTblMeta => selTblAliases.has(fromTblMeta.alias));
+
+    // Create a Schema for each table that has columns selected.  The primary
+    // key is used to create the Schema since it uniquely identifies each table.
+    // The PK is guaranteed to be selected (see select()).
     fromTblMetas
       .forEach(fromTblMeta => {
         const pks = this.colStore.getPrimaryKey(fromTblMeta.tableMetadata.Entity);

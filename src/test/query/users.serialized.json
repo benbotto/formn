@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "first": "Joe",
+    "last": "Shmo"
+  },
+  {
+    "id": 2,
+    "first": "Rand",
+    "last": "AlThore"
+  },
+  {
+    "id": 3,
+    "first": "Holly",
+    "last": "Davis"
+  },
+  {
+    "id": 4,
+    "first": "Jenny",
+    "last": "Mather"
+  }
+]

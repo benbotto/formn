@@ -131,5 +131,16 @@ describe('MySQLFromAdapter()', () => {
         'FROM    `users` AS `u`');
     });
   });
+
+  describe('.countDistinct()', () => {
+    it('returns a Count instance with the From set.', () => {
+      const count = getFrom(User, 'u')
+        .countDistinct('u.id');
+
+      expect(count.toString()).toBe(
+        'SELECT  COUNT(DISTINCT `u`.`userID`) AS count\n' +
+        'FROM    `users` AS `u`');
+    });
+  });
 });
 

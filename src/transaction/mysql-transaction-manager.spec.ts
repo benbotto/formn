@@ -49,7 +49,7 @@ describe('MySQLTransactionManager()', () => {
 
       begin
         .then(() => {
-          expect(mockConn.query).toHaveBeenCalledWith('START TRANSACTION');
+          expect(mockConn.query as jasmine.Spy).toHaveBeenCalledWith('START TRANSACTION');
           expect(transMgr.getTransactionState()).toBe('STARTED');
           done();
         });
@@ -86,7 +86,7 @@ describe('MySQLTransactionManager()', () => {
           expect(transMgr.getTransactionState()).toBe('COMMITTING');
         })
         .then(() => {
-          expect(mockConn.query).toHaveBeenCalledWith('COMMIT');
+          expect(mockConn.query as jasmine.Spy).toHaveBeenCalledWith('COMMIT');
           expect(connMan.release).toHaveBeenCalledWith(mockConn);
           expect(transMgr.getTransactionState()).toBe('COMMITTED');
           done();
@@ -116,7 +116,7 @@ describe('MySQLTransactionManager()', () => {
           expect(transMgr.getTransactionState()).toBe('ROLLING_BACK');
         })
         .then(() => {
-          expect(mockConn.query).toHaveBeenCalledWith('ROLLBACK');
+          expect(mockConn.query as jasmine.Spy).toHaveBeenCalledWith('ROLLBACK');
           expect(connMan.release).toHaveBeenCalledWith(mockConn);
           expect(transMgr.getTransactionState()).toBe('ROLLED_BACK');
           done();

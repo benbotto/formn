@@ -78,8 +78,8 @@ export class ParameterList {
    * set to true, however, then parameters will be blindly overwritten.
    */
   addParameter(key: string, value: any, overwrite: boolean = false): this {
-    if (!key.match(/^[A-Za-z][\w\-]*$/))
-      throw new ConditionError('Parameter keys must match "/^[A-Za-z][\\w\\-]*$/".');
+    if (!key.match(/^[A-Za-z][\w]*$/))
+      throw new ConditionError('Parameter keys must match "/^[A-Za-z][\\w]*$/".');
 
     if (this.params.has(key) && this.params.get(key) !== value && !overwrite)
       throw new ConditionError(`Parameter "${key}" already exists with value "${this.params.get(key)}".`);

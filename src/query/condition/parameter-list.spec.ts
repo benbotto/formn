@@ -1,14 +1,14 @@
 import { ParameterList } from '../';
 
-describe('ParameterList()', function() {
-  describe('.constructor()', function() {
-    it('initially contains no parameters.', function() {
+describe('ParameterList()', () => {
+  describe('.constructor()', () => {
+    it('initially contains no parameters.', () => {
       const paramList = new ParameterList();
 
       expect(Object.keys(paramList.getParams()).length).toBe(0);
     });
 
-    it('can copy parameters from another list.', function() {
+    it('can copy parameters from another list.', () => {
       const paramList1 = new ParameterList();
       paramList1.addParameter(paramList1.createParameterName('name'), 'Jack');
       paramList1.addParameter(paramList1.createParameterName('age'), 30);
@@ -63,70 +63,70 @@ describe('ParameterList()', function() {
     });
   });
 
-  describe('.createParameterName()', function() {
+  describe('.createParameterName()', () => {
     let paramList: ParameterList;
 
     beforeEach(() => paramList = new ParameterList());
 
-    it('replaces non-word characters with underscores.', function() {
+    it('replaces non-word characters with underscores.', () => {
       expect(paramList.createParameterName('here"is a.name')).toBe('here_is_a_name_0');
     });
 
-    it('adds an ID at the end of each parameter.', function() {
+    it('adds an ID at the end of each parameter.', () => {
       expect(paramList.createParameterName('name')).toBe('name_0');
       expect(paramList.createParameterName('name')).toBe('name_1');
       expect(paramList.createParameterName('name')).toBe('name_2');
     });
   });
 
-  describe('.addParameter()', function() {
+  describe('.addParameter()', () => {
     let paramList: ParameterList;
 
     beforeEach(() => paramList = new ParameterList());
 
-    it('stores the parameter.', function() {
+    it('stores the parameter.', () => {
       paramList.addParameter('name', 'Jack');
       expect(paramList.getParams().name).toBe('Jack');
     });
 
-    it('raises an exception if the param already exists and the value is different.', function() {
-      expect(function() {
+    it('raises an exception if the param already exists and the value is different.', () => {
+      expect(() => {
         paramList.addParameter('name', 'Jack');
         paramList.addParameter('name', 'Jill');
       }).toThrowError('Parameter "name" already exists with value "Jack".');
     });
 
-    it('does not raise an exception if the same key-value pair is set twice.', function() {
-      expect(function() {
+    it('does not raise an exception if the same key-value pair is set twice.', () => {
+      expect(() => {
         paramList.addParameter('name', 'Jack');
         paramList.addParameter('name', 'Jack');
       }).not.toThrow();
     });
 
-    it('allows parameters to be blindly overwritten.', function() {
-      expect(function() {
+    it('allows parameters to be blindly overwritten.', () => {
+      expect(() => {
         paramList.addParameter('name', 'Jack');
         paramList.addParameter('name', 'Jill', true);
       }).not.toThrow();
     });
 
-    it('raises an exception of the parameter has invalid characters.', function() {
-      paramList.addParameter('test-1',   'asdf');
-      paramList.addParameter('test_2',   'asdf');
-      paramList.addParameter('test_2-3', 'asdf');
+    it('raises an exception of the parameter has invalid characters.', () => {
+      paramList.addParameter('test_1',      'asdf');
+      paramList.addParameter('test_2_0',    'asdf');
+      paramList.addParameter('test_3_asdf', 'asdf');
 
-      expect(function() {
+      expect(() => {
         paramList.addParameter('0test', 'asdf');
-      }).toThrowError('Parameter keys must match "/^[A-Za-z][\\w\\-]*$/".');
+      }).toThrowError('Parameter keys must match "/^[A-Za-z][\\w]*$/".');
     });
   });
 
-  describe('.addParameters()', function() {
+  describe('.addParameters()', () => {
     let paramList: ParameterList;
 
     beforeEach(() => paramList = new ParameterList());
 
-    it('can copy key-value pairs from an object.', function() {
+    it('can copy key-value pairs from an object.', () => {
       const params = {name: 'Jack', age: 50};
       paramList.addParameters(params);
     });

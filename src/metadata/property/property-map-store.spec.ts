@@ -1,11 +1,11 @@
-import { initDB, User } from '../../test/';
+import { initDB, User, ExtendedUser } from '../../test/';
 
 import { PropertyMapStore, metaFactory } from '../';
 
 describe('PropertyMapStore()', () => {
   let propStore: PropertyMapStore;
 
-  beforeAll(function() {
+  beforeAll(() => {
     // (Re)initialize the db.
     initDB();
 
@@ -17,6 +17,17 @@ describe('PropertyMapStore()', () => {
     it('gets a PropertyMap for a table.', () => {
       const pm = propStore.getPropertyMap(User);
 
+      expect(pm.id).toBe('id');
+      expect(pm.first).toBe('first');
+      expect(pm.last).toBe('last');
+      expect(pm.createdOn).toBe('createdOn');
+      expect(pm.phoneNumbers).toBe('phoneNumbers');
+    });
+
+    it('has all the properties from the parent table.', () => {
+      const pm = propStore.getPropertyMap(ExtendedUser);
+
+      expect(pm.fullName).toBe('fullName');
       expect(pm.id).toBe('id');
       expect(pm.first).toBe('first');
       expect(pm.last).toBe('last');

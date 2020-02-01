@@ -41,12 +41,12 @@ export class PropertyMapStore {
 
     assert(pm, `Failed to get property map for type "${Entity.name}."  The type must be decorated with @Table.`);
 
-    if (alias == undefined)
+    if (alias === undefined)
       return pm;
 
     const aliasedPM: PropertyMapType = {};
 
-    for (let key in pm)
+    for (const key in pm)
       aliasedPM[key] = `${alias}.${pm[key]}`;
 
     return aliasedPM;

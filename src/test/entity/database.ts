@@ -2,7 +2,7 @@ import { validationFactory, Validate, EmailValidator } from 'bsy-validation';
 
 import {
   User, PhoneNumber, Photo, Product, UserXProduct, Vehicle, VehiclePackage,
-  TypeTest
+  TypeTest, ExtendedUser
 } from '../';
 
 import { FormnMigration } from '../../migrator/';
@@ -49,6 +49,13 @@ export function initDB() {
 
   tblDec = Table({name: 'users'});
   tblDec(User);
+
+  // ExtendedUser.
+  colDec = Column();
+  colDec(ExtendedUser.prototype, 'fullName');
+
+  tblDec = Table({name: 'extended_users'});
+  tblDec(ExtendedUser);
 
   // PhoneNumber.
   colDec = Column({name: 'phoneNumberID', isPrimary: true, isGenerated: true, isNullable: false, sqlDataType: 'int'});

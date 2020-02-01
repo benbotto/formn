@@ -26,5 +26,12 @@ export class RelationshipMetadata {
     public on: (entity: PropertyMapType, refEntity: PropertyMapType) => string[]|string[][],
     public cardinality: CardinalityType) {
   }
+
+  /**
+   * Make a copy.
+   */
+  clone(): RelationshipMetadata {
+    return new RelationshipMetadata(this.Entity, this.mapTo, this.to, this.on, this.cardinality);
+  }
 }
 

@@ -71,5 +71,12 @@ export class ColumnStore {
 
     return pk;
   }
+
+  /**
+   * Check if an Entity has any [[ColumnMetadata]].
+   */
+  hasColumnMetadata(Entity: TableType): boolean {
+    return this.tableCols.has(Entity);
+  }
 }
 

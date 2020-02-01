@@ -80,5 +80,17 @@ describe('ColumnStore()', () => {
       expect(pk[0].mapTo).toBe('id');
     });
   });
+
+  describe('.hasColumnMetadata()', () => {
+    it('returns true if the entity has columns.', () => {
+      expect(colStore.hasColumnMetadata(User)).toBe(true);
+    });
+
+    it('returns false if the entity has no columns.', () => {
+      class Foo {}
+
+      expect(colStore.hasColumnMetadata(Foo)).toBe(false);
+    });
+  });
 });
 

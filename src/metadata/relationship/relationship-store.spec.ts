@@ -1,4 +1,4 @@
-import { initDB, PhoneNumber, Product, User, Photo } from '../../test/';
+import { initDB, PhoneNumber, Product, User, Photo, ExtendedUser } from '../../test/';
 
 import { RelationshipStore, metaFactory } from '../';
 
@@ -105,13 +105,16 @@ describe('RelationshipStore()', () => {
     it('returns all the relationships that Entity1 is a part of.', () => {
       const rels = relStore.getRelationships(PhoneNumber);
 
-      expect(rels.length).toBe(2);
+      expect(rels.length).toBe(3);
       expect(rels[0].mapTo).toBe('user');
       expect(rels[0].Entity).toBe(PhoneNumber);
       expect(rels[0].to()).toBe(User);
       expect(rels[1].mapTo).toBe('phoneNumbers');
       expect(rels[1].Entity).toBe(User);
       expect(rels[1].to()).toBe(PhoneNumber);
+      expect(rels[2].mapTo).toBe('phoneNumbers');
+      expect(rels[2].Entity).toBe(ExtendedUser);
+      expect(rels[2].to()).toBe(PhoneNumber);
     });
 
     it('returns all the relationships that Entity1 owns.', () => {
@@ -121,6 +124,14 @@ describe('RelationshipStore()', () => {
       expect(rels[0].mapTo).toBe('user');
       expect(rels[0].Entity).toBe(PhoneNumber);
       expect(rels[0].to()).toBe(User);
+    });
+
+    it('returns all the relationships from the parent class.', () => {
+      const rels = relStore.getRelationships(ExtendedUser, null, true);
+
+      expect(rels.length).toBe(2);
+      expect(rels[0].mapTo).toBe('phoneNumbers');
+      expect(rels[1].mapTo).toBe('userXProducts');
     });
   });
 

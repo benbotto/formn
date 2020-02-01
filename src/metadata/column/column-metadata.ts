@@ -35,18 +35,18 @@ export class ColumnMetadata {
     dataType: string,
     options: ColumnMetaOptions) {
 
-    this.Entity       = Entity;
-    this.mapTo        = mapTo;
-    this.dataType     = dataType;
+    this.Entity      = Entity;
+    this.mapTo       = mapTo;
+    this.dataType    = dataType;
 
-    this.name         = options.name;
-    this.isPrimary    = options.isPrimary || false;
-    this.isGenerated  = options.isGenerated || false;
-    this.hasDefault   = options.hasDefault || false;
-    this.maxLength    = options.maxLength;
-    this.isNullable   = options.isNullable === undefined ? true : options.isNullable;
-    this.converter    = options.converter;
-    this.sqlDataType  = options.sqlDataType;
+    this.name        = options.name;
+    this.isPrimary   = options.isPrimary || false;
+    this.isGenerated = options.isGenerated || false;
+    this.hasDefault  = options.hasDefault || false;
+    this.maxLength   = options.maxLength;
+    this.isNullable  = options.isNullable === undefined ? true : options.isNullable;
+    this.converter   = options.converter;
+    this.sqlDataType = options.sqlDataType;
   }
 
   /**
@@ -58,6 +58,24 @@ export class ColumnMetadata {
    */
   static createFQName(tableAlias: string, colName: string): string {
     return `${tableAlias}.${colName}`;
+  }
+
+  /**
+   * Make a clone.
+   */
+  clone(): ColumnMetadata {
+    const options = new ColumnMetaOptions();
+
+    options.name        = this.name;
+    options.isPrimary   = this.isPrimary;
+    options.isGenerated = this.isGenerated;
+    options.hasDefault  = this.hasDefault;
+    options.maxLength   = this.maxLength;
+    options.isNullable  = this.isNullable;
+    options.converter   = this.converter;
+    options.sqlDataType = this.sqlDataType;
+
+    return new ColumnMetadata(this.Entity, this.mapTo, this.dataType, options);
   }
 }
 

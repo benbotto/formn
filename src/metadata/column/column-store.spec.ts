@@ -1,4 +1,4 @@
-import { initDB, User } from '../../test/';
+import { initDB, User, ExtendedUser } from '../../test/';
 
 import { ColumnStore, metaFactory } from '../';
 
@@ -21,6 +21,19 @@ describe('ColumnStore()', () => {
       expect(cols[1].mapTo).toBe('first');
       expect(cols[2].mapTo).toBe('last');
       expect(cols[3].mapTo).toBe('createdOn');
+    });
+
+    it('gets the columns for the table and the parent table\'s columns.', () => {
+      const cols = colStore.getColumnMetadata(ExtendedUser);
+
+      expect(cols[0].mapTo).toBe('fullName');
+      expect(cols[1].mapTo).toBe('id');
+      expect(cols[2].mapTo).toBe('first');
+      expect(cols[3].mapTo).toBe('last');
+      expect(cols[4].mapTo).toBe('createdOn');
+
+      for (const col of cols)
+        expect(col.Entity).toBe(ExtendedUser);
     });
 
     it('throws an error if the Entity is not decorated.', () => {

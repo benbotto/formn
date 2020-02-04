@@ -51,8 +51,8 @@ describe('ConditionMapper()', () => {
           {$eq: {'address': ':addr'}},
           {
             $or: [
-              {$eq: {'status': 'Pending'}},
-              {$eq: {'status': 'Paid'}},
+              {$eq: {'status': ':s1'}},
+              {$eq: {'status': ':s2'}},
             ]
           }
         ]
@@ -65,8 +65,36 @@ describe('ConditionMapper()', () => {
           {$eq: {'j.address': ':addr'}},
           {
             $or: [
-              {$eq: {'j.status': 'Pending'}},
-              {$eq: {'j.status': 'Paid'}},
+              {$eq: {'j.status': ':s1'}},
+              {$eq: {'j.status': ':s2'}},
+            ]
+          }
+        ]
+      });
+    });
+
+    it('converts rhs columns.', () => {
+      const cond = {
+        $and: [
+          {$eq: {'address': ':addr'}},
+          {
+            $or: [
+              {$eq: {'status': 'description'}},
+              {$in: {'status': ['address']}},
+            ]
+          }
+        ]
+      };
+
+      const newCond = mapper.map(cond, columnLookup);
+
+      expect(newCond).toEqual({
+        $and: [
+          {$eq: {'j.address': ':addr'}},
+          {
+            $or: [
+              {$eq: {'j.status': 'j.description'}},
+              {$in: {'j.status': ['j.address']}},
             ]
           }
         ]
@@ -114,6 +142,22 @@ describe('ConditionMapper()', () => {
       }
       catch (err) {
         expect(err.message).toBe('Property "foo" not found in ColumnLookup.');
+      }
+    });
+
+    it('throws an error if a rhs column is missing.', () => {
+      try {
+        const cond = {
+          $and: [
+            {$eq: {'description': 'badColumn'}},
+          ]
+        };
+
+        mapper.map(cond, columnLookup);
+        expect(true).toBe(false);
+      }
+      catch (err) {
+        expect(err.message).toBe('Property "badColumn" not found in ColumnLookup.');
       }
     });
   });

@@ -44,7 +44,7 @@ export class ConditionMapper {
           // col  val
           const op     = tree.token.value;
           const column = columnLookup.getColumn(tree.children[0].token.value as string);
-          const value  = getValue(tree.children[1].token, params);
+          const value  = getValue(tree.children[1].token, params, columnLookup);
 
           return {[op]: {[column]: value}};
         }
@@ -57,7 +57,7 @@ export class ConditionMapper {
           const column = columnLookup.getColumn(tree.children[0].token.value as string);
           const kids   = tree.children
             .slice(1)
-            .map(kid => getValue(kid.token, params));
+            .map(kid => getValue(kid.token, params, columnLookup));
 
           return {[op]: {[column]: kids}};
         }
@@ -81,8 +81,9 @@ export class ConditionMapper {
         }
       }
 
-      // Returns the value of token with a verification that it exists in params.
-      function getValue(token: LexerToken, params: ParameterType): string|number {
+      // Returns the value of token with a verification that it exists in
+      // params, or the mapped column if the token is a column.
+      function getValue(token: LexerToken, params: ParameterType, columnLookup: ColumnLookup): string | number {
         if (params && token.type === 'parameter') {
           // Find the value in the params list (the leading colon is removed).
           const paramKey = (token.value as string).substring(1);
@@ -91,6 +92,8 @@ export class ConditionMapper {
           if (value === undefined)
             throw new ConditionError(`Replacement value for parameter "${paramKey}" not present.`);
         }
+        else if (token.type === 'column')
+          return columnLookup.getColumn(token.value as string);
 
         return token.value;
       }

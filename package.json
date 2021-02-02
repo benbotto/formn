@@ -31,6 +31,7 @@
     "@types/pluralize": "0.x.x",
     "bsy-validation": "2.x.x",
     "change-case": "3.x.x",
+    "moment": "2.x.x",
     "mysql2": "1.x.x",
     "pluralize": "7.x.x",
     "reflect-metadata": "0.x.x",

@@ -10,7 +10,7 @@ describe('ConnectionsFileReader()', () => {
   describe('.readConnectionOptions()', () => {
     it('throws an error if the file is not found.', () => {
       expect(() => reader.readConnectionOptions('/fake/path/connections.json'))
-        .toThrowError("Cannot find module '/fake/path/connections.json'");
+        .toThrowError('Failed to require connections file "/fake/path/connections.json"');
     });
 
     it('returns the ConnectionOptions for a valid connections.json file.', () => {

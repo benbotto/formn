@@ -27,13 +27,23 @@ export class ConnectionsFileReader {
    * @return An array of [[ConnectionOptions]] objects.
    */
   readConnectionOptions(connFile: string): ConnectionOptions[] {
-    const connOpts  = [];
+    const connOpts = [];
 
     // Ensure the path is absolute.
     connFile = this.getConnectionsFilePath(connFile);
 
     // require throws an error if the file is not found.
-    let settingsArr = require(connFile);
+    let settingsArr;
+
+    try {
+      settingsArr = require(connFile);
+    }
+    catch (err) {
+      if (err.code === 'MODULE_NOT_FOUND')
+        throw new Error(`Failed to require connections file "${connFile}"`);
+      else
+        throw err;
+    }
 
     if (!Array.isArray(settingsArr))
       settingsArr = [settingsArr];

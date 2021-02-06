@@ -52,7 +52,7 @@ describe('ModelValidator()', () => {
         .validate(tt, TypeTest)
         .catch(errList => {
           expect(errList.errors[0].field).toBe('str');
-          expect(errList.errors[0].detail).toBe('"str" must be at most 10 characters long.');
+          expect(errList.errors[0].detail).toBe('"str" must have a length that does not exceed 10.');
           done();
         });
     });
